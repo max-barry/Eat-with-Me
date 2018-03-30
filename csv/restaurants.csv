@@ -1,4 +1,4 @@
-name,likes
-Johnny Pizza,0
-Burger Town,0
-Salad Nation,0
+name,likes,slug
+Johnny Pizza,0,johnny-pizza
+Burger Town,0,burger-town
+Salad Nation,0,salad-nation
