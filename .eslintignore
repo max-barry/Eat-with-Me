@@ -1,0 +1,3 @@
+node_modules/**/*.{json,js}
+functions/dist/**/*.{json,js}
+functions/node_modules/**/*.{json,js}
