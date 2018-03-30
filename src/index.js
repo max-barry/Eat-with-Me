@@ -1,9 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// import './index.css';
-import App from './containers/App/App';
+import { ApolloProvider } from 'react-apollo';
+
+import './index.styles';
+import ApolloClientStore from './graphql/index';
+import Feed from './containers/Feed';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <ApolloProvider client={ApolloClientStore}>
+        <Feed />
+    </ApolloProvider>,
+    document.getElementById('root')
+);
 registerServiceWorker();

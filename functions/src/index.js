@@ -7,7 +7,6 @@ const GraphQLServer = setupGraphQLServer();
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
-// exports.api = functions.https.onRequest(GraphQLServer);
-exports.api = functions.https.onRequest((req, res) => res.send('cat2000'));
+exports.api = functions.https.onRequest(GraphQLServer);
 
 // service:max-barry-685:B5aSiMIYx8C-ZgbpGjEW2A

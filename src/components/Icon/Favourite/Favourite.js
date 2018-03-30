@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { cx, css } from 'react-emotion';
 import { MdFavoriteOutline, MdFavorite } from 'react-icons/lib/md';
 import { Spring, config as SpringConfig } from 'react-spring';

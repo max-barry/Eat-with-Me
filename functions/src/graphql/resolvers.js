@@ -1,6 +1,6 @@
 const resolveFunctions = {
     Query: {
-        restaurants(obj, args, context) {
+        restaurants(parent, args, context) {
             return context.db
                 .collection('restaurants')
                 .get()
@@ -10,12 +10,34 @@ const resolveFunctions = {
                     )
                 );
         },
-        restaurant(obj, args, context) {
+        restaurant(parent, args, context) {
             return context.db
                 .collection('restaurants')
                 .doc(args.id)
                 .get()
                 .then(doc => Object.assign({ id: doc.id }, doc.data()));
+        }
+    },
+    Mutation: {
+        like(parent, args, context) {
+            const db = context.db;
+            const ref = db.collection('restaurants').doc(args.id);
+            return context.db
+                .runTransaction(t => {
+                    return t.get(ref).then(doc => {
+                        const data = doc.data();
+                        data.likes += 1;
+                        // Add one person to the city population
+                        t.update(ref, { likes: data.likes });
+                        return Promise.resolve({ id: doc.id, ...data });
+                    });
+                })
+                .then(result => {
+                    return result;
+                })
+                .catch(err => {
+                    console.log('Transaction failure:', err);
+                });
         }
     }
 };

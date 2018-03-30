@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const cors = require('cors');
 
 const printSchema = require('graphql/utilities/schemaPrinter').printSchema;
 const graphqlExpress = require('apollo-server-express').graphqlExpress;
@@ -12,6 +13,10 @@ const firestore = require('../firebaseSetup').firestore;
 const setupGraphQLServer = () => {
     // setup server
     const graphQLServer = express();
+
+    // Cors setup
+    // TODO : Make this secure
+    graphQLServer.use(cors());
 
     // /api/graphql
     graphQLServer.use(

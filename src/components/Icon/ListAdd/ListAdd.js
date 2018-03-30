@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { css } from 'react-emotion';
 import { Spring, config as SpringConfig } from 'react-spring';
 import SvgBase from 'react-icon-base';
 
 import { COLORS } from '../../../styles/constants.colors';
 import { IconBaseStyle } from '../Icon.styles.js';
-
-const LISTADD_DELTA_MAGNITUDE = 15;
 
 const ListAdd = ({ active, initial, ...props }) => (
     <Spring

@@ -3,16 +3,22 @@ const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
 const resolvers = require('./resolvers');
 
 const schema = `
-type Restaurant {
-  id: String!
-  name: String
-}
+  type Restaurant {
+    id: ID!
+    name: String!
+    likes: Int!
+  }
 
-# the schema allows the following query:
-type Query {
-  restaurants: [Restaurant]
-  restaurant(id: ID!): Restaurant
-}
+  # the schema allows the following query:
+  type Query {
+    restaurants: [Restaurant]
+    restaurant(id: ID!): Restaurant
+  }
+
+  # the schema allows the following mutations:
+  type Mutation {
+    like(id: ID!): Restaurant
+  }
 `;
 
 module.exports = makeExecutableSchema({
