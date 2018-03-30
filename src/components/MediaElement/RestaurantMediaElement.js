@@ -8,9 +8,9 @@ import { MediaElementActionList } from './MediaElement.styles';
 
 const RestaurantMediaElement = ({
     favourite,
-    restaurant: { likes, name, ...attributes }
+    restaurant: { likes, name, slug, ...attributes }
 }) => (
-    <MediaElement>
+    <MediaElement link={`/${slug}`}>
         {name}
         <MediaElementActionList>
             <li>

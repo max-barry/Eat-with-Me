@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // import Favourite from '../Icons/Favourite';
 
@@ -8,9 +9,11 @@ import {
     MediaElementBody
 } from './MediaElement.styles';
 
-const MediaElement = ({ children }) => (
+const MediaElement = ({ children, link }) => (
     <MediaElementContainer>
-        <MediaElementImage src="https://placehold.it/200x150" />
+        <Link to={link}>
+            <MediaElementImage src="https://placehold.it/200x150" />
+        </Link>
         <MediaElementBody>{children}</MediaElementBody>
     </MediaElementContainer>
 );
