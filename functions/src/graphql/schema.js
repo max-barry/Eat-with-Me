@@ -7,12 +7,13 @@ const schema = `
     id: ID!
     name: String!
     likes: Int!
+    slug: String!
   }
 
   # the schema allows the following query:
   type Query {
     restaurants: [Restaurant]
-    restaurant(id: ID!): Restaurant
+    restaurant(id: ID, slug: String): Restaurant
   }
 
   # the schema allows the following mutations:

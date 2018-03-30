@@ -25,7 +25,8 @@ const setupGraphQLServer = () => {
         graphqlExpress({
             schema,
             context: {
-                db: firestore
+                db: firestore,
+                restaurantRef: firestore.collection('restaurants')
             },
             tracing: false,
             cacheControl: false
