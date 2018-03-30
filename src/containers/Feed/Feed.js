@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
 import { graphql, compose } from 'react-apollo';
+import { branch, renderComponent } from 'recompose';
 
 import { GET_RESTAURANTS } from '../../data/queries';
+import FeedLoading from './Feed.loading';
 import RestaurantActions from '../RestaurantActions';
 import RestaurantMediaElement from '../../components/MediaElement/RestaurantMediaElement';
 
 class Feed extends Component {
     render() {
         const { restaurants } = this.props;
-        return restaurants.loading ? (
-            <p>Loading</p>
-        ) : (
+        return (
             <ul>
                 {restaurants.restaurants.map((restaurant, i) => (
                     <RestaurantActions
@@ -25,4 +25,12 @@ class Feed extends Component {
     }
 }
 
-export default compose(graphql(GET_RESTAURANTS, { name: 'restaurants' }))(Feed);
+const enhance = compose(
+    graphql(GET_RESTAURANTS, { name: 'restaurants' }),
+    branch(
+        props => props.restaurants && props.restaurants.loading,
+        renderComponent(FeedLoading)
+    )
+);
+
+export default enhance(Feed);

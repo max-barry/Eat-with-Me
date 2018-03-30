@@ -1,17 +1,40 @@
-// import React, { Component } from 'react';
-// import { graphql } from 'react-apollo';
+import React, { Component } from 'react';
 
-// import { GET_RESTAURANT } from '../../data/queries';
-// // import RestaurantMediaElement from '../../components/MediaElement/RestaurantMediaElement';
+import { graphql, compose } from 'react-apollo';
+import { branch, renderComponent } from 'recompose';
 
-// class Restaurant extends Component {
-//     render() {
-//         return this.props.data.loading ? (
-//             <p>Loading</p>
-//         ) : (
-//             <div>Some restaurant</div>
-//         );
-//     }
-// }
+import { GET_RESTAURANT } from '../../data/queries';
+import RestaurantLoading from './Restaurant.loading';
+import RestaurantActions from '../RestaurantActions';
+// import RestaurantMediaElement from '../../components/MediaElement/RestaurantMediaElement';
 
-// export default graphql(GET_RESTAURANT)(Restaurant);
+const Content = props => (
+    <div>
+        <p>{props.restaurant.restaurant.name}</p>
+    </div>
+);
+
+class RestaurantDetail extends Component {
+    render() {
+        const props = this.props;
+        // const { restaurants } = this.props;
+        return <RestaurantActions {...props} component={Content} />;
+    }
+}
+
+const enhance = compose(
+    graphql(GET_RESTAURANT, {
+        name: 'restaurant',
+        options: ({ match }) => ({
+            variables: {
+                slug: match.params.slug
+            }
+        })
+    }),
+    branch(
+        props => props.restaurant && props.restaurant.loading,
+        renderComponent(RestaurantLoading)
+    )
+);
+
+export default enhance(RestaurantDetail);
