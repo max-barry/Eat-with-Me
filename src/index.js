@@ -2,16 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import './index.styles';
-import ApolloClientStore from './graphql/index';
+import ApolloClientStore from './data/index';
 import Feed from './containers/Feed';
 import registerServiceWorker from './registerServiceWorker';
+import './index.styles';
+// import Restaurant from './containers/Restaurant';
 
 ReactDOM.render(
-    <ApolloProvider client={ApolloClientStore}>
-        <Feed />
-    </ApolloProvider>,
+    <BrowserRouter>
+        <ApolloProvider client={ApolloClientStore}>
+            <Switch>
+                <Route exact path="/" component={Feed} />
+                {/* <Route path="/:id" component={Restaurant} /> */}
+            </Switch>
+        </ApolloProvider>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 registerServiceWorker();
