@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { css } from 'react-emotion';
 import { Spring, config as SpringConfig } from 'react-spring';
 import SvgBase from 'react-icon-base';
 
+import iconEnhance from '../enhance';
 import { COLORS } from '../../../styles/constants.colors';
 import { IconBaseStyle } from '../Icon.styles.js';
 
@@ -22,7 +24,7 @@ const ListAdd = ({ active, initial, ...props }) => (
                         willChange: 'transform, opacity'
                     }
                 })}
-                {...this.props}
+                {...props}
             >
                 <g>
                     <path
@@ -48,25 +50,13 @@ const ListAdd = ({ active, initial, ...props }) => (
     />
 );
 
-// class ListAdd extends Component {
-//     state = {
-//         active: this.props.active || false,
-//         initial: this.props.active || false
-//     };
+// const propCheck = setPropTypes({
+//     active: PropTypes.bool.isRequired,
+//     initial: PropTypes.bool
+// });
 
-//     componentWillReceiveProps = nextProps => {
-//         if (nextProps.active !== this.state.active)
-//             this.setState(state => ({ active: nextProps.active }));
-//     };
+// const reRenderOn = onlyUpdateForKeys(['active']);
 
-//     render() {
-//         const { active, initial } = this.state;
-//         const DELTA_MAGNITUDE = 15;
+// const enhance = compose(propCheck, reRenderOn);
 
-//         return (
-
-//         );
-//     }
-// }
-
-export default ListAdd;
+export default iconEnhance(ListAdd);

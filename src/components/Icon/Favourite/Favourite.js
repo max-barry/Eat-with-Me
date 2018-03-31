@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { cx, css } from 'react-emotion';
 import { MdFavoriteOutline, MdFavorite } from 'react-icons/lib/md';
 import { Spring, config as SpringConfig } from 'react-spring';
 
+import iconEnhance from '../enhance';
 import {
     FavouriteContainer,
     FavouriteIconElement,
@@ -32,4 +34,4 @@ const Favourite = ({ active, initial, ...props }) => (
     </FavouriteContainer>
 );
 
-export default Favourite;
+export default iconEnhance(Favourite);

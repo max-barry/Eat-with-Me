@@ -4,7 +4,7 @@ import { RESTAURANT_FRAGMENT } from './fragments';
 
 export const GET_RESTAURANTS = gql`
     query GetRestaurants {
-        restaurants {
+        getRestaurants {
             ...${RESTAURANT_FRAGMENT.name}
         }
     }
@@ -13,9 +13,19 @@ export const GET_RESTAURANTS = gql`
 
 export const GET_RESTAURANT = gql`
     query GetRestaurant($id: ID, $slug: String) {
-        restaurant(id: $id, slug: $slug) {
+        getRestaurant(id: $id, slug: $slug) {
             ...${RESTAURANT_FRAGMENT.name}
         }
     }
     ${RESTAURANT_FRAGMENT.fragment}
+`;
+
+export const GET_USER_AUTH = gql`
+    query GetUserAuth {
+        userAuth @client {
+            __typename
+            uid
+            displayName
+        }
+    }
 `;

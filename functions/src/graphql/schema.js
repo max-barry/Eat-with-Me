@@ -10,15 +10,20 @@ const schema = `
     slug: String!
   }
 
+  type User {
+    id: ID!
+    enabled: Boolean!
+  }
+
   # the schema allows the following query:
   type Query {
-    restaurants: [Restaurant]
-    restaurant(id: ID, slug: String): Restaurant
+    getRestaurants: [Restaurant]
+    getRestaurant(id: ID, slug: String): Restaurant
   }
 
   # the schema allows the following mutations:
   type Mutation {
-    like(id: ID!): Restaurant
+    updateLikes(id: ID!, uid: String!): Restaurant
   }
 `;
 
@@ -26,25 +31,3 @@ module.exports = makeExecutableSchema({
     typeDefs: schema,
     resolvers
 });
-
-/**
-
-type Post {
-  id: Int!
-  title: String
-  author: Author
-  votes: Int
-}
-# the schema allows the following query:
-type Query {
-  posts: [Post]
-  author(id: Int!): Author
-}
-# this schema allows the following mutation:
-type Mutation {
-  upvotePost (
-    postId: Int!
-  ): Post
-}
-
-*/

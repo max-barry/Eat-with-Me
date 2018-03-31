@@ -1,38 +1,52 @@
-import { graphql, compose } from 'react-apollo';
-import { componentFromProp, withHandlers } from 'recompose';
+import { compose } from 'react-apollo';
+import { componentFromProp, withHandlers, setPropTypes } from 'recompose';
+import PropTypes from 'prop-types';
 
 import { GET_RESTAURANTS } from '../../data/queries';
-import {
-    UPDATE_RESTAURANT_LIKES,
-    updateCacheArray
-} from '../../data/mutations';
+import { gqlUpdateLikes, gqlGetUserAuth } from '../../data/composers';
+import { updateCacheArray } from '../../data/mutations';
 
-const favourite = props => async () => {
-    const { restaurant: { id, ...attributes } } = props;
+const favourite = props => _ => {
+    const {
+        restaurant: { id, ...attributes },
+        getAuthUser: { userAuth }
+    } = props;
 
-    props.like({
+    props.updateLikes({
         variables: {
-            id
+            id,
+            uid: userAuth.uid
         },
         optimisticResponse: {
             __typename: 'Mutation',
-            like: {
+            updateLikes: {
                 __typename: 'Restaurant',
                 id: id,
                 ...attributes,
                 likes: attributes.likes + 1
             }
         },
-        update: (cache, { data: { like } }) =>
-            updateCacheArray(GET_RESTAURANTS, 'restaurants', cache, like)
+        update: (cache, { data: { updateLikes } }) =>
+            updateCacheArray(
+                GET_RESTAURANTS,
+                'getRestaurants',
+                cache,
+                updateLikes
+            )
     });
 };
 
-const RestaurantActions = compose(
-    graphql(UPDATE_RESTAURANT_LIKES, { name: 'like' }),
-    withHandlers({
-        favourite
-    })
-)(componentFromProp('component'));
+const propsCheck = setPropTypes({
+    restaurant: PropTypes.object.isRequired
+});
 
-export default RestaurantActions;
+const extraHandlers = withHandlers({
+    favourite
+});
+
+export default compose(
+    propsCheck,
+    gqlUpdateLikes,
+    gqlGetUserAuth,
+    extraHandlers
+)(componentFromProp('component'));

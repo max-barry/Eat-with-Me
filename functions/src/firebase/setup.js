@@ -3,6 +3,5 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-module.exports = {
-    firestore: admin.firestore()
-};
+exports.firestore = admin.firestore();
+exports.auth = admin.auth();

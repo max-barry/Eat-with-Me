@@ -5,12 +5,17 @@ import ListAdd from '../Icon/ListAdd';
 import { IconWithText } from '../Icon/Icon';
 import MediaElement from './MediaElement';
 import { MediaElementActionList } from './MediaElement.styles';
+import urls from '../../settings/urls';
 
 const RestaurantMediaElement = ({
     favourite,
-    restaurant: { likes, name, slug, ...attributes }
+    restaurant: { likes, name, slug, ...attributes },
+    ...props
 }) => (
-    <MediaElement link={`/${slug}`}>
+    <MediaElement
+        {...props}
+        link={urls.RESTAURANT_SLUG.pathname.replace(':slug', slug)}
+    >
         {name}
         <MediaElementActionList>
             <li>

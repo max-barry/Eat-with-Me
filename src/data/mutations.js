@@ -4,8 +4,8 @@ import set from 'lodash/set';
 import { RESTAURANT_FRAGMENT } from './fragments';
 
 export const UPDATE_RESTAURANT_LIKES = gql`
-    mutation UpdateRestaurantLikes($id: ID!) {
-        like(id: $id) {
+    mutation UpdateRestaurantLikes($id: ID!, $uid: String!) {
+        updateLikes(id: $id, uid: $uid) {
             ...${RESTAURANT_FRAGMENT.name}
         }
     }
@@ -13,6 +13,7 @@ export const UPDATE_RESTAURANT_LIKES = gql`
 `;
 
 export const updateCacheArray = (query, key, cache, newItem) => {
+    // TODO : You might be able to use cache.readFragment
     const oldData = cache.readQuery({
         query
     });

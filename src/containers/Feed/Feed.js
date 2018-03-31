@@ -10,10 +10,10 @@ import RestaurantMediaElement from '../../components/MediaElement/RestaurantMedi
 
 class Feed extends Component {
     render() {
-        const { restaurants } = this.props;
+        const { getRestaurants } = this.props;
         return (
             <ul>
-                {restaurants.restaurants.map((restaurant, i) => (
+                {getRestaurants.getRestaurants.map((restaurant, i) => (
                     <RestaurantActions
                         key={i}
                         restaurant={restaurant}
@@ -26,9 +26,12 @@ class Feed extends Component {
 }
 
 const enhance = compose(
-    graphql(GET_RESTAURANTS, { name: 'restaurants' }),
+    graphql(GET_RESTAURANTS, { name: 'getRestaurants' }),
     branch(
-        props => props.restaurants && props.restaurants.loading,
+        props =>
+            props.getRestaurants &&
+            props.getRestaurants.loading &&
+            props.getRestaurants.restaurants === undefined,
         renderComponent(FeedLoading)
     )
 );

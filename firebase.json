@@ -2,8 +2,8 @@
     "functions": {
         "source": "functions/dist",
         "predeploy": [
-            "yarn clean && yarn build:funcs && yarn deps:copy && yarn deps:install",
-            "npm --prefix \"$RESOURCE_DIR\" run lint"
+            "yarn lint:functions",
+            "cd functions && yarn clean:functions && yarn build:functions && yarn copy:functions && yarn install:functions"
         ]
     }
 }

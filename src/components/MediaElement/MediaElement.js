@@ -9,8 +9,8 @@ import {
     MediaElementBody
 } from './MediaElement.styles';
 
-const MediaElement = ({ children, link }) => (
-    <MediaElementContainer>
+const MediaElement = ({ children, link, ...props }) => (
+    <MediaElementContainer {...props}>
         <Link to={link}>
             <MediaElementImage src="https://placehold.it/200x150" />
         </Link>

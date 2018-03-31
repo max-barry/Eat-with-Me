@@ -8,7 +8,11 @@ const graphiqlExpress = require('apollo-server-express').graphiqlExpress;
 // const ApolloEngine = require('apollo-engine').ApolloEngine;
 
 const schema = require('./schema');
-const firestore = require('../firebaseSetup').firestore;
+const { firestore } = require('../firebase/setup');
+const {
+    COLLECTION_RESTAURANT,
+    COLLECTION_USER
+} = require('../firebase/firestore/constants');
 
 const setupGraphQLServer = () => {
     // setup server
@@ -26,7 +30,8 @@ const setupGraphQLServer = () => {
             schema,
             context: {
                 db: firestore,
-                restaurantRef: firestore.collection('restaurants')
+                restaurantRef: firestore.collection(COLLECTION_RESTAURANT),
+                userRef: firestore.collection(COLLECTION_USER)
             },
             tracing: false,
             cacheControl: false
