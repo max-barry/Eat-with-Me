@@ -20,10 +20,9 @@ const stateLink = withClientState({
         Mutation: MutationResolvers
     },
     defaults: {
-        userAuth: {
-            __typename: 'userAuth',
-            uid: null,
-            displayName: null
+        getUserAuth: {
+            __typename: 'getUserAuth',
+            uid: null
         }
     }
 });

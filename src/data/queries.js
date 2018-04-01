@@ -22,10 +22,19 @@ export const GET_RESTAURANT = gql`
 
 export const GET_USER_AUTH = gql`
     query GetUserAuth {
-        userAuth @client {
+        getUserAuth @client {
             __typename
             uid
-            displayName
+        }
+    }
+`;
+
+export const GET_USER_PROFILE = gql`
+    query GetUserProfile($uid: ID!) {
+        getUserProfile(uid: $uid) {
+            __typename
+            uid
+            likes
         }
     }
 `;

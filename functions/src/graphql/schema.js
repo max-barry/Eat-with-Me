@@ -1,8 +1,12 @@
+const GraphQLJSON = require('graphql-type-json');
+
 const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
 
 const resolvers = require('./resolvers');
 
 const schema = `
+  scalar JSON
+
   type Restaurant {
     id: ID!
     name: String!
@@ -11,14 +15,16 @@ const schema = `
   }
 
   type User {
-    id: ID!
+    uid: ID!
     enabled: Boolean!
+    likes: JSON
   }
 
   # the schema allows the following query:
   type Query {
     getRestaurants: [Restaurant]
     getRestaurant(id: ID, slug: String): Restaurant
+    getUserProfile(uid: ID): User
   }
 
   # the schema allows the following mutations:
@@ -29,5 +35,10 @@ const schema = `
 
 module.exports = makeExecutableSchema({
     typeDefs: schema,
-    resolvers
+    resolvers: {
+        JSON: {
+            __serialize: value => GraphQLJSON.parseValue(value)
+        },
+        ...resolvers
+    }
 });

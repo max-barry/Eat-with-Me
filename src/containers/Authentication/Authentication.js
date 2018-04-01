@@ -2,7 +2,7 @@ import { withApollo } from 'react-apollo';
 import { lifecycle, compose, pure } from 'recompose';
 
 import { auth } from '../../settings/firebase';
-import { gqlGetUserAuth } from '../../data/composers';
+import { gqlGetUser } from '../../data/composers';
 
 const updateOnAuth = lifecycle({
     componentDidMount() {
@@ -10,8 +10,8 @@ const updateOnAuth = lifecycle({
             const { displayName, uid } = authObject;
             this.props.client.writeData({
                 data: {
-                    userAuth: {
-                        __typename: 'userAuth',
+                    getUserAuth: {
+                        __typename: 'getUserAuth',
                         displayName,
                         uid
                     }
@@ -21,8 +21,8 @@ const updateOnAuth = lifecycle({
     }
 });
 
-const enhance = compose(gqlGetUserAuth, updateOnAuth, pure);
+const enhance = compose(withApollo, gqlGetUser, updateOnAuth, pure);
 
 const Authentication = props => props.children;
 
-export default withApollo(enhance(Authentication));
+export default enhance(Authentication);

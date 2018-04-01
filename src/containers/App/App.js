@@ -6,9 +6,7 @@ import { withRouter } from 'react-router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 
 import urls from '../../settings/urls';
-import Feed from '../Feed';
-import RestaurantDetail from '../RestaurantDetail';
-import Register from '../Register';
+import asyncComponent from '../AsyncIt';
 
 class App extends Component {
     previousLocation = this.props.location;
@@ -20,15 +18,25 @@ class App extends Component {
             <div>
                 <Link to={urls.REGISTER}>Register</Link>
                 <Switch location={isModal ? this.previousLocation : location}>
-                    <Route exact path={urls.HOME.pathname} component={Feed} />
+                    <Route
+                        exact
+                        path={urls.HOME.pathname}
+                        component={asyncComponent('../Feed')}
+                    />
                     <Route
                         path={urls.RESTAURANT_SLUG.pathname}
-                        component={RestaurantDetail}
+                        component={asyncComponent('../RestaurantDetail')}
                     />
-                    <Route path={urls.REGISTER.pathname} component={Register} />
+                    <Route
+                        path={urls.REGISTER.pathname}
+                        component={asyncComponent('../Register')}
+                    />
                 </Switch>
                 {isModal ? (
-                    <Route path={urls.REGISTER.pathname} component={Register} />
+                    <Route
+                        path={urls.REGISTER.pathname}
+                        component={asyncComponent('../Register')}
+                    />
                 ) : null}
             </div>
         );

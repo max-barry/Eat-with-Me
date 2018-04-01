@@ -3,27 +3,24 @@ import { componentFromProp, withHandlers, setPropTypes } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { GET_RESTAURANTS } from '../../data/queries';
-import { gqlUpdateLikes, gqlGetUserAuth } from '../../data/composers';
+import { gqlUpdateLikes, gqlGetUser } from '../../data/composers';
 import { updateCacheArray } from '../../data/mutations';
 
 const favourite = props => _ => {
-    const {
-        restaurant: { id, ...attributes },
-        getAuthUser: { userAuth }
-    } = props;
+    const { restaurant, user } = props;
 
     props.updateLikes({
         variables: {
-            id,
-            uid: userAuth.uid
+            id: restaurant.id,
+            uid: user.uid
         },
         optimisticResponse: {
             __typename: 'Mutation',
             updateLikes: {
                 __typename: 'Restaurant',
-                id: id,
-                ...attributes,
-                likes: attributes.likes + 1
+                id: restaurant.id,
+                ...restaurant,
+                likes: restaurant.likes + 1
             }
         },
         update: (cache, { data: { updateLikes } }) =>
@@ -44,9 +41,6 @@ const extraHandlers = withHandlers({
     favourite
 });
 
-export default compose(
-    propsCheck,
-    gqlUpdateLikes,
-    gqlGetUserAuth,
-    extraHandlers
-)(componentFromProp('component'));
+export default compose(propsCheck, gqlUpdateLikes, gqlGetUser, extraHandlers)(
+    componentFromProp('component')
+);

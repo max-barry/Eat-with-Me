@@ -31,7 +31,13 @@ const setupGraphQLServer = () => {
             context: {
                 db: firestore,
                 restaurantRef: firestore.collection(COLLECTION_RESTAURANT),
-                userRef: firestore.collection(COLLECTION_USER)
+                userRef: firestore.collection(COLLECTION_USER),
+                throwMissing: () => {
+                    throw new Error('Could not find');
+                },
+                throwBadRequest: () => {
+                    throw new Error('Request not properly formed');
+                }
             },
             tracing: false,
             cacheControl: false

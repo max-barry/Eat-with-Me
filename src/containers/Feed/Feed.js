@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 
-import { graphql, compose } from 'react-apollo';
-import { branch, renderComponent } from 'recompose';
+import { compose } from 'react-apollo';
 
-import { GET_RESTAURANTS } from '../../data/queries';
+import { gqlGetRestaurants, loadWaitingForData } from '../../data/composers';
 import FeedLoading from './Feed.loading';
 import RestaurantActions from '../RestaurantActions';
 import RestaurantMediaElement from '../../components/MediaElement/RestaurantMediaElement';
 
 class Feed extends Component {
     render() {
-        const { getRestaurants } = this.props;
+        const { restaurants } = this.props;
+
         return (
             <ul>
-                {getRestaurants.getRestaurants.map((restaurant, i) => (
+                {restaurants.map((restaurant, i) => (
                     <RestaurantActions
                         key={i}
                         restaurant={restaurant}
@@ -26,14 +26,8 @@ class Feed extends Component {
 }
 
 const enhance = compose(
-    graphql(GET_RESTAURANTS, { name: 'getRestaurants' }),
-    branch(
-        props =>
-            props.getRestaurants &&
-            props.getRestaurants.loading &&
-            props.getRestaurants.restaurants === undefined,
-        renderComponent(FeedLoading)
-    )
+    gqlGetRestaurants,
+    loadWaitingForData('getRestaurants', FeedLoading)
 );
 
 export default enhance(Feed);
