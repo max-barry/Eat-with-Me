@@ -12,7 +12,7 @@ import {
 import getUser from '../../data/graphql.users/queries/getUser';
 import updateLikeHandlers from '../../data/graphql.restaurants/mutations/updateLike';
 
-const addToList = props => _ => {};
+// const addToList = props => _ => {};
 
 // TODO : Optimise with an onChange
 const extraProps = withPropsOnChange(

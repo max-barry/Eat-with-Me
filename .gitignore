@@ -18,6 +18,10 @@
 .env.test.local
 .env.production.local
 
+# Data scrapes
+/data-scrape
+/scripts/Yelp
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

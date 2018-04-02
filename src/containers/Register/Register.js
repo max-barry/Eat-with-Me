@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 
 import Modal from 'react-modal';
-import { withHandlers, compose, renderNothing, branch } from 'recompose';
-
+import { withHandlers, compose } from 'recompose';
 import * as firebase from 'firebase/app';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
-// import * as firebaseui from 'firebaseui';
-// import firebase, { auth } from '../../settings/fb';
-// import firebase, { FIREBASE_UI_CONFIG } from '../../settings/firebase';
 
 import urls from '../../settings/urls';
-
-// import { graphql, compose } from 'react-apollo';
-// import { branch, renderComponent } from 'recompose';
-// import { css } from 'react-emotion';
 
 Modal.setAppElement('#root');
 
 class Register extends Component {
-    // Configure FirebaseUI.
-
     render() {
         const { closeModal, history } = this.props;
         return (
