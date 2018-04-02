@@ -1,18 +1,19 @@
 import { withApollo } from 'react-apollo';
 import { lifecycle, compose, pure } from 'recompose';
+import * as firebase from 'firebase/app';
 
-import { auth } from '../../settings/firebase';
+// import { auth } from '../../settings/fb';
 import { gqlGetUser } from '../../data/composers';
 
 const updateOnAuth = lifecycle({
     componentDidMount() {
-        auth.onAuthStateChanged((authObject = {}) => {
-            const { displayName, uid } = authObject;
+        firebase.auth().onAuthStateChanged(authObject => {
+            authObject = authObject || { uid: null };
+            const { uid } = authObject;
             this.props.client.writeData({
                 data: {
                     getUserAuth: {
                         __typename: 'getUserAuth',
-                        displayName,
                         uid
                     }
                 }

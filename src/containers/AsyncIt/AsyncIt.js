@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export default function asyncComponent(importPath) {
+export default function asyncComponent(componentImport) {
     class AsyncComponent extends Component {
         state = { component: null };
 
         async componentDidMount() {
-            const { default: component } = await (() => import(importPath))();
+            const { default: component } = await componentImport();
 
             this.setState({
                 component: component

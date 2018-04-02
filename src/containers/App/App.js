@@ -8,6 +8,10 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import urls from '../../settings/urls';
 import asyncComponent from '../AsyncIt';
 
+// import Feed from '../Feed';
+// import RestaurantDetail from '../RestaurantDetail';
+// import Register from '../Register';
+
 class App extends Component {
     previousLocation = this.props.location;
 
@@ -21,21 +25,19 @@ class App extends Component {
                     <Route
                         exact
                         path={urls.HOME.pathname}
-                        component={asyncComponent('../Feed')}
+                        component={asyncComponent(() => import('../Feed'))}
                     />
                     <Route
                         path={urls.RESTAURANT_SLUG.pathname}
-                        component={asyncComponent('../RestaurantDetail')}
-                    />
-                    <Route
-                        path={urls.REGISTER.pathname}
-                        component={asyncComponent('../Register')}
+                        component={asyncComponent(() =>
+                            import('../RestaurantDetail')
+                        )}
                     />
                 </Switch>
-                {isModal ? (
+                {isModal || location.pathname === urls.REGISTER.pathname ? (
                     <Route
                         path={urls.REGISTER.pathname}
-                        component={asyncComponent('../Register')}
+                        component={asyncComponent(() => import('../Register'))}
                     />
                 ) : null}
             </div>
