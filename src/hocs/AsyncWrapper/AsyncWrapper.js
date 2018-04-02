@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default function asyncComponent(componentImport) {
+export default function AsyncWrapper(componentImport) {
     class AsyncComponent extends Component {
         state = { component: null };
 

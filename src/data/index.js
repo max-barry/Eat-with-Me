@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { withClientState } from 'apollo-link-state';
 
-import { QueryResolvers, MutationResolvers } from './resolvers';
+// import { QueryResolvers, MutationResolvers } from './resolvers';
 // import typeDefs from './typeDefs';
 
 const cache = new InMemoryCache();
@@ -16,14 +16,15 @@ const httpLink = new HttpLink({
 const stateLink = withClientState({
     cache,
     resolvers: {
-        Query: QueryResolvers,
-        Mutation: MutationResolvers
+        // Query: QueryResolvers,
+        // Mutation: MutationResolvers
     },
     defaults: {
-        getUserAuth: {
-            __typename: 'getUserAuth',
-            uid: null
-        }
+        FIREBASE_USER_UID: null
+        // getUserAuth: {
+        //     __typename: 'getUserAuth',
+        //     id: null
+        // }
     }
 });
 

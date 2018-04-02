@@ -3,48 +3,47 @@ export default {
         const { db, restaurantRef, userRef } = context;
         const targetRestaurant = restaurantRef.doc(args.id);
         const targetUser = userRef.doc(args.uid);
+        const increment = args.increment;
 
         return db.runTransaction(async transaction => {
             // Fetch from the server
             const restaurant = await transaction.get(targetRestaurant);
+            const user = await transaction.get(targetUser);
 
-            // Crack what comes back
+            // Fetch the current data records
             const restaurantData = restaurant.data();
-            restaurantData.likes += 1;
+            const userData = user.data();
 
-            // Update the restaurant with the like
-            transaction.update(targetRestaurant, {
-                likes: restaurantData.likes
-            });
+            // Check if the user has already liked or disliked
+            // TODO : Move to a proper graphql validator (if that exists)
+            const commit =
+                // The user has no relationship with the restaurant OR
+                !(restaurant.id in userData.likes) ||
+                // The user's increment is opposite to their current total
+                (restaurant.id in userData.likes &&
+                    userData.likes[restaurant.id] !== increment);
 
-            // Update the list of restaurants the user likes
-            transaction.update(targetUser, {
-                [`likes.${restaurant.id}`]: true
-            });
+            if (commit) {
+                // Update some values on the local objects
+                restaurantData.likes += increment ? 1 : -1;
+                userData.likes[restaurant.id] = increment;
 
-            // Return the restaurant
-            return { id: restaurant.id, ...restaurantData };
+                // Update the restaurant with the like
+                transaction.update(targetRestaurant, {
+                    likes: restaurantData.likes
+                });
+
+                // Update the list of restaurants the user likes
+                transaction.update(targetUser, {
+                    [`likes.${restaurant.id}`]: increment
+                });
+            }
+
+            // Return the restaurant and user
+            return {
+                user: { id: user.id, ...userData },
+                restaurant: { id: restaurant.id, ...restaurantData }
+            };
         });
-        // const doc = await transaction.get(ref);
-        // console.log(doc);
-        // const data = doc.data();
-        // data.likes += 1;
-
-        // transaction.update();
-
-        // return {};
-
-        // return db
-        //     .runTransaction(t => {
-        //         return t.get(ref).then(doc => {
-        //
-        //
-        //             // Add one person to the city population
-        //
-        //             return Promise.resolve();
-        //         });
-        //     })
-        //     .then(result => result)
-        //     .catch(err => console.error(err));
     }
 };

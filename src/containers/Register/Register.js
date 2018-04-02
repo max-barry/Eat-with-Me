@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Modal from 'react-modal';
-import { withHandlers, compose } from 'recompose';
+import { withHandlers, compose, renderNothing, branch } from 'recompose';
 
 import * as firebase from 'firebase/app';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';

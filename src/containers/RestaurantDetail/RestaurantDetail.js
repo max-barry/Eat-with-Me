@@ -2,9 +2,10 @@ import React from 'react';
 
 import { compose } from 'react-apollo';
 
-import { gqlGetRestaurant, loadWaitingForData } from '../../data/composers';
+import { loadWaitingForData } from '../../data/utils';
+import getRestaurant from '../../data/graphql.restaurants/queries/getRestaurant';
 import RestaurantLoading from './Restaurant.loading';
-import RestaurantActions from '../RestaurantActions';
+import RestaurantWrapper from '../../hocs/RestaurantWrapper';
 
 const Content = ({ restaurant, ...props }) => (
     <p>
@@ -15,7 +16,7 @@ const Content = ({ restaurant, ...props }) => (
 // const RestaurantDetail = ({ getRestaurant: { getRestaurant }, ...props }) => (
 const RestaurantDetail = ({ restaurant, ...props }) => {
     return (
-        <RestaurantActions
+        <RestaurantWrapper
             restaurant={restaurant}
             component={Content}
             {...props}
@@ -24,8 +25,8 @@ const RestaurantDetail = ({ restaurant, ...props }) => {
 };
 
 const enhance = compose(
-    gqlGetRestaurant,
-    loadWaitingForData('getRestaurant', RestaurantLoading)
+    getRestaurant,
+    loadWaitingForData('restaurant', RestaurantLoading)
 );
 
 export default enhance(RestaurantDetail);

@@ -11,8 +11,8 @@ import { MediaElementActionList } from './MediaElement.styles';
 import urls from '../../settings/urls';
 
 const RestaurantMediaElement = ({
-    favourite,
-    hasFavourited,
+    updateLikes,
+    hasLiked,
     restaurant: { likes, name, slug, ...attributes },
     ...props
 }) => (
@@ -23,8 +23,11 @@ const RestaurantMediaElement = ({
         {name}
         <MediaElementActionList>
             <li>
-                <IconWithText text={`${likes} likes`} onClick={favourite}>
-                    <Favourite active={hasFavourited()} />
+                <IconWithText
+                    text={`${likes} likes`}
+                    onClick={_ => updateLikes(!hasLiked)}
+                >
+                    <Favourite active={hasLiked} />
                 </IconWithText>
             </li>
             <li>

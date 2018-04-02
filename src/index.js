@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter } from 'react-router-dom';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 import ApolloClientStore from './data/index';
-import Authentication from './containers/Authentication';
+import Authentication from './hocs/Authentication';
 import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.styles';
-
-// import * as firebaseui from 'firebaseui';
 
 // Configure Firebase.
 export const FIREBASE_CONFIG = {
@@ -22,10 +20,6 @@ export const FIREBASE_CONFIG = {
 
 // Initialize
 firebase.initializeApp(FIREBASE_CONFIG);
-
-// export const auth = firebase.auth();
-
-// export default firebase;
 
 ReactDOM.render(
     <BrowserRouter>

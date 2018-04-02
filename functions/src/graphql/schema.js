@@ -15,21 +15,26 @@ const schema = `
   }
 
   type User {
-    uid: ID!
+    id: ID!
     enabled: Boolean!
     likes: JSON
+  }
+
+  type RestaurantLikedBy {
+    user: User!
+    restaurant: Restaurant!
   }
 
   # the schema allows the following query:
   type Query {
     getRestaurants: [Restaurant]
     getRestaurant(id: ID, slug: String): Restaurant
-    getUserProfile(uid: ID): User
+    getUserProfile(id: ID): User
   }
 
   # the schema allows the following mutations:
   type Mutation {
-    updateLikes(id: ID!, uid: String!): Restaurant
+    updateLikes(id: ID!, uid: String!, increment: Boolean!): RestaurantLikedBy
   }
 `;
 

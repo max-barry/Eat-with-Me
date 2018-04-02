@@ -6,38 +6,36 @@ import { withRouter } from 'react-router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 
 import urls from '../../settings/urls';
-import asyncComponent from '../AsyncIt';
+import AsyncWrapper from '../../hocs/AsyncWrapper';
 
-// import Feed from '../Feed';
-// import RestaurantDetail from '../RestaurantDetail';
-// import Register from '../Register';
+const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
+const AsyncRestaurantDetail = AsyncWrapper(_ => import('../RestaurantDetail'));
+const AsyncRegister = AsyncWrapper(_ => import('../Register'));
 
 class App extends Component {
     previousLocation = this.props.location;
 
     render() {
-        const { location, checkIfModal } = this.props;
-        const isModal = checkIfModal();
+        const { location, isModal } = this.props;
+        const showModal = isModal();
         return (
             <div>
                 <Link to={urls.REGISTER}>Register</Link>
-                <Switch location={isModal ? this.previousLocation : location}>
+                <Switch location={showModal ? this.previousLocation : location}>
                     <Route
                         exact
                         path={urls.HOME.pathname}
-                        component={asyncComponent(() => import('../Feed'))}
+                        component={AsyncFeed}
                     />
                     <Route
                         path={urls.RESTAURANT_SLUG.pathname}
-                        component={asyncComponent(() =>
-                            import('../RestaurantDetail')
-                        )}
+                        component={AsyncRestaurantDetail}
                     />
                 </Switch>
-                {isModal || location.pathname === urls.REGISTER.pathname ? (
+                {showModal || location.pathname === urls.REGISTER.pathname ? (
                     <Route
                         path={urls.REGISTER.pathname}
-                        component={asyncComponent(() => import('../Register'))}
+                        component={AsyncRegister}
                     />
                 ) : null}
             </div>
@@ -52,20 +50,18 @@ const lifecycleHandlers = lifecycle({
             nextProps.history.action !== 'POP' &&
             (!location.state || !location.state.modal)
         ) {
-            this.previousLocation = this.props.location;
+            this.previousLocation = location;
         }
     }
 });
 
 const extraHandlers = withHandlers({
-    checkIfModal: props => _ => {
-        const { location } = props;
-        return !!(
+    isModal: ({ location }) => _ =>
+        !!(
             location.state &&
             location.state.modal &&
             this.previousLocation !== location
-        );
-    }
+        )
 });
 
 const enhance = compose(withRouter, extraHandlers, lifecycleHandlers);
