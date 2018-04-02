@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { setPropTypes, compose } from 'recompose';
+import PropTypes from 'prop-types';
+
 import Favourite from '../Icon/Favourite';
 import ListAdd from '../Icon/ListAdd';
 import { IconWithText } from '../Icon/Icon';
@@ -9,6 +12,7 @@ import urls from '../../settings/urls';
 
 const RestaurantMediaElement = ({
     favourite,
+    hasFavourited,
     restaurant: { likes, name, slug, ...attributes },
     ...props
 }) => (
@@ -20,7 +24,7 @@ const RestaurantMediaElement = ({
         <MediaElementActionList>
             <li>
                 <IconWithText text={`${likes} likes`} onClick={favourite}>
-                    <Favourite active={false} />
+                    <Favourite active={hasFavourited()} />
                 </IconWithText>
             </li>
             <li>
@@ -32,4 +36,10 @@ const RestaurantMediaElement = ({
     </MediaElement>
 );
 
-export default RestaurantMediaElement;
+const propsCheck = setPropTypes({
+    restaurant: PropTypes.object.isRequired
+});
+
+const enhance = compose(propsCheck);
+
+export default enhance(RestaurantMediaElement);

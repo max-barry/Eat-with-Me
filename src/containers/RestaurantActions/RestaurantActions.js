@@ -1,15 +1,21 @@
 import { compose } from 'react-apollo';
+import { withRouter } from 'react-router';
 import { componentFromProp, withHandlers, setPropTypes } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { GET_RESTAURANTS } from '../../data/queries';
 import { gqlUpdateLikes, gqlGetUser } from '../../data/composers';
 import { updateCacheArray } from '../../data/mutations';
+import urls from '../../settings/urls';
 
-const favourite = props => _ => {
-    const { restaurant, user } = props;
+const hasFavourited = ({ restaurant, user }) => _ =>
+    !!(user && user.uid && restaurant.id in user.likes);
 
-    props.updateLikes({
+const favourite = ({ restaurant, user, history, updateLikes }) => _ => {
+    // If not user.uid then redirect them to the register page
+    if (!(user && user.uid)) return history.push(urls.REGISTER);
+
+    updateLikes({
         variables: {
             id: restaurant.id,
             uid: user.uid
@@ -33,14 +39,21 @@ const favourite = props => _ => {
     });
 };
 
+const addToList = props => _ => {};
+
 const propsCheck = setPropTypes({
     restaurant: PropTypes.object.isRequired
 });
 
 const extraHandlers = withHandlers({
-    favourite
+    favourite,
+    hasFavourited
 });
 
-export default compose(propsCheck, gqlUpdateLikes, gqlGetUser, extraHandlers)(
-    componentFromProp('component')
-);
+export default compose(
+    propsCheck,
+    gqlUpdateLikes,
+    gqlGetUser,
+    withRouter,
+    extraHandlers
+)(componentFromProp('component'));
