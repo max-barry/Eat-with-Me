@@ -10,7 +10,7 @@ import RestaurantMediaElement from '../../components/MediaElement/RestaurantMedi
 
 class Feed extends Component {
     render() {
-        const { restaurants } = this.props;
+        const { restaurants = [] } = this.props;
 
         return (
             <ul>

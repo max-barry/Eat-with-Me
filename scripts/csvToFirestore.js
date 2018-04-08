@@ -1,22 +1,11 @@
 const path = require('path');
-
-const admin = require('firebase-admin');
 const csv = require('csvtojson');
-
 const CSV_PATH = path.resolve(__dirname, '../csv/restaurants.csv');
-const SERVICE_ACCOUNT = require('../credentials/firestore.import.alpha.json');
-const COLLECTION = 'restaurants';
+const { firestore, COLLECTION_RESTAURANT } = require('./firestoreClient');
 
 const TYPES = {
     likes: parseInt
 };
-
-admin.initializeApp({
-    credential: admin.credential.cert(SERVICE_ACCOUNT),
-    databaseURL: 'https://eat-with-me-alpha.firebaseio.com'
-});
-
-const firestore = admin.firestore();
 
 function loadCsv(csv_path) {
     return new Promise((resolve, reject) => {
@@ -41,7 +30,7 @@ async function main() {
     const data = await loadCsv(CSV_PATH);
 
     const batchWrite = firestore.batch();
-    const collectionRef = firestore.collection(COLLECTION);
+    const collectionRef = firestore.collection(COLLECTION_RESTAURANT);
 
     data.forEach(row => batchWrite.set(collectionRef.doc(), row));
 
