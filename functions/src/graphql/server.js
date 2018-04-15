@@ -1,18 +1,18 @@
-const bodyParser = require('body-parser');
-const express = require('express');
-const cors = require('cors');
+import bodyParser from 'body-parser';
+import express from 'express';
+import cors from 'cors';
 
-const printSchema = require('graphql/utilities/schemaPrinter').printSchema;
-const graphqlExpress = require('apollo-server-express').graphqlExpress;
-const graphiqlExpress = require('apollo-server-express').graphiqlExpress;
+import { printSchema } from 'graphql/utilities/schemaPrinter';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+// const graphiqlExpress = require('apollo-server-express').graphiqlExpress;
 // const ApolloEngine = require('apollo-engine').ApolloEngine;
 
-const schema = require('./schema');
-const { firestore } = require('../firebase/setup');
-const {
+import schema from './schema';
+import { firestore } from '../firebase/setup';
+import {
     COLLECTION_RESTAURANT,
     COLLECTION_USER
-} = require('../firebase/firestore/constants');
+} from '../firebase/firestore/constants';
 
 const setupGraphQLServer = () => {
     // setup server
@@ -74,4 +74,4 @@ const setupGraphQLServer = () => {
     return graphQLServer;
 };
 
-module.exports = setupGraphQLServer;
+export default setupGraphQLServer;

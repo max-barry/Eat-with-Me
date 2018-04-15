@@ -16,4 +16,4 @@ const resolveFunctions = {
     Mutation: Mutations
 };
 
-module.exports = resolveFunctions;
+export default resolveFunctions;

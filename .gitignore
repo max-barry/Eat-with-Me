@@ -20,7 +20,7 @@
 
 # Data scrapes
 /data-scrape
-/scripts/Yelp
+/scripts/Yelp/_olddata
 
 npm-debug.log*
 yarn-debug.log*

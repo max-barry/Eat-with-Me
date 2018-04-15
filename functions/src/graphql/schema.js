@@ -1,18 +1,42 @@
-const GraphQLJSON = require('graphql-type-json');
+import { makeExecutableSchema } from 'graphql-tools';
+import GraphQLJSON from 'graphql-type-json';
+import { PointObject } from 'graphql-geojson';
 
-const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
-
-const resolvers = require('./resolvers');
+import resolvers from './resolvers';
 
 const schema = `
   scalar JSON
+  scalar Coordinates
+
+  type Location {
+    address1: String!
+    address2: String
+    address3: String
+    city: String!
+    country: String!
+    state: String
+    zip_code: String!
+  }
 
   type Restaurant {
     id: ID!
     name: String!
-    likes: Int!
-    slug: String!
+    likes: Int
+    yelp: String!
+    yelp_rating: Float
+    yelp_review_count: Int
+    yelp_url: String
+    price_bracket: Int
+    display_phone: String
+    category_aliases: JSON
+    category_titles: JSON
+    location: Location
+    permanently_closed: Boolean
+    coordinates: Coordinates
+    yelp_photos: [String]
   }
+
+  # slug: String!
 
   type User {
     id: ID!
@@ -27,7 +51,13 @@ const schema = `
 
   # the schema allows the following query:
   type Query {
-    getRestaurants: [Restaurant]
+    getRestaurants(
+      after: Int = null,
+      orderBy: String = "yelp_review_count",
+      limit: Int = 20,
+      includeClosed: Boolean = false
+      includeLandmarks: Boolean = false
+    ): [Restaurant]
     getRestaurant(id: ID, slug: String): Restaurant
     getUserProfile(id: ID): User
   }
@@ -38,12 +68,13 @@ const schema = `
   }
 `;
 
-module.exports = makeExecutableSchema({
+export default makeExecutableSchema({
     typeDefs: schema,
     resolvers: {
         JSON: {
             __serialize: value => GraphQLJSON.parseValue(value)
         },
+        Coordinates: PointObject,
         ...resolvers
     }
 });

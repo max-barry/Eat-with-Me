@@ -11,3 +11,8 @@ const { auth } = require('../setup');
 //         // if ()
 //         console.log(event);
 //     });
+
+// exports.dbWrite = functions.firestore.document('/path').onWrite((change, context) => {
+//     const beforeData = change.before.data(); // data before the write
+//     const afterData = change.after.data(); // data after the write
+//   });
