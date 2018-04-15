@@ -6,13 +6,13 @@ import { RESTAURANT_FRAGMENT } from '../fragments';
 
 export const GET_RESTAURANTS = gql`
     query GetRestaurants(
-        $after: Int = null,
-        $orderBy: String = 'yelp_review_count',
+        $after: String = null,
+        $orderBy: String = "yelp_review_count",
         $limit: Int = 20,
         $includeClosed: Boolean = false,
         $includeLandmarks: Boolean = false
     ) {
-        getRestaurants(
+        restaurants (
             after: $after,
             orderBy: $orderBy,
             limit: $limit,
@@ -25,13 +25,16 @@ export const GET_RESTAURANTS = gql`
     ${RESTAURANT_FRAGMENT.fragment}
 `;
 
-export const gqlGetRestaurants = graphql(GET_RESTAURANTS, {
-    name: 'getRestaurants'
-});
+// export const gqlGetRestaurants = graphql(GET_RESTAURANTS, {
+//     name: 'getRestaurants',
+//     options: {
+//         variables: {}
+//     }
+// });
 
-export default compose(
-    gqlGetRestaurants,
-    withPropsOnChange(['getRestaurants'], ({ getRestaurants }) => ({
-        restaurants: getRestaurants.getRestaurants
-    }))
-);
+// export default compose(
+//     gqlGetRestaurants,
+//     withPropsOnChange(['getRestaurants'], ({ getRestaurants }) => ({
+//         restaurants: getRestaurants.getRestaurants
+//     }))
+// );

@@ -21,8 +21,10 @@ const schema = `
   type Restaurant {
     id: ID!
     name: String!
-    likes: Int
+    slug: String!
     yelp: String!
+    is_restaurant: Boolean!
+    likes: Int
     yelp_rating: Float
     yelp_review_count: Int
     yelp_url: String
@@ -51,15 +53,15 @@ const schema = `
 
   # the schema allows the following query:
   type Query {
-    getRestaurants(
-      after: Int = null,
+    restaurants (
+      after: String = null,
       orderBy: String = "yelp_review_count",
       limit: Int = 20,
       includeClosed: Boolean = false
       includeLandmarks: Boolean = false
     ): [Restaurant]
-    getRestaurant(id: ID, slug: String): Restaurant
-    getUserProfile(id: ID): User
+    restaurant(id: ID, slug: String): Restaurant
+    userProfile(id: ID): User
   }
 
   # the schema allows the following mutations:

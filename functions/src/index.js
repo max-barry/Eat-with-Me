@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+import { https } from 'firebase-functions';
 
 import setupGraphQLServer from './graphql/server';
 import { onRestaurantLiked } from './firebase/firestore/functions';
@@ -9,9 +9,7 @@ import {
 
 const GraphQLServer = setupGraphQLServer();
 
-console.log(functions);
-
-export const api = functions.https.onRequest(GraphQLServer);
+export const api = https.onRequest(GraphQLServer);
 // export const onUserCreated = _onUserCreated;
 // export const onUserDeleted = _onUserDeleted;
 // exports.onRestaurantLiked = onRestaurantLiked;
