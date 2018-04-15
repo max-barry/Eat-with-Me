@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter } from 'react-router-dom';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import ApolloClientStore from './data/index';
-import Authentication from './hocs/Authentication';
 import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.styles';
@@ -21,12 +20,12 @@ export const FIREBASE_CONFIG = {
 // Initialize
 firebase.initializeApp(FIREBASE_CONFIG);
 
+// TODO : Authentication has been moved from index > app
+//        as a temporary bugfix for https://github.com/ReactTraining/react-router/issues/6072
 ReactDOM.render(
     <BrowserRouter>
         <ApolloProvider client={ApolloClientStore}>
-            <Authentication>
-                <App />
-            </Authentication>
+            <App />
         </ApolloProvider>
     </BrowserRouter>,
     document.getElementById('root')

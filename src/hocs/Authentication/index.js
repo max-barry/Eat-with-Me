@@ -1,1 +1,5 @@
-export { default } from './Authentication';
+export {
+    AuthenticationProvider,
+    AuthenticationConsumer,
+    AuthenticationContext
+} from './Authentication';

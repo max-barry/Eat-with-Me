@@ -1,20 +1,10 @@
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import {
-    componentFromProp,
-    // withHandlers,
-    // withProps,
-    setPropTypes,
-    compose,
-    withPropsOnChange
-} from 'recompose';
+import { setPropTypes, compose, withPropsOnChange } from 'recompose';
 
-import getUser from '../../data/graphql.users/queries/getUser';
+import { AuthenticationConsumer } from '../Authentication';
 import updateLikeHandlers from '../../data/graphql.restaurants/mutations/updateLike';
 
-// const addToList = props => _ => {};
-
-// TODO : Optimise with an onChange
 const extraProps = withPropsOnChange(
     ['user', 'restaurant'],
     ({ user, restaurant, ...props }) => ({
@@ -28,12 +18,8 @@ const propsCheck = setPropTypes({
     hasLiked: PropTypes.bool.isRequired
 });
 
-export default compose(
-    getUser,
-    updateLikeHandlers,
-    withRouter,
-    extraProps,
-    // initialProps,
-    // extraHandlers,
-    propsCheck
-)(componentFromProp('component'));
+// TODO : Optimize a bit more by only listening to some prop changes (e.g. user or restaurant)
+
+const enhance = compose(updateLikeHandlers, withRouter, extraProps, propsCheck);
+
+export default enhance(AuthenticationConsumer('component'));

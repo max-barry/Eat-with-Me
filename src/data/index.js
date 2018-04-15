@@ -15,17 +15,8 @@ const httpLink = new HttpLink({
 
 const stateLink = withClientState({
     cache,
-    resolvers: {
-        // Query: QueryResolvers,
-        // Mutation: MutationResolvers
-    },
-    defaults: {
-        FIREBASE_USER_UID: null
-        // getUserAuth: {
-        //     __typename: 'getUserAuth',
-        //     id: null
-        // }
-    }
+    resolvers: {},
+    defaults: {}
 });
 
 export default new ApolloClient({

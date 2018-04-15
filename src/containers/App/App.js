@@ -7,6 +7,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 
 import urls from '../../settings/urls';
 import AsyncWrapper from '../../hocs/AsyncWrapper';
+import { AuthenticationProvider } from '../../hocs/Authentication';
 
 const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
 const AsyncRestaurantDetail = AsyncWrapper(_ => import('../RestaurantDetail'));
@@ -19,26 +20,31 @@ class App extends Component {
         const { location, isModal } = this.props;
         const showModal = isModal();
         return (
-            <div>
-                <Link to={urls.REGISTER}>Register</Link>
-                <Switch location={showModal ? this.previousLocation : location}>
-                    <Route
-                        exact
-                        path={urls.HOME.pathname}
-                        component={AsyncFeed}
-                    />
-                    <Route
-                        path={urls.RESTAURANT_SLUG.pathname}
-                        component={AsyncRestaurantDetail}
-                    />
-                </Switch>
-                {showModal || location.pathname === urls.REGISTER.pathname ? (
-                    <Route
-                        path={urls.REGISTER.pathname}
-                        component={AsyncRegister}
-                    />
-                ) : null}
-            </div>
+            <AuthenticationProvider>
+                <div>
+                    <Link to={urls.REGISTER}>Register</Link>
+                    <Switch
+                        location={showModal ? this.previousLocation : location}
+                    >
+                        <Route
+                            exact
+                            path={urls.HOME.pathname}
+                            component={AsyncFeed}
+                        />
+                        <Route
+                            path={urls.RESTAURANT_SLUG.pathname}
+                            component={AsyncRestaurantDetail}
+                        />
+                    </Switch>
+                    {showModal ||
+                    location.pathname === urls.REGISTER.pathname ? (
+                        <Route
+                            path={urls.REGISTER.pathname}
+                            component={AsyncRegister}
+                        />
+                    ) : null}
+                </div>
+            </AuthenticationProvider>
         );
     }
 }
