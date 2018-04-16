@@ -25,6 +25,9 @@ export default {
 
             if (commit) {
                 // Update some values on the local objects
+                if (!restaurantData.likes || isNaN(restaurantData.likes)) {
+                    restaurantData.likes = 0;
+                }
                 restaurantData.likes += increment ? 1 : -1;
                 userData.likes[restaurant.id] = increment;
 
@@ -42,7 +45,7 @@ export default {
             // Return the restaurant and user
             return {
                 user: { id: user.id, ...userData },
-                restaurant: { id: restaurant.id, ...restaurantData }
+                restaurant: restaurantData
             };
         });
     }

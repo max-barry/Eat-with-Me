@@ -1,15 +1,31 @@
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { setPropTypes, compose, withPropsOnChange } from 'recompose';
+import {
+    componentFromProp,
+    setPropTypes,
+    compose,
+    withPropsOnChange
+} from 'recompose';
 
 import { AuthenticationConsumer } from '../Authentication';
 import updateLikeHandlers from '../../data/graphql.restaurants/mutations/updateLike';
 
 const extraProps = withPropsOnChange(
     ['user', 'restaurant'],
-    ({ user, restaurant, ...props }) => ({
-        hasLiked: !!(user && user.id && user.likes[restaurant.id])
-    })
+    ({ user, restaurant, ...props }) => {
+        console.log('!!!');
+        console.log(!!user);
+        if (user) console.log(!!user.id);
+        if (user) console.log(user.likes);
+        if (user) console.log(!!user.likes[restaurant.id]);
+
+        console.log(restaurant);
+
+        console.log('!!!');
+        return {
+            hasLiked: !!(user && user.id && user.likes[restaurant.id])
+        };
+    }
 );
 
 const propsCheck = setPropTypes({
@@ -20,6 +36,12 @@ const propsCheck = setPropTypes({
 
 // TODO : Optimize a bit more by only listening to some prop changes (e.g. user or restaurant)
 
-const enhance = compose(updateLikeHandlers, withRouter, extraProps, propsCheck);
+const enhance = compose(
+    withRouter,
+    AuthenticationConsumer,
+    updateLikeHandlers,
+    extraProps,
+    propsCheck
+);
 
-export default enhance(AuthenticationConsumer('component'));
+export default enhance(componentFromProp('component'));

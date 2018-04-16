@@ -61,7 +61,7 @@ const schema = `
       includeLandmarks: Boolean = false
     ): [Restaurant]
     restaurant(id: ID, slug: String): Restaurant
-    userProfile(id: ID): User
+    user(id: ID): User
   }
 
   # the schema allows the following mutations:

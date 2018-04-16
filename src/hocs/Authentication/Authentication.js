@@ -1,19 +1,12 @@
 import React, { createElement } from 'react';
 
-// import { withRouter } from 'react-router';
-import { withApollo } from 'react-apollo';
-import {
-    lifecycle,
-    // withState,
-    withHandlers,
-    // shouldUpdate,
-    // defaultProps,
-    withStateHandlers,
-    compose
-} from 'recompose';
 import firebase from 'firebase/app';
+import { withApollo } from 'react-apollo';
+import { lifecycle, withHandlers, withStateHandlers, compose } from 'recompose';
 
 import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
+
+export const AuthenticationContext = React.createContext(null);
 
 const authenticationStateHandlers = withStateHandlers(
     { firebaseAuth: null, databaseAuth: null },
@@ -42,7 +35,7 @@ const authenticationHandlers = withHandlers({
             variables: { id: firebaseAuth.uid }
         });
         // Update the state of the database auth object
-        setDatabaseState(response.data.userProfile);
+        setDatabaseState(response.data.user);
     }
 });
 
@@ -53,51 +46,25 @@ const authenticationLifecycles = lifecycle({
     }
 });
 
-// const enhance = ;
-// const enhance = compose(withApollo, AuthenticationLifecycles);
-
-// const enhance = compose(withApollo, updateOnAuth);
-
-export const AuthenticationContext = React.createContext(null);
-
-export const AuthenticationProvider = compose(
+const AuthProviderEnhancements = compose(
     withApollo,
     authenticationStateHandlers,
     authenticationHandlers,
     authenticationLifecycles
-)(({ children, databaseAuth }) => (
+);
+
+const AuthProviderComponent = ({ children, databaseAuth }) => (
     <AuthenticationContext.Provider value={databaseAuth}>
         {children}
     </AuthenticationContext.Provider>
-));
+);
 
-export const AuthenticationConsumer = propName => {
-    const Component = props => (
-        <AuthenticationContext.Consumer>
-            {user => createElement(props[propName], { user, ...props })}
-        </AuthenticationContext.Consumer>
-    );
-    Component.displayName = `authenticationConsumer(${propName})`;
-    return Component;
-};
+export const AuthenticationProvider = AuthProviderEnhancements(
+    AuthProviderComponent
+);
 
-// export default () => <Authentication />;
-
-// const updateOnAuth = lifecycle({
-//     componentDidMount() {
-//         const { client } = this.props;
-//         firebase.auth().onAuthStateChanged(authObject => {
-//             client.writeData({
-//                 data: {
-//                     FIREBASE_USER_UID: authObject.uid
-//                 }
-//             });
-//         });
-//     }
-// });
-
-// const enhance = compose(withApollo, updateOnAuth);
-
-// const Authentication = props => props.children;
-
-// export default enhance(Authentication);
+export const AuthenticationConsumer = Component => props => (
+    <AuthenticationContext.Consumer>
+        {user => <Component {...props} user={user} />}
+    </AuthenticationContext.Consumer>
+);

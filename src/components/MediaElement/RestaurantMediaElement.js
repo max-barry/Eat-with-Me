@@ -13,7 +13,7 @@ import urls from '../../settings/urls';
 const RestaurantMediaElement = ({
     updateLikes,
     hasLiked,
-    restaurant: { likes, name, slug, ...attributes },
+    restaurant: { likes = 0, name, slug, ...attributes },
     ...props
 }) => (
     <MediaElement

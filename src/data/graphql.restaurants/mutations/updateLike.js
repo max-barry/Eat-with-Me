@@ -20,8 +20,15 @@ export const UPDATE_RESTAURANT_LIKES = gql`
     ${USER_FRAGMENT.fragment}
 `;
 
-const updateLikes = ({ restaurant, user, ...props }) => increment =>
-    props.updateLikes({
+const updateLikes = ({ restaurant, user, ...props }) => increment => {
+    console.log('updating');
+    console.log({
+        likes: {
+            ...user.likes,
+            [restaurant.id]: increment
+        }
+    });
+    return props.updateLikes({
         variables: {
             increment,
             id: restaurant.id,
@@ -47,6 +54,7 @@ const updateLikes = ({ restaurant, user, ...props }) => increment =>
             }
         }
     });
+};
 
 export const gqlUpdateLikes = graphql(UPDATE_RESTAURANT_LIKES, {
     name: 'updateLikes'
