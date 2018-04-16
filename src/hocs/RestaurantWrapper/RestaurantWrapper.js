@@ -10,6 +10,8 @@ import {
 import { AuthenticationConsumer } from '../Authentication';
 import updateLikeHandlers from '../../data/graphql.restaurants/mutations/updateLike';
 
+// TODO : Avoid more "everything gets rerendered" on get_restaurants calls when it only changes 1 restaurant
+
 const extraProps = withPropsOnChange(
     ['user', 'restaurant'],
     ({ user, restaurant, ...props }) => ({
@@ -19,6 +21,7 @@ const extraProps = withPropsOnChange(
 
 const propsCheck = setPropTypes({
     restaurant: PropTypes.object.isRequired,
+    component: PropTypes.element.isRequired,
     updateLikes: PropTypes.func.isRequired,
     hasLiked: PropTypes.bool.isRequired
 });
