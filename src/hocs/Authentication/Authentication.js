@@ -1,62 +1,46 @@
-import React, { createElement } from 'react';
+import React from 'react';
 
 import firebase from 'firebase/app';
-import { withApollo } from 'react-apollo';
-import { lifecycle, withHandlers, withStateHandlers, compose } from 'recompose';
+import { Query } from 'react-apollo';
+import { lifecycle, compose, withState } from 'recompose';
 
 import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
 
 export const AuthenticationContext = React.createContext(null);
 
-const authenticationStateHandlers = withStateHandlers(
-    { firebaseAuth: null, databaseAuth: null },
-    {
-        setFirebaseState: props => firebaseAuthObject => ({
-            firebaseAuth: firebaseAuthObject
-        }),
-        setDatabaseState: props => databaseAuthObject => ({
-            databaseAuth: databaseAuthObject
-        })
-    }
+const authenticationStateHandlers = withState(
+    'firebaseAuth',
+    'setFirebaseState',
+    null
 );
-
-const authenticationHandlers = withHandlers({
-    onFirebaseAuthChange: ({
-        setFirebaseState,
-        setDatabaseState,
-        client
-    }) => async firebaseAuth => {
-        // Update the state of the firebase auth object
-        setFirebaseState(firebaseAuth);
-        // Call Graphql with our new Firebase Auth UID
-        // TODO : Secure this
-        const response = await client.query({
-            query: GET_USER_PROFILE,
-            variables: { id: firebaseAuth.uid }
-        });
-        // Update the state of the database auth object
-        setDatabaseState(response.data.user);
-    }
-});
 
 const authenticationLifecycles = lifecycle({
     componentDidMount() {
         // TODO : Handle a delete auth or logout
-        firebase.auth().onAuthStateChanged(this.props.onFirebaseAuthChange);
+        firebase.auth().onAuthStateChanged(this.props.setFirebaseState);
     }
 });
 
 const AuthProviderEnhancements = compose(
-    withApollo,
     authenticationStateHandlers,
-    authenticationHandlers,
     authenticationLifecycles
 );
 
-const AuthProviderComponent = ({ children, databaseAuth }) => (
-    <AuthenticationContext.Provider value={databaseAuth}>
-        {children}
-    </AuthenticationContext.Provider>
+// TODO : Handle the loading and error states for this data loading
+const AuthProviderComponent = ({ children, firebaseAuth, ...props }) => (
+    <Query
+        query={GET_USER_PROFILE}
+        variables={{
+            id: firebaseAuth ? firebaseAuth.uid : null,
+            skip: !firebaseAuth
+        }}
+    >
+        {({ loading, data = {} }) => (
+            <AuthenticationContext.Provider value={data.user}>
+                {children}
+            </AuthenticationContext.Provider>
+        )}
+    </Query>
 );
 
 export const AuthenticationProvider = AuthProviderEnhancements(

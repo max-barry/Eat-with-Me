@@ -12,20 +12,9 @@ import updateLikeHandlers from '../../data/graphql.restaurants/mutations/updateL
 
 const extraProps = withPropsOnChange(
     ['user', 'restaurant'],
-    ({ user, restaurant, ...props }) => {
-        console.log('!!!');
-        console.log(!!user);
-        if (user) console.log(!!user.id);
-        if (user) console.log(user.likes);
-        if (user) console.log(!!user.likes[restaurant.id]);
-
-        console.log(restaurant);
-
-        console.log('!!!');
-        return {
-            hasLiked: !!(user && user.id && user.likes[restaurant.id])
-        };
-    }
+    ({ user, restaurant, ...props }) => ({
+        hasLiked: !!(user && user.id && user.likes[restaurant.id])
+    })
 );
 
 const propsCheck = setPropTypes({
