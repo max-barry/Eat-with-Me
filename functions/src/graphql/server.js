@@ -8,6 +8,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 // const ApolloEngine = require('apollo-engine').ApolloEngine;
 
 import schema from './schema';
+import * as utils from './utils';
 import { firestore } from '../firebase/setup';
 import {
     COLLECTION_RESTAURANT,
@@ -29,6 +30,7 @@ const setupGraphQLServer = () => {
         graphqlExpress({
             schema,
             context: {
+                utils,
                 db: firestore,
                 restaurantRef: firestore.collection(COLLECTION_RESTAURANT),
                 userRef: firestore.collection(COLLECTION_USER),

@@ -28,7 +28,12 @@ export default {
                 if (!restaurantData.likes || isNaN(restaurantData.likes)) {
                     restaurantData.likes = 0;
                 }
-                restaurantData.likes += increment ? 1 : -1;
+                // Don't let it dip below 0
+                restaurantData.likes = Math.max(
+                    // Current likes + or - 1
+                    restaurants.likes + (increment ? 1 : -1),
+                    0
+                );
                 userData.likes[restaurant.id] = increment;
 
                 // Update the restaurant with the like

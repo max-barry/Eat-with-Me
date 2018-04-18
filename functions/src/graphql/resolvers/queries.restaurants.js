@@ -17,8 +17,8 @@ export default {
         if (!includeLandmarks) {
             query = query.where('is_restaurant', '==', true);
         }
-        // Add the order by
-        query = query.orderBy(orderBy, 'desc');
+        // Add the order by. If it startsWith - then it should be descending
+        query = query.orderBy(...context.utils.setOrder(orderBy));
         // Do we need to start after?
         if (after) {
             query = query.startAfter(
@@ -28,7 +28,7 @@ export default {
         // Get the restaurants with a limit
         const snapshot = await query.limit(limit).get();
         // Get the snapshot or an empty array
-        return snapshot.docs.map(doc => doc.data()) || [];
+        return snapshot.docs.map(doc => ({ likes: 0, ...doc.data() } || []));
     },
     async restaurant(parent, args, context) {
         const { id, slug } = args;
@@ -51,6 +51,6 @@ export default {
             if (!data.exists) context.throwMissing();
         }
 
-        return data.data();
+        return { likes: 0, ...data.data() };
     }
 };

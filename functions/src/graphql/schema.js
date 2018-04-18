@@ -8,6 +8,19 @@ const schema = `
   scalar JSON
   scalar Coordinates
 
+  input CollectionAmend {
+    id: ID!
+    should_add: Boolean!
+  }
+
+  type Collection {
+    id: ID!
+    owner: String!
+    restaurants: [Restaurant]
+    private: Boolean!
+    is_all_favourites: Boolean!
+  }
+
   type Location {
     address1: String!
     address2: String
@@ -38,8 +51,6 @@ const schema = `
     yelp_photos: [String]
   }
 
-  # slug: String!
-
   type User {
     id: ID!
     enabled: Boolean!
@@ -55,7 +66,7 @@ const schema = `
   type Query {
     restaurants (
       after: String = null,
-      orderBy: String = "yelp_review_count",
+      orderBy: String = "-yelp_review_count",
       limit: Int = 20,
       includeClosed: Boolean = false
       includeLandmarks: Boolean = false
@@ -67,6 +78,7 @@ const schema = `
   # the schema allows the following mutations:
   type Mutation {
     updateLikes(id: ID!, uid: String!, increment: Boolean!): RestaurantLikedBy
+    updateCollection(id: ID!, owner: String!, restaurants: [CollectionAmend]): Collection
   }
 `;
 
