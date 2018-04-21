@@ -59,6 +59,7 @@ const schema = `
     id: ID!
     enabled: Boolean!
     likes: JSON
+    username: String
   }
 
   type RestaurantLikedBy {

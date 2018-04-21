@@ -17,6 +17,8 @@ export default {
             // Check if the user has already liked or disliked
             // TODO : Move to a proper graphql validator (if that exists)
             const commit =
+                !userData.likes ||
+                // The user has never liked
                 // The user has no relationship with the restaurant OR
                 !(restaurant.id in userData.likes) ||
                 // The user's increment is opposite to their current total
@@ -31,9 +33,12 @@ export default {
                 // Don't let it dip below 0
                 restaurantData.likes = Math.max(
                     // Current likes + or - 1
-                    restaurants.likes + (increment ? 1 : -1),
+                    restaurantData.likes + (increment ? 1 : -1),
                     0
                 );
+                if (!userData.likes) {
+                    userData.likes = {};
+                }
                 userData.likes[restaurant.id] = increment;
 
                 // Update the restaurant with the like
