@@ -5,6 +5,7 @@ export const USER_FRAGMENT = {
         fragment UserBasic on User {
             id
             likes
+            username
         }
     `,
     name: 'UserBasic'

@@ -8,6 +8,7 @@ import { withFormik, Field, Form } from 'formik';
 
 import { CHECK_USERNAME_EXISTS } from '../../data/graphql.usernames/queries/checkUsernameExists';
 import { SET_USER_USERNAME } from '../../data/graphql.usernames/mutations/setUsername';
+import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
 import urls from '../../settings/urls';
 
 const USERNAME_MIN_LENGTH = 3;
@@ -39,7 +40,7 @@ const formikEnhancer = withFormik({
         username: ''
     }),
     handleSubmit: (
-        values,
+        { username },
         { props: { client, user, history }, setSubmitting, ...actions }
     ) =>
         client
@@ -47,10 +48,27 @@ const formikEnhancer = withFormik({
                 mutation: SET_USER_USERNAME,
                 variables: {
                     user: user.id,
-                    username: values.username
+                    username: username
+                },
+                update: (proxy, { data: { setUsername } }) => {
+                    // Read the data from our cache for this query.
+                    console.log('Updaing');
+                    const currentUser = proxy.readQuery({
+                        query: GET_USER_PROFILE,
+                        variables: { id: user.id }
+                    });
+                    console.log(currentUser);
+                    currentUser.user.username = username;
+                    console.log(currentUser);
+                    // Mutate it with the new username
+                    proxy.writeQuery({
+                        query: GET_USER_PROFILE,
+                        data: currentUser
+                    });
                 }
             })
             .then(({ data: { setUsername: saved } }) => {
+                console.log('in then');
                 if (saved) return history.push(urls.HOME);
                 // TODO : Raise errors
                 setSubmitting(false);

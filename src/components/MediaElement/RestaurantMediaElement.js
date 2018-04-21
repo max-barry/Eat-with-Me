@@ -24,7 +24,7 @@ class RestaurantMediaElement extends Component {
                 {...props}
                 link={urls.RESTAURANT_SLUG.pathname.replace(':slug', slug)}
             >
-                {name} + {attributes.id}
+                {name}
                 <MediaElementActionList>
                     <li>
                         <IconWithText
