@@ -51,6 +51,10 @@ const schema = `
     yelp_photos: [String]
   }
 
+  type Username {
+    user: User!
+  }
+
   type User {
     id: ID!
     enabled: Boolean!
@@ -73,12 +77,14 @@ const schema = `
     ): [Restaurant]
     restaurant(id: ID, slug: String): Restaurant
     user(id: ID): User
+    usernameExists(username: String!): Boolean
   }
 
   # the schema allows the following mutations:
   type Mutation {
     updateLikes(id: ID!, uid: String!, increment: Boolean!): RestaurantLikedBy
     updateCollection(id: ID!, owner: String!, restaurants: [CollectionAmend]): Collection
+    setUsername(user: String!, username: String!): Boolean
   }
 `;
 

@@ -35,11 +35,15 @@ const AuthProviderComponent = ({ children, firebaseAuth, ...props }) => (
             skip: !firebaseAuth
         }}
     >
-        {({ loading, data = {} }) => (
-            <AuthenticationContext.Provider value={data.user}>
-                {children}
-            </AuthenticationContext.Provider>
-        )}
+        {({ data = {}, ...query }) => {
+            return (
+                <AuthenticationContext.Provider
+                    value={{ user: data.user, query }}
+                >
+                    {children}
+                </AuthenticationContext.Provider>
+            );
+        }}
     </Query>
 );
 
@@ -49,6 +53,8 @@ export const AuthenticationProvider = AuthProviderEnhancements(
 
 export const AuthenticationConsumer = Component => props => (
     <AuthenticationContext.Consumer>
-        {user => <Component {...props} user={user} />}
+        {({ user, query }) => (
+            <Component {...props} user={user} userQuery={query} />
+        )}
     </AuthenticationContext.Consumer>
 );

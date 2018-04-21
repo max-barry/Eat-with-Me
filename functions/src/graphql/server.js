@@ -12,7 +12,8 @@ import * as utils from './utils';
 import { firestore } from '../firebase/setup';
 import {
     COLLECTION_RESTAURANT,
-    COLLECTION_USER
+    COLLECTION_USER,
+    COLLECTION_USERNAME
 } from '../firebase/firestore/constants';
 
 const setupGraphQLServer = () => {
@@ -34,6 +35,7 @@ const setupGraphQLServer = () => {
                 db: firestore,
                 restaurantRef: firestore.collection(COLLECTION_RESTAURANT),
                 userRef: firestore.collection(COLLECTION_USER),
+                usernameRef: firestore.collection(COLLECTION_USERNAME),
                 throwMissing: () => {
                     throw new Error('Could not find');
                 },
