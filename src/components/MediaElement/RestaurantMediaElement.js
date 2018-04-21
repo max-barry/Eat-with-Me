@@ -15,7 +15,7 @@ class RestaurantMediaElement extends Component {
         const {
             updateLikes,
             hasLiked,
-            restaurant: { likes = 0, name, slug, ...attributes },
+            restaurant: { likes = 0, name, slug },
             ...props
         } = this.props;
 
