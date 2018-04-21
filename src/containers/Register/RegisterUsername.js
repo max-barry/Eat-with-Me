@@ -12,6 +12,7 @@ import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
 import urls from '../../settings/urls';
 
 const USERNAME_MIN_LENGTH = 3;
+const USERNAME_VALID_CHARACTERS = /[^a-zA-Z0-9]/;
 
 const usernameValidationSchema = ({ client, ...props }) =>
     object({
@@ -19,15 +20,23 @@ const usernameValidationSchema = ({ client, ...props }) =>
             .required()
             .min(USERNAME_MIN_LENGTH)
             .test(
+                'special',
+                "Username can't include special characters",
+                username => !USERNAME_VALID_CHARACTERS.test(username)
+            )
+            .test(
                 'taken',
                 'Is taken',
                 username =>
-                    !username || username.length < USERNAME_MIN_LENGTH
+                    !username ||
+                    username.length < USERNAME_MIN_LENGTH ||
+                    !USERNAME_VALID_CHARACTERS.test(username)
                         ? true
                         : client
                               .query({
                                   query: CHECK_USERNAME_EXISTS,
-                                  variables: { username }
+                                  variables: { username },
+                                  fetchPolicy: 'network-only'
                               })
                               .then(query => !query.data.usernameExists)
             )
@@ -52,14 +61,11 @@ const formikEnhancer = withFormik({
                 },
                 update: (proxy, { data: { setUsername } }) => {
                     // Read the data from our cache for this query.
-                    console.log('Updaing');
                     const currentUser = proxy.readQuery({
                         query: GET_USER_PROFILE,
                         variables: { id: user.id }
                     });
-                    console.log(currentUser);
                     currentUser.user.username = username;
-                    console.log(currentUser);
                     // Mutate it with the new username
                     proxy.writeQuery({
                         query: GET_USER_PROFILE,
@@ -68,7 +74,6 @@ const formikEnhancer = withFormik({
                 }
             })
             .then(({ data: { setUsername: saved } }) => {
-                console.log('in then');
                 if (saved) return history.push(urls.HOME);
                 // TODO : Raise errors
                 setSubmitting(false);

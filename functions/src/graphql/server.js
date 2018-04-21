@@ -9,7 +9,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
 import schema from './schema';
 import * as utils from './utils';
-import { firestore } from '../firebase/setup';
+import { db } from '../firebase/setup';
 import {
     COLLECTION_RESTAURANT,
     COLLECTION_USER,
@@ -32,10 +32,10 @@ const setupGraphQLServer = () => {
             schema,
             context: {
                 utils,
-                db: firestore,
-                restaurantRef: firestore.collection(COLLECTION_RESTAURANT),
-                userRef: firestore.collection(COLLECTION_USER),
-                usernameRef: firestore.collection(COLLECTION_USERNAME),
+                db,
+                restaurantRef: db.collection(COLLECTION_RESTAURANT),
+                userRef: db.collection(COLLECTION_USER),
+                usernameRef: db.collection(COLLECTION_USERNAME),
                 throwMissing: () => {
                     throw new Error('Could not find');
                 },

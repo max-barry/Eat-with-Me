@@ -1,7 +1,6 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
 admin.initializeApp();
 
-exports.firestore = admin.firestore();
-exports.auth = admin.auth();
+export const db = admin.firestore();
+export const authentication = admin.auth();
