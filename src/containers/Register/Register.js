@@ -11,7 +11,7 @@ import RegisterFirebaseUI from './RegisterSignIn';
 
 Modal.setAppElement('#root');
 
-const Register = ({ closeModal, history, user }) => {
+const Register = ({ closeModal, history, user: { user } }) => {
     // If we have a user and they have a username
     // then we don't need to be on the register page
     if (user && user.username) return <Redirect to={urls.HOME} />;

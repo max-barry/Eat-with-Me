@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 // import { Transition, config } from 'react-spring';
 import { withRouter } from 'react-router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 
 import urls from '../../settings/urls';
 import AsyncWrapper from '../../hocs/AsyncWrapper';
+import Header from '../Header';
 import { AuthenticationProvider } from '../../hocs/Authentication';
 
 const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
@@ -22,7 +23,7 @@ class App extends Component {
         return (
             <AuthenticationProvider>
                 <div>
-                    <Link to={urls.REGISTER}>Register</Link>
+                    <Header />
                     <Switch
                         location={showModal ? this.previousLocation : location}
                     >
