@@ -13,6 +13,7 @@ import { AuthenticationProvider } from '../../hocs/Authentication';
 const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
 const AsyncRestaurantDetail = AsyncWrapper(_ => import('../RestaurantDetail'));
 const AsyncRegister = AsyncWrapper(_ => import('../Register'));
+const AsyncCollections = AsyncWrapper(_ => import('../Profile/Collections'));
 
 class App extends Component {
     previousLocation = this.props.location;
@@ -33,8 +34,19 @@ class App extends Component {
                             component={AsyncFeed}
                         />
                         <Route
+                            xact
                             path={urls.RESTAURANT_SLUG.pathname}
                             component={AsyncRestaurantDetail}
+                        />
+                        <Route
+                            exact
+                            path={urls.PROFILE.pathname}
+                            component={() => <div>Profile page</div>}
+                        />
+                        <Route
+                            exact
+                            path={urls.PROFILE_COLLECTIONS.pathname}
+                            component={AsyncCollections}
                         />
                     </Switch>
                     {showModal ||
