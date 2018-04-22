@@ -13,7 +13,8 @@ import { db } from '../firebase/setup';
 import {
     COLLECTION_RESTAURANT,
     COLLECTION_USER,
-    COLLECTION_USERNAME
+    COLLECTION_USERNAME,
+    COLLECTION_COLLECTIONS
 } from '../firebase/firestore/constants';
 
 const setupGraphQLServer = () => {
@@ -28,24 +29,26 @@ const setupGraphQLServer = () => {
     graphQLServer.use(
         '/graphql',
         bodyParser.json(),
-        graphqlExpress({
+        graphqlExpress(request => ({
             schema,
             context: {
                 utils,
                 db,
+                req: request,
                 restaurantRef: db.collection(COLLECTION_RESTAURANT),
                 userRef: db.collection(COLLECTION_USER),
                 usernameRef: db.collection(COLLECTION_USERNAME),
+                collectionRef: db.collection(COLLECTION_COLLECTIONS),
                 throwMissing: () => {
                     throw new Error('Could not find');
                 },
-                throwBadRequest: () => {
-                    throw new Error('Request not properly formed');
+                throwBadRequest: (msg = 'unknown') => {
+                    throw new Error(`Request not properly formed: ${msg}`);
                 }
             },
             tracing: false,
             cacheControl: false
-        })
+        }))
     );
 
     // /api/graphiql

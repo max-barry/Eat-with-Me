@@ -4,6 +4,8 @@
     "private": true,
     "repository": "git@bitbucket.org:mxbry/eat-with-me-alpha.git",
     "dependencies": {
+        "@casl/ability": "^2.0.3",
+        "@casl/react": "^0.3.0",
         "apollo-client-preset": "^1.0.8",
         "apollo-link-state": "^0.4.1",
         "emotion": "^9.1.0",

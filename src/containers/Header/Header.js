@@ -18,13 +18,14 @@ const _userfy = (path, user) =>
     path.pathname.replace(':username', user.username);
 
 const buildNavigation = ({
-    user: { user, firebaseAuthPreload: preload, ...authObj }
+    user: { user, query, firebaseAuthPreload: preload, ...authObj }
 }) => {
     const extraLinks = [];
+    const isLoading = preload || query.loading;
 
-    if (!preload && !user) {
+    if (!isLoading && !user) {
         extraLinks.push(...PRE_LOGIN_LINKS);
-    } else if (!preload && user) {
+    } else if (!isLoading && user) {
         const loggedInLinks = POST_LOGIN_LINKS.map(([link, copy]) => [
             _userfy(link, user),
             copy
@@ -34,12 +35,12 @@ const buildNavigation = ({
     }
 
     return {
-        preload,
+        isLoading,
         links: [...DEFAULT_LINKS, ...extraLinks]
     };
 };
 
-const Header = ({ links, preload: preAuthLoad }) => (
+const Header = ({ links, isLoading: headerLinkLoading }) => (
     <header>
         <nav>
             {links.map(([link, copy], i) => (
@@ -47,7 +48,7 @@ const Header = ({ links, preload: preAuthLoad }) => (
                     {copy}
                 </Link>
             ))}
-            {preAuthLoad && [
+            {headerLinkLoading && [
                 <HeaderLinkLoading key={1} />,
                 <HeaderLinkLoading key={2} />
             ]}

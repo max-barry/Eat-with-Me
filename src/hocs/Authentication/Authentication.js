@@ -1,10 +1,11 @@
 import React from 'react';
 
-import firebase from 'firebase/app';
 import { Query } from 'react-apollo';
+import firebase from 'firebase/app';
 import { lifecycle, compose, withState } from 'recompose';
 
 import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
+import defineAbilityForUser from './abilities';
 
 export const AuthenticationContext = React.createContext(null);
 
@@ -50,10 +51,15 @@ const AuthProviderComponent = ({
         {({ data = {}, ...query }) => (
             <AuthenticationContext.Provider
                 value={{
-                    user: data.user,
                     query,
                     firebaseAuthPreload,
-                    firebaseAuthObj
+                    firebaseAuthObj,
+                    authLoaded: !firebaseAuthPreload && !query.loading,
+                    ability:
+                        !firebaseAuthPreload && !query.loading && data
+                            ? defineAbilityForUser(data.user)
+                            : null,
+                    user: data.user
                 }}
             >
                 {children}

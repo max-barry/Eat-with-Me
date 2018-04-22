@@ -15,7 +15,8 @@ const schema = `
 
   type Collection {
     id: ID!
-    owner: String!
+    user: String!
+    username: String!
     restaurants: [Restaurant]
     private: Boolean!
     is_all_favourites: Boolean!
@@ -78,6 +79,7 @@ const schema = `
     ): [Restaurant]
     restaurant(id: ID, slug: String): Restaurant
     user(id: ID): User
+    collections(user: String, username: String): [Collection]
     usernameExists(username: String!): Boolean
   }
 

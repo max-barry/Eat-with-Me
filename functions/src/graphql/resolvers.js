@@ -3,12 +3,14 @@ import usernameQueries from './resolvers/queries.usernames';
 import restaurantQueries from './resolvers/queries.restaurants';
 import restaurantMutations from './resolvers/mutations.restaurants';
 import collectionMutations from './resolvers/mutations.collections';
+import collectionQueries from './resolvers/queries.collections';
 import usernameMutations from './resolvers/mutations.usernames';
 
 const Queries = {
     ...restaurantQueries,
     ...userQueries,
-    ...usernameQueries
+    ...usernameQueries,
+    ...collectionQueries
 };
 
 const Mutations = {
