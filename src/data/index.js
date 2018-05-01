@@ -3,6 +3,9 @@ import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { withClientState } from 'apollo-link-state';
+import merge from 'lodash/merge';
+
+import resolversGooglemaps from './graphql.state/googlemaps/resolvers';
 
 // import { QueryResolvers, MutationResolvers } from './resolvers';
 // import typeDefs from './typeDefs';
@@ -15,8 +18,8 @@ const httpLink = new HttpLink({
 
 const stateLink = withClientState({
     cache,
-    resolvers: {},
-    defaults: {}
+    resolvers: merge(resolversGooglemaps)
+    // defaults: {}
 });
 
 export default new ApolloClient({

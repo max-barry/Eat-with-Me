@@ -34,5 +34,5 @@ const enhance = compose(
     extraProps,
     propsCheck
 );
-
+// TODO : This should be a proper HOC
 export default enhance(componentFromProp('component'));

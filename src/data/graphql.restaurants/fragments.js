@@ -7,6 +7,7 @@ export const RESTAURANT_FRAGMENT = {
             name
             likes
             slug
+            google_place_id
         }
     `,
     name: 'RestaurantBasic'

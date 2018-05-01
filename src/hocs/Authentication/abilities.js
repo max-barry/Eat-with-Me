@@ -8,7 +8,7 @@ const defineAbilityForUser = user => {
     // Add all profile pages to the list of pages where the user is the owner
     for (const [key, path] of Object.entries(urls)) {
         if (path.hasOwner) {
-            can('edit', path.pathname.replace(':username', user.username));
+            can('edit', path.userfy(user.username));
         }
     }
 

@@ -37,6 +37,7 @@ const schema = `
     name: String!
     slug: String!
     yelp: String!
+    google_place_id: String
     is_restaurant: Boolean!
     likes: Int
     yelp_rating: Float
@@ -73,9 +74,7 @@ const schema = `
     restaurants (
       after: String = null,
       orderBy: String = "-yelp_review_count",
-      limit: Int = 20,
-      includeClosed: Boolean = false
-      includeLandmarks: Boolean = false
+      limit: Int = 20
     ): [Restaurant]
     restaurant(id: ID, slug: String): Restaurant
     user(id: ID): User

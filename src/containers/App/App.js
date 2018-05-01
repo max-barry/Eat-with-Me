@@ -34,7 +34,7 @@ class App extends Component {
                             component={AsyncFeed}
                         />
                         <Route
-                            xact
+                            exact
                             path={urls.RESTAURANT_SLUG.pathname}
                             component={AsyncRestaurantDetail}
                         />
@@ -44,10 +44,10 @@ class App extends Component {
                             component={() => <div>Profile page</div>}
                         />
                         <Route
-                            exact
                             path={urls.PROFILE_COLLECTIONS.pathname}
                             component={AsyncCollections}
                         />
+                        <Route component={() => <p>Not found</p>} />
                     </Switch>
                     {showModal ||
                     location.pathname === urls.REGISTER.pathname ? (

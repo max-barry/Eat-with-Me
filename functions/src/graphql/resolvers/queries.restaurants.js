@@ -5,18 +5,18 @@ export default {
     async restaurants(parent, args, context) {
         // Get the stuff out of the args
         // TODO : Use something else for the cursor (like the ordering unit) because this would fail if the ID is deleted
-        let { after, orderBy, limit, includeClosed, includeLandmarks } = args;
+        let { after, orderBy, limit } = args;
         // Make sure that we're not getting asked for too many results
         limit = Math.min(PAGE_MAX_LIMIT, limit);
         // Start building a query
         let query = context.restaurantRef;
         // Do we need to include closed?
-        if (!includeClosed) {
-            query = query.where('permanently_closed', '==', false);
-        }
-        if (!includeLandmarks) {
-            query = query.where('is_restaurant', '==', true);
-        }
+        // if (!includeClosed) {
+        //     query = query.where('permanently_closed', '==', false);
+        // }
+        // if (!includeLandmarks) {
+        //     query = query.where('is_restaurant', '==', true);
+        // }
         // Add the order by. If it startsWith - then it should be descending
         query = query.orderBy(...context.utils.setOrder(orderBy));
         // Do we need to start after?
@@ -51,6 +51,6 @@ export default {
             if (!data.exists) context.throwMissing();
         }
 
-        return { likes: 0, ...data.data() };
+        return { ...data.data() };
     }
 };
