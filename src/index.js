@@ -2,18 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter } from 'react-router-dom';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import ApolloClientStore from './graphql';
-import App from './containers/App';
+import Loadable from 'react-loadable';
 import registerServiceWorker from './registerServiceWorker';
-import { FIREBASE_CONFIG } from './settings/apis';
+import ApolloClientStore from './graphql';
 import './index.styles';
 
-// Initialize Firebase but check an app doesn't exist
-if (!firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG);
-}
+const App = Loadable({
+    loader: _ => import('./containers/App'),
+    loading: () => <p>App is loading</p>
+});
 
 // TODO : Authentication has been moved from index > app
 //        as a temporary bugfix for https://github.com/ReactTraining/react-router/issues/6072

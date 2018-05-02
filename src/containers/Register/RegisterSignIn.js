@@ -6,7 +6,7 @@ import {
     FIREBASE_AUTH_METHOD
 } from '../../settings/apis';
 
-export default _ => (
+export default props => (
     <FirebaseAuth
         uiConfig={{
             // Popup signin flow rather than redirect flow.

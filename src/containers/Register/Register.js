@@ -1,18 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
+import Loadable from 'react-loadable';
 import { renderComponent, compose, branch } from 'recompose';
 import urls from '../../settings/urls';
-import RegisterUsername from './RegisterUsername';
-import RegisterFirebaseUI from './RegisterSignIn';
 import { withAuthenticationConsumer } from '../../hocs/Authentication';
 import withModal from '../../hocs/Modal';
 
 Modal.setAppElement('#root');
 
-const RegisterUsernameHoc = renderComponent(RegisterUsername);
-const RegisterFirebaseUIHoc = renderComponent(RegisterFirebaseUI);
+const RegisterUsername = renderComponent(
+    Loadable({
+        loader: _ => import('./RegisterUsername'),
+        loading: () => <p>Loading register username</p>
+    })
+);
+const RegisterFirebaseUI = renderComponent(
+    Loadable({
+        loader: _ => import('./RegisterSignIn'),
+        loading: () => <p>Loading register firebase UI</p>
+    })
+);
+
+// const RegisterUsernameHoc = renderComponent(RegisterUsername);
+// const RegisterFirebaseUIHoc = renderComponent(RegisterFirebaseUI);
 const RedirectHome = renderComponent(() => <Redirect to={urls.HOME} />);
 
 const enhance = compose(
@@ -28,8 +40,8 @@ const enhance = compose(
         RedirectHome,
         branch(
             ({ auth: { user } }) => !!user,
-            RegisterUsernameHoc,
-            RegisterFirebaseUIHoc
+            RegisterUsername,
+            RegisterFirebaseUI
         )
     )
 );

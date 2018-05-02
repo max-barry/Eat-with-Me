@@ -8,7 +8,6 @@ export default {
                     document.createElement('div')
                 );
 
-                // TODO : Handle the error
                 const placeDetail = await new Promise((resolve, reject) => {
                     service.getDetails({ placeId: place_id }, (place, status) =>
                         resolve(place)
@@ -21,6 +20,7 @@ export default {
                     __typename: 'GooglePlace'
                 };
             } catch (e) {
+                // TODO : Handle the error
                 console.error(e);
                 return null;
             }

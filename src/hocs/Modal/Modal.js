@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { compose } from 'recompose';
-import urls from '../../settings/urls';
 
 const withModal = ({
     onClose,
