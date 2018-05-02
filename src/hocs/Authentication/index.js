@@ -1,5 +1,5 @@
 export {
-    AuthenticationProvider,
-    AuthenticationConsumer,
+    withAuthenticationProvider,
+    withAuthenticationConsumer,
     AuthenticationContext
 } from './Authentication';

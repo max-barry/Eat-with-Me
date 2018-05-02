@@ -1,6 +1,15 @@
 import gql from 'graphql-tag';
 
-import { USER_FRAGMENT } from '../fragments';
+export const USER_FRAGMENT = {
+    fragment: gql`
+        fragment UserBasic on User {
+            id
+            likes
+            username
+        }
+    `,
+    name: 'UserBasic'
+};
 
 export const GET_USER_PROFILE = gql`
     query GetUserProfile($id: ID!, $skip: Boolean = false) {

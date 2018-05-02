@@ -1,15 +1,14 @@
 import React from 'react';
-
 import { withApollo } from 'react-apollo';
 import { withRouter } from 'react-router';
 import { compose } from 'recompose';
 import { object, string } from 'yup';
 import { withFormik, Field, Form } from 'formik';
-
-import { CHECK_USERNAME_EXISTS } from '../../data/graphql.usernames/queries/checkUsernameExists';
-import { SET_USER_USERNAME } from '../../data/graphql.usernames/mutations/setUsername';
-import { GET_USER_PROFILE } from '../../data/graphql.users/queries/getUser';
+import { CHECK_USERNAME_EXISTS } from '../../graphql/graphql.usernames/queries';
+import { SET_USER_USERNAME } from '../../graphql/graphql.usernames/mutations';
+import { GET_USER_PROFILE } from '../../graphql/graphql.users/queries';
 import urls from '../../settings/urls';
+import { withAuthenticationConsumer } from '../../hocs/Authentication';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_VALID_CHARACTERS = /[^a-zA-Z0-9]/;
@@ -50,9 +49,14 @@ const formikEnhancer = withFormik({
     }),
     handleSubmit: (
         { username },
-        { props: { client, user, history }, setSubmitting, ...actions }
-    ) =>
-        client
+        {
+            props: { client, auth: { user }, history },
+            setSubmitting,
+            ...actions
+        }
+    ) => {
+        console.log(user);
+        return client
             .mutate({
                 mutation: SET_USER_USERNAME,
                 variables: {
@@ -81,7 +85,8 @@ const formikEnhancer = withFormik({
             .catch(err => {
                 setSubmitting(false);
                 console.error(err);
-            })
+            });
+    }
 });
 
 const RegisterUsername = ({ errors, isSubmitting }) => (
@@ -96,6 +101,11 @@ const RegisterUsername = ({ errors, isSubmitting }) => (
     </Form>
 );
 
-const enhancer = compose(withApollo, withRouter, formikEnhancer);
+const enhancer = compose(
+    withApollo,
+    withRouter,
+    withAuthenticationConsumer,
+    formikEnhancer
+);
 
 export default enhancer(RegisterUsername);

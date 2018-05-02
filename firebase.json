@@ -1,9 +1,1 @@
-{
-    "functions": {
-        "source": "functions/dist",
-        "predeploy": [
-            "yarn lint:functions",
-            "cd functions && yarn clean:functions && yarn build:functions && yarn copy:functions && yarn install:functions"
-        ]
-    }
-}
+{}

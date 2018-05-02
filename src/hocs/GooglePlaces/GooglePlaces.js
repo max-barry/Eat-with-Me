@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Script from 'react-load-script';
 import { Query } from 'react-apollo';
 
-import { GOOGLE_MAPS_SCRIPT_URL } from './constants';
+import { GOOGLE_MAPS_SCRIPT_URL } from '../../settings/apis';
 import { GET_GOOGLE_PLACE } from '../../data/graphql.state/googlemaps/queries';
 
 const withGooglePlaces = get_place_id => BaseComponent => {
-    class WithGooglePlaces extends Component {
+    return class extends Component {
         state = { hasLoadedMaps: false };
         place_id = typeof get_place_id === 'function'
             ? get_place_id(this.props)
@@ -39,8 +39,7 @@ const withGooglePlaces = get_place_id => BaseComponent => {
                 </div>
             );
         }
-    }
-    return WithGooglePlaces;
+    };
 };
 
 export default withGooglePlaces;

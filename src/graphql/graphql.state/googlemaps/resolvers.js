@@ -10,11 +10,8 @@ export default {
 
                 // TODO : Handle the error
                 const placeDetail = await new Promise((resolve, reject) => {
-                    service.getDetails(
-                        {
-                            placeId: place_id
-                        },
-                        (place, status) => resolve(place)
+                    service.getDetails({ placeId: place_id }, (place, status) =>
+                        resolve(place)
                     );
                 });
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Query } from 'react-apollo';
 
-import { GET_RESTAURANTS } from '../../data/graphql.restaurants/queries/getRestaurants';
+import { GET_RESTAURANTS } from '../../data/graphql.restaurants/queries';
 import FeedLoading from './Feed.loading';
 import RestaurantWrapper from '../../hocs/RestaurantWrapper';
 import RestaurantMediaElement from '../../components/MediaElement/RestaurantMediaElement';

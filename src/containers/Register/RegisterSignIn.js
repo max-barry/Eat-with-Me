@@ -1,10 +1,12 @@
-// Various content of our register component
 import React from 'react';
-
 import firebase from 'firebase/app';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
+import {
+    FIREBASE_AUTH_CLIENT_ID,
+    FIREBASE_AUTH_METHOD
+} from '../../settings/apis';
 
-const RegisterFirebaseUI = _ => (
+export default _ => (
     <FirebaseAuth
         uiConfig={{
             // Popup signin flow rather than redirect flow.
@@ -13,9 +15,8 @@ const RegisterFirebaseUI = _ => (
             signInOptions: [
                 {
                     provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                    authMethod: 'https://accounts.google.com',
-                    clientId:
-                        '735729979405-b4dt8g88logn2me2q8lmau7sdjavjc8a.apps.googleusercontent.com'
+                    authMethod: FIREBASE_AUTH_METHOD,
+                    clientId: FIREBASE_AUTH_CLIENT_ID
                 }
                 // firebase.auth.FacebookAuthProvider.PROVIDER_ID
             ],
@@ -27,5 +28,3 @@ const RegisterFirebaseUI = _ => (
         firebaseAuth={firebase.auth()}
     />
 );
-
-export default RegisterFirebaseUI;
