@@ -1,4 +1,36 @@
 import { injectGlobal } from 'emotion';
+import { shevy, fontFamily } from './settings/styles';
+
+const { content, ...headings } = shevy;
+
+const hs = [1, 2, 3, 4, 5, 6]
+    .map(
+        size => `
+            h${size} {
+                font-size: ${headings[`h${size}`].fontSize};
+                line-height: ${headings[`h${size}`].lineHeight};
+                margin-bottom: ${headings[`h${size}`].marginBottom};
+            }
+    `
+    )
+    .join('\n');
+
+const typography = `
+    html, body {
+        font-size: ${content.fontSize};
+        line-height: ${content.lineHeight};
+        font-family: ${fontFamily};
+        letter-spacing: 0.01em;
+    }
+
+    p {
+        font-size: ${content.fontSize};
+        line-height: ${content.lineHeight};
+        margin-bottom: ${content.marginBottom};
+    }
+    
+    ${hs}
+`;
 
 injectGlobal`
     html {
@@ -25,4 +57,6 @@ injectGlobal`
         height: auto;
         display: block;
     }
+
+    ${typography}
 `;

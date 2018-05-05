@@ -1,17 +1,10 @@
-import React from 'react';
+import { configure } from '@storybook/react';
+// import '../index.styles';
 
-import { storiesOf } from '@storybook/react';
-// import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
+const req = require.context('../components', true, /\.stories\.js$/);
 
-import { Welcome } from '@storybook/react/demo';
-import MediaElement from '../components/MediaElement';
-import RestaurantMediaElement from '../components/MediaElement/RestaurantMediaElement';
+const loadStories = () => {
+    req.keys().forEach(filename => req(filename));
+};
 
-storiesOf('Welcome', module).add('to Storybook', () => (
-    <Welcome showApp={linkTo('MediaElement')} />
-));
-
-storiesOf('MediaElement', module)
-    .add('default', () => <MediaElement />)
-    .add('Restaurant', () => <RestaurantMediaElement />);
+configure(loadStories, module);
