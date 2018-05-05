@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from 'react-modal';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import Loadable from 'react-loadable';
@@ -8,24 +7,20 @@ import urls from '../../settings/urls';
 import { withAuthenticationConsumer } from '../../hocs/Authentication';
 import withModal from '../../hocs/Modal';
 
-Modal.setAppElement('#root');
+const RegisterUsername = Loadable({
+    loader: _ => import('./RegisterUsername'),
+    loading: () => <p>Loading register username</p>
+});
+const RegisterFirebaseUI = Loadable({
+    loader: _ => import('./RegisterSignIn'),
+    loading: () => <p>Loading register firebase UI</p>
+});
 
-const RegisterUsername = renderComponent(
-    Loadable({
-        loader: _ => import('./RegisterUsername'),
-        loading: () => <p>Loading register username</p>
-    })
+const RedirectHome = props => (
+    <Redirect
+        to={(props.location.state && props.location.state.next) || urls.HOME}
+    />
 );
-const RegisterFirebaseUI = renderComponent(
-    Loadable({
-        loader: _ => import('./RegisterSignIn'),
-        loading: () => <p>Loading register firebase UI</p>
-    })
-);
-
-// const RegisterUsernameHoc = renderComponent(RegisterUsername);
-// const RegisterFirebaseUIHoc = renderComponent(RegisterFirebaseUI);
-const RedirectHome = renderComponent(() => <Redirect to={urls.HOME} />);
 
 const enhance = compose(
     withRouter,
@@ -33,15 +28,20 @@ const enhance = compose(
     withModal({
         isOpen: true,
         contentLabel: 'Register',
-        onClose: props => event => props.history.push(urls.HOME)
+        onClose: props => event => {
+            console.log(props.location.state.modalClose);
+            return props.history.push(
+                props.location.state.modalClose || urls.HOME
+            );
+        }
     }),
     branch(
         ({ auth: { user } }) => user && user.username,
-        RedirectHome,
+        renderComponent(RedirectHome),
         branch(
             ({ auth: { user } }) => !!user,
-            RegisterUsername,
-            RegisterFirebaseUI
+            renderComponent(RegisterUsername),
+            renderComponent(RegisterFirebaseUI)
         )
     )
 );

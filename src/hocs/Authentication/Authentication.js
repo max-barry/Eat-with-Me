@@ -44,10 +44,11 @@ export const withAuthenticationProvider = BaseComponent => {
                         <AuthenticationContext.Provider
                             value={{
                                 query,
-                                firebaseAuthPreload,
-                                firebaseAuthObj,
-                                authLoaded:
-                                    !firebaseAuthPreload && !query.loading,
+                                firebase: {
+                                    preload: firebaseAuthPreload,
+                                    auth: firebaseAuthObj
+                                },
+                                loaded: !firebaseAuthPreload && !query.loading,
                                 ability:
                                     !firebaseAuthPreload &&
                                     !query.loading &&

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
+
 const withModal = ({
     onClose,
     isOpen = true,

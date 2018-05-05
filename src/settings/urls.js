@@ -19,8 +19,8 @@ const urls = {
         pathname: `/u/${USER_PARAM}/collections`,
         hasOwner: true
     },
-    PROFILE_COLLECTIONS_NEW: {
-        pathname: `/u/${USER_PARAM}/collections/new`,
+    COLLECTIONS_NEW: {
+        pathname: `/collections/new`,
         hasOwner: true
     },
     HOME: {

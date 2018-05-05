@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import Loadable from 'react-loadable';
 import { compose, withPropsOnChange } from 'recompose';
@@ -7,7 +7,10 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { FIREBASE_CONFIG } from '../../settings/apis';
 import urls from '../../settings/urls';
-import { withAuthenticationProvider } from '../../hocs/Authentication';
+import {
+    withAuthenticationProvider,
+    withAuthenticationConsumer
+} from '../../hocs/Authentication';
 
 // Initialize Firebase but check an app doesn't exist
 if (!firebase.apps.length) {
@@ -16,7 +19,12 @@ if (!firebase.apps.length) {
 
 const Register = Loadable({
     loader: _ => import('../Register'),
-    loading: () => <p>'Loading'</p>
+    loading: () => <p>Loading register</p>
+});
+
+const NewCollection = Loadable({
+    loader: _ => import('../NewCollection'),
+    loading: () => <p>Loading new collection</p>
 });
 
 // const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
@@ -25,21 +33,20 @@ const Register = Loadable({
 // const AsyncCollections = AsyncWrapper(_ => import('../Profile/Collections'));
 
 class App extends Component {
-    state = { previousLocation: this.props.location };
     modalUrls = [urls.REGISTER.pathname];
+    state = { previousLocation: this.props.location };
 
-    componentDidUpdate({ location }, prevState, snapshot) {
-        if (
-            this.props.history.action !== 'POP' &&
-            (!location.state || !location.state.modal)
-        )
-            this.setState({ previousLocation: location });
+    static getDerivedStateFromProps({ location }, prevState) {
+        return !location.state || !location.state.modal
+            ? { ...prevState, previousLocation: location }
+            : null;
     }
 
     render() {
         return (
             <div>
                 <Link to={urls.REGISTER}>Register</Link>
+                <Link to={urls.COLLECTIONS_NEW}>New collection</Link>
                 {/* <Header /> */}
                 <Switch
                     location={
@@ -52,6 +59,11 @@ class App extends Component {
                         exact
                         path={urls.HOME.pathname}
                         component={() => <p>Home</p>}
+                    />
+                    <Route
+                        exact
+                        path={urls.COLLECTIONS_NEW.pathname}
+                        component={NewCollection}
                     />
                     {/*<Route
                         exact
@@ -74,6 +86,7 @@ class App extends Component {
                     <Route
                         path={urls.REGISTER.pathname}
                         component={() => <Register />}
+                        // component={() => <Register />} # todo ; make this {Register}
                     />
                 )}
             </div>
@@ -82,10 +95,11 @@ class App extends Component {
 }
 
 const modalPropsHandler = withPropsOnChange(['location'], ownerProps => ({
-    isModal:
+    isModal: !!(
         ownerProps.location.state &&
         ownerProps.location.state.modal &&
         this.previousLocation !== ownerProps.location
+    )
 }));
 
 const enhance = compose(

@@ -50,12 +50,12 @@ const formikEnhancer = withFormik({
     handleSubmit: (
         { username },
         {
-            props: { client, auth: { user }, history },
+            props: { client, auth: { user }, history, location },
             setSubmitting,
             ...actions
         }
     ) => {
-        console.log(user);
+        console.log(location);
         return client
             .mutate({
                 mutation: SET_USER_USERNAME,
