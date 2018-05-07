@@ -4,21 +4,23 @@ import { connectRefinementList } from 'react-instantsearch/connectors';
 import { pure } from 'recompose';
 import Row from '../../components/Structures/Row';
 import ButtonSimple from '../../components/Buttons/ButtonSimple';
-import { FiltersContainer } from './Filters.styles';
+import { FiltersContainer, FiltersModalStyles } from './Filters.styles';
 import { bs, dimensions } from '../../settings/styles';
-import FiltersCanvas from './FiltersCanvas';
 import {
     FACET_QUARTER,
     FACET_EXTRAS,
     FACET_CUISINE,
-    initial_refinements,
-    FACET_IS_BAR
+    FACET_IS_BAR,
+    initial_refinements
 } from './Filters.constants';
 import { filterComponents } from './FilterContent';
+import { Modal } from '../../hocs/Modal/Modal';
+import { unchange } from '../../shared';
 
 const VirtualRefinement = connectRefinementList(() => null);
 
-const FilterButton = pure(({ children, onClick, ...props }) => (
+// replace pure with updatewith... (the better one)
+const FilterButton = unchange(({ children, onClick, ...props }) => (
     <li
         {...props}
         className={css(
@@ -88,56 +90,70 @@ class Filters extends Component {
         });
     }
 
+    updateVirtuals([attr, refinements, close = true]) {
+        this.setState({
+            [this.state.contentKey]: refinements,
+            filtersOpen: !close
+        });
+    }
+
+    onRequestClose() {
+        this.setState({ filtersOpen: false });
+    }
+
     componentDidMount() {
         const { left, bottom } = this.container.getBoundingClientRect();
         this.setState({ style: { left, top: bottom } });
     }
 
     render() {
+        const { content: Content } = this.state;
         return (
             <div ref={this.containerRef}>
                 <FiltersContainer>
                     <Row>
                         <FilterButton
                             onClick={e => this.openFilter(e, FACET_QUARTER)}
-                        >
-                            Region
-                        </FilterButton>
+                            children="Region"
+                        />
                         <FilterButton
                             onClick={e => this.openFilter(e, FACET_CUISINE)}
-                        >
-                            Cuisine
-                        </FilterButton>
-                        <FilterButton onClick={e => this.openFilter(e)}>
-                            Price
-                        </FilterButton>
-                        <FilterButton onClick={e => this.openFilter(e)}>
-                            Neighborhood
-                        </FilterButton>
+                            children="Cuisine"
+                        />
+                        <FilterButton
+                            onClick={e => this.openFilter(e)}
+                            children="Price"
+                        />
+                        <FilterButton
+                            onClick={e => this.openFilter(e)}
+                            children="Neighborhood"
+                        />
                         <FilterButton
                             onClick={e => this.openFilter(e, FACET_EXTRAS)}
-                        >
-                            More...
-                        </FilterButton>
+                            children="More..."
+                        />
                     </Row>
                 </FiltersContainer>
                 <div id="FilterCanvasWrap">
-                    <FiltersCanvas
-                        content={this.state.content}
-                        defaultRefinement={this.state[this.state.contentKey]}
-                        onMount={rendered => (this.rendered = rendered)}
+                    <Modal
                         isOpen={this.state.filtersOpen}
-                        style={this.state.style}
-                        onRequestClose={() =>
-                            this.setState({ filtersOpen: false })
-                        }
-                        updateVirtuals={(attr, refinements, close = true) =>
-                            this.setState({
-                                [this.state.contentKey]: refinements,
-                                filtersOpen: !close
-                            })
-                        }
-                    />
+                        contentLabel="Filter content modal"
+                        style={FiltersModalStyles(this.state.style)}
+                        onRequestClose={() => this.onRequestClose()}
+                    >
+                        {Content && (
+                            <Content
+                                onRequestClose={() => this.onRequestClose()}
+                                onMount={rendered => (this.rendered = rendered)}
+                                defaultRefinement={
+                                    this.state[this.state.contentKey]
+                                }
+                                updateVirtuals={(...args) =>
+                                    this.updateVirtuals(args)
+                                }
+                            />
+                        )}
+                    </Modal>
                 </div>
 
                 <VirtualRefinement
