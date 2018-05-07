@@ -10,3 +10,7 @@ export const FIREBASE_CONFIG = {
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyC9Ta8VNaniDrziwJegVOJy9dyVDkynim8';
 export const GOOGLE_MAPS_SCRIPT_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
+
+export const ALGOLIA_APP_ID = '0PHJ10PJKH';
+export const ALGOLIA_API_KEY = 'b56b2f424a62acad1d17ddc50b18ba79';
+export const ALGOLIA_RESTAURANTS_INDEX = 'prod_restaurants';

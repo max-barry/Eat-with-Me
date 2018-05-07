@@ -28,8 +28,7 @@ const enhance = compose(
     withModal({
         isOpen: true,
         contentLabel: 'Register',
-        onClose: props => event => {
-            console.log(props.location.state.modalClose);
+        onRequestClose: props => event => {
             return props.history.push(
                 props.location.state.modalClose || urls.HOME
             );

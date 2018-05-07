@@ -55,7 +55,6 @@ const formikEnhancer = withFormik({
             ...actions
         }
     ) => {
-        console.log(location);
         return client
             .mutate({
                 mutation: SET_USER_USERNAME,

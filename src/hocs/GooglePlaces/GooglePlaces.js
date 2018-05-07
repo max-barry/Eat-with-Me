@@ -26,8 +26,6 @@ const withGooglePlaces = get_place_id => BaseComponent => {
                         skip={!this.state.hasLoadedMaps}
                     >
                         {({ loading, error, data }) => {
-                            console.log(loading);
-                            console.log(data);
                             return (
                                 <BaseComponent
                                     GooglePlace={this.props.place_id}

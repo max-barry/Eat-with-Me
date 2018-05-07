@@ -1,5 +1,5 @@
 import { injectGlobal } from 'emotion';
-import { shevy, fontFamily } from './settings/styles';
+import { shevy, fontFamily, fontWeights } from './settings/styles';
 
 const { content, ...headings } = shevy;
 
@@ -20,7 +20,8 @@ const typography = `
         font-size: ${content.fontSize};
         line-height: ${content.lineHeight};
         font-family: ${fontFamily};
-        letter-spacing: 0.01em;
+        font-weight: ${fontWeights.regular};
+        // letter-spacing: 0.01em;
     }
 
     p {
@@ -30,6 +31,8 @@ const typography = `
     }
     
     ${hs}
+
+    em {font-style: normal;}
 `;
 
 injectGlobal`

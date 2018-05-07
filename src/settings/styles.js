@@ -33,25 +33,45 @@ export const sFlexed = css({
     flexDirection: 'row'
 });
 
+export const sFlexedCenter = css(sFlexed, {
+    justifyContent: 'center',
+    alignItems: 'center'
+});
+
 export const colors = {
-    primary: 'blue',
-    favourite: 'red',
+    primary: '#EF2D56',
+    secondary: '#F0F66E',
+    accent: '#96BDC6',
     valid: 'green',
-    greyLight: '#f1f1f1'
+    greyMid: '#E7ECEF',
+    greyLight: '#f1f1f1',
+    offWhite: '#fafafa',
+    greyBorder: '#c7c7c7',
+    greyText: '#c4bcbc'
 };
 
 export const dimensions = {
+    container: 1024,
     navigation: 80,
     navigation__logo: 52,
-    filters: 60
+    filtersBar: 60,
+    filtersComponentMinWidth: 400,
+    borderRadius: 2,
+    tap: 48,
+    icon: 32
 };
 
 export const fontWeights = {
     light: 300,
+    regular: 300,
     medium: 500,
     heavy: 600
 };
 
 export const transitionTimes = {
-    weak: 80
+    weak: 65
+};
+
+export const shadows = {
+    focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`
 };

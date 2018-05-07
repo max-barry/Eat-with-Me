@@ -8,21 +8,23 @@ export default styled('button')(
     {
         ...shevy.h6,
         marginBottom: 0,
-        borderRadius: dimensions.borderRadius,
-        border: `1px solid transparent`,
-        backgroundColor: colors.greyLight
+        padding: `${bs(0.25)} ${bs(0.5)}`,
+        textDecoration: 'none',
+        border: '1px dashed transparent',
+        borderRadius: dimensions.borderRadius
     },
     css`
         &:hover {
-            background-color: ${darken(0.03, colors.greyLight)};
+            text-decoration: underline;
+            background-color: ${colors.offWhite};
         }
         &:focus {
             outline: none;
-            border: 1px dashed ${darken(0.08, colors.greyLight)};
-            background-color: ${darken(0.015, colors.greyLight)};
+            // border-color: ${darken(0.08, colors.greyLight)};
+            background-color: ${colors.offWhite};
         }
         &:active {
-            background-color: ${darken(0.06, colors.greyLight)};
+            background-color: ${darken(0.03, colors.offWhite)};
         }
     `
 );

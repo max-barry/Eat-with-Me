@@ -11,6 +11,8 @@ import {
     withAuthenticationProvider,
     withAuthenticationConsumer
 } from '../../hocs/Authentication';
+import Filters from '../Filters';
+import withSearch from '../../hocs/Search/Search';
 
 // Initialize Firebase but check an app doesn't exist
 if (!firebase.apps.length) {
@@ -103,6 +105,7 @@ const modalPropsHandler = withPropsOnChange(['location'], ownerProps => ({
 }));
 
 const enhance = compose(
+    withSearch,
     withRouter,
     withAuthenticationProvider,
     modalPropsHandler

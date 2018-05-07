@@ -4,6 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { withClientState } from 'apollo-link-state';
 import resolvers from './graphql.state/resolvers';
+import defaults from './graphql.state/defaults';
 import { GRAPHQL_SERVER_ENDPOINT } from '../settings/application';
 
 const cache = new InMemoryCache();
@@ -14,7 +15,8 @@ const httpLink = new HttpLink({
 
 const stateLink = withClientState({
     cache,
-    resolvers
+    resolvers,
+    defaults
     // defaults: {}
 });
 

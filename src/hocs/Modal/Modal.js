@@ -4,25 +4,29 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 const withModal = ({
-    onClose,
+    onRequestClose = () => {},
     isOpen = true,
-    contentLabel = 'Modal'
+    contentLabel = 'Modal',
+    style,
+    ...opts
 }) => BaseComponent => {
     return class extends Component {
-        isOpenState = typeof isOpen === 'function'
-            ? isOpen(this.props)
-            : isOpen;
+        populateIf = prop =>
+            typeof prop === 'function' ? prop(this.props) : prop;
 
-        onCloseAction = onClose(this.props);
+        isOpenState = () => this.populateIf(isOpen);
+        computedStyles = () => this.populateIf(style);
+        onRequestCloseAction = () => this.populateIf(onRequestClose);
 
         render() {
             return (
                 <Modal
-                    isOpen={this.isOpenState}
+                    isOpen={this.isOpenState()}
                     contentLabel={contentLabel}
-                    onRequestClose={this.onCloseAction}
+                    onRequestClose={this.onRequestCloseAction}
+                    style={this.computedStyles()}
+                    {...opts}
                 >
-                    <button onClick={this.onCloseAction}>Close</button>
                     <BaseComponent {...this.props} />
                 </Modal>
             );
