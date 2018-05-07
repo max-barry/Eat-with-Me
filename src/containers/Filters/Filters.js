@@ -10,15 +10,16 @@ import FiltersCanvas from './FiltersCanvas';
 import {
     FACET_QUARTER,
     FACET_EXTRAS,
-    initial_refinements
+    FACET_CUISINE,
+    initial_refinements,
+    FACET_IS_BAR
 } from './Filters.constants';
-// import withSearch from '../../hocs/Search/Search';
-// import { Hits } from 'react-instantsearch/dom';
+import { filterComponents } from './FilterContent';
 
-const VirtualQuarter = connectRefinementList(() => null);
+const VirtualRefinement = connectRefinementList(() => null);
 
-const FilterButton = pure(({ children, ...props }) => (
-    <ButtonSimple
+const FilterButton = pure(({ children, onClick, ...props }) => (
+    <li
         {...props}
         className={css(
             { marginLeft: bs(0.25), marginRight: bs(0.25) },
@@ -26,61 +27,75 @@ const FilterButton = pure(({ children, ...props }) => (
              &:last-child  {margin-right: 0}`
         )}
     >
-        {children}
-    </ButtonSimple>
+        <ButtonSimple onClick={onClick}>{children}</ButtonSimple>
+    </li>
 ));
-
-// const VirtualFilters = Object.entries(enums).map(([key, en], i) => {
-//     const comp = filterComponents[en];
-//     const Connector = connectors[comp.connector](() => null);
-//     return { Virtual: Connector, props: comp.props };
-// });
 
 class Filters extends Component {
     state = {
-        left: 0,
-        top: 0,
         filtersOpen: false,
+        content: null,
         contentKey: null,
         [FACET_QUARTER]: initial_refinements[FACET_QUARTER],
-        [FACET_EXTRAS]: initial_refinements[FACET_EXTRAS]
+        [FACET_EXTRAS]: initial_refinements[FACET_EXTRAS],
+        [FACET_CUISINE]: initial_refinements[FACET_CUISINE],
+        style: {
+            left: 0,
+            top: 0
+        }
     };
-    ref = React.createRef();
+
+    containerRef = React.createRef();
+
+    get container() {
+        return this.containerRef.current;
+    }
 
     openFilter(event, contentKey) {
         // Get the bounding rect of the clicked element
         // to work out left value
-        const { left } = event.target.getBoundingClientRect();
+        let { left } = event.target.getBoundingClientRect();
         // Adjust for the window being very small and
         // the filter now being off the screen
         // Delta is either 0 if no adjustment is needed or an integer
         // to shift the open filter component left by that
         const {
             width: containerWidth
-        } = this.ref.current.getBoundingClientRect();
-        const delta = Math.min(
-            // The width of the container (basically the window) minus
-            // how far left this filter component needs to be
-            // and the width of the component OR 0 if we have space
-            containerWidth - (left + dimensions.filtersComponentMinWidth),
-            0
+        } = this.container.getBoundingClientRect();
+        left -= Math.abs(
+            Math.min(
+                // The width of the container (basically the window) minus
+                // how far left this filter component needs to be
+                // and the width of the component OR 0 if we have space
+                containerWidth - (left + dimensions.filtersComponentMinWidth),
+                0
+            )
         );
+        // We need to check if the filters are already open
+        // and save them down if they are
+        if (this.state.filtersOpen && this.rendered) {
+            this.rendered.save(true);
+        }
         // Set the new state with the left value and an open filter
         this.setState({
-            left: left - Math.abs(delta),
+            contentKey,
             filtersOpen: true,
-            contentKey
+            content: filterComponents[contentKey],
+            style: {
+                ...this.state.style,
+                left
+            }
         });
     }
 
     componentDidMount() {
-        const { left, bottom } = this.ref.current.getBoundingClientRect();
-        this.setState({ left, top: bottom });
+        const { left, bottom } = this.container.getBoundingClientRect();
+        this.setState({ style: { left, top: bottom } });
     }
 
     render() {
         return (
-            <div ref={this.ref}>
+            <div ref={this.containerRef}>
                 <FiltersContainer>
                     <Row>
                         <FilterButton
@@ -88,7 +103,9 @@ class Filters extends Component {
                         >
                             Region
                         </FilterButton>
-                        <FilterButton onClick={e => this.openFilter(e)}>
+                        <FilterButton
+                            onClick={e => this.openFilter(e, FACET_CUISINE)}
+                        >
                             Cuisine
                         </FilterButton>
                         <FilterButton onClick={e => this.openFilter(e)}>
@@ -106,26 +123,34 @@ class Filters extends Component {
                 </FiltersContainer>
                 <div id="FilterCanvasWrap">
                     <FiltersCanvas
-                        isOpen={this.state.filtersOpen}
-                        top={this.state.top}
-                        left={this.state.left}
-                        contentKey={this.state.contentKey}
+                        content={this.state.content}
                         defaultRefinement={this.state[this.state.contentKey]}
-                        onRequestClose={() => {
-                            this.setState({ filtersOpen: false });
-                        }}
-                        updateVirtuals={(attr, refinements) =>
+                        onMount={rendered => (this.rendered = rendered)}
+                        isOpen={this.state.filtersOpen}
+                        style={this.state.style}
+                        onRequestClose={() =>
+                            this.setState({ filtersOpen: false })
+                        }
+                        updateVirtuals={(attr, refinements, close = true) =>
                             this.setState({
                                 [this.state.contentKey]: refinements,
-                                filtersOpen: false
+                                filtersOpen: !close
                             })
                         }
                     />
                 </div>
 
-                <VirtualQuarter
+                <VirtualRefinement
                     attribute={FACET_QUARTER}
                     defaultRefinement={this.state[FACET_QUARTER]}
+                />
+                <VirtualRefinement
+                    attribute={FACET_IS_BAR}
+                    defaultRefinement={this.state[FACET_EXTRAS][FACET_IS_BAR]}
+                />
+                <VirtualRefinement
+                    attribute={FACET_CUISINE}
+                    defaultRefinement={this.state[FACET_CUISINE]}
                 />
             </div>
         );

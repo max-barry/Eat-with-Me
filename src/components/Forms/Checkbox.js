@@ -14,9 +14,9 @@ import {
 import { tick as svgtick } from '../SVGs/paths';
 
 class Checkbox extends Component {
-    state = { checked: this.props.initial };
+    state = { checked: this.props.checked };
     checkboxRef = React.createRef();
-    labelName = `label__${this.props.name}`;
+    labelName = `${this.props.name}`;
 
     update(event) {
         // Update the component state change
@@ -84,15 +84,16 @@ class Checkbox extends Component {
     }
 }
 
+const ElementOrFunc = [PropTypes.element, PropTypes.func];
+
 const enhance = compose(
     setPropTypes({
         name: PropTypes.string.isRequired,
-        title: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-            .isRequired,
+        title: PropTypes.oneOfType(ElementOrFunc).isRequired,
         onChange: PropTypes.func.isRequired,
-        initial: PropTypes.bool,
+        checked: PropTypes.bool.isRequired,
         tabIndex: PropTypes.number,
-        tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+        tag: PropTypes.oneOfType(ElementOrFunc)
     })
 );
 

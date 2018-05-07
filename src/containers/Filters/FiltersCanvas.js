@@ -1,38 +1,43 @@
-import React from 'react';
-import { compose } from 'recompose';
-import Loadable from 'react-loadable';
-import withModal from '../../hocs/Modal/Modal';
+import React, { Component } from 'react';
+import { compose, setPropTypes, renderNothing } from 'recompose';
+import PropTypes from 'prop-types';
+import { Modal } from '../../hocs/Modal/Modal';
 import { FiltersModalStyles } from './Filters.styles';
-import { FACET_QUARTER, FACET_EXTRAS } from './Filters.constants';
+// import { filterComponents } from './FilterContent';
 
-const FilterQuarter = Loadable({
-    loader: _ => import('./FilterContent/Quarter/Quarter'),
-    loading: () => <p>Loading quarter filter</p>
-});
+class FiltersCanvas extends Component {
+    render() {
+        const {
+            isOpen,
+            contentLabel,
+            style,
+            content: Content,
+            ...props
+        } = this.props;
 
-const FilterExtras = Loadable({
-    loader: _ => import('./FilterContent/Extra/Extra'),
-    loading: () => <p>Loading extra filter</p>
-});
+        const modalSettings = {
+            isOpen,
+            contentLabel,
+            onRequestClose: props.onRequestClose,
+            style: FiltersModalStyles(style)
+        };
 
-const filterComponents = {
-    [FACET_QUARTER]: FilterQuarter,
-    [FACET_EXTRAS]: FilterExtras
-};
-
-const FiltersCanvas = ({ contentKey, isOpen, top, left, ...props }) => {
-    const FilterComponent = filterComponents[contentKey];
-    console.log(props);
-    return <FilterComponent {...props} />;
-};
+        return Content ? (
+            <Modal {...modalSettings}>
+                <Content {...props} />
+            </Modal>
+        ) : null;
+    }
+}
 
 const enhance = compose(
-    withModal({
-        contentLabel: 'Filters',
-        parentSelector: () => document.getElementById('FilterCanvasWrap'),
-        isOpen: props => props.isOpen,
-        onRequestClose: props => props.onRequestClose(),
-        style: props => FiltersModalStyles(props)
+    setPropTypes({
+        isOpen: PropTypes.bool.isRequired,
+        onRequestClose: PropTypes.func.isRequired,
+        style: PropTypes.object.isRequired,
+        contentLabel: PropTypes.string,
+        onMount: PropTypes.func,
+        contentKey: PropTypes.string
     })
 );
 

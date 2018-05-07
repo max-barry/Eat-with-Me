@@ -1,39 +1,47 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import { default as ReactModal } from 'react-modal';
+import PropTypes from 'prop-types';
+import { setPropTypes, compose, mapProps } from 'recompose';
 
-Modal.setAppElement('#root');
+ReactModal.setAppElement('#root');
 
-const withModal = ({
-    onRequestClose = () => {},
-    isOpen = true,
-    contentLabel = 'Modal',
-    style,
-    ...opts
-}) => BaseComponent => {
+class ModalComponent extends Component {
+    componentDidMount() {
+        if (this.props.onMount) this.props.onMount(this);
+    }
+
+    render() {
+        return <ReactModal {...this.props}>{this.props.children}</ReactModal>;
+    }
+}
+
+const enhance = compose(
+    // mapProps(props =>
+    //     Object.entries(props).reduce((previous, [name, prop]) => {
+    //         previous[name] = typeof prop === 'function' ? prop(props) : prop;
+    //         return previous;
+    //     }, {})
+    // ),
+    setPropTypes({
+        onRequestClose: PropTypes.func.isRequired,
+        isOpen: PropTypes.oneOfType([PropTypes.bool, PropTypes.func])
+            .isRequired,
+        contentLabel: PropTypes.string,
+        style: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        onMount: PropTypes.func
+    })
+);
+
+export const Modal = enhance(ModalComponent);
+
+export const withModal = settings => BaseComponent => {
     return class extends Component {
-        populateIf = prop =>
-            typeof prop === 'function' ? prop(this.props) : prop;
-
-        isOpenState = () => this.populateIf(isOpen);
-        computedStyles = () => this.populateIf(style);
-        onRequestCloseAction = () => this.populateIf(onRequestClose);
-
         render() {
             return (
-                <Modal
-                    isOpen={this.isOpenState()}
-                    contentLabel={contentLabel}
-                    onRequestClose={this.onRequestCloseAction}
-                    style={this.computedStyles()}
-                    {...opts}
-                >
+                <Modal {...settings}>
                     <BaseComponent {...this.props} />
                 </Modal>
             );
         }
     };
 };
-
-// const enhance = compose(withRouter);
-
-export default withModal;
