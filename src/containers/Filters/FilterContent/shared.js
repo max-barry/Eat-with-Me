@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { css } from 'react-emotion';
-import { setPropTypes, compose, withHandlers, lifecycle } from 'recompose';
+import { setPropTypes, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { colors } from '../../../settings/styles';
 import ButtonLink from '../../../components/Buttons/ButtonLink';

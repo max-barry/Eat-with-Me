@@ -12,11 +12,11 @@ import {
     CheckboxBoxInnerStyles
 } from './Checkbox.styles';
 import { tick as svgtick } from '../SVGs/paths';
+import { ariaCheckboxProps, requiredPropTypes } from './shared';
 
 class Checkbox extends Component {
     state = { checked: this.props.checked };
     checkboxRef = React.createRef();
-    labelName = `${this.props.name}`;
 
     update(event) {
         // Update the component state change
@@ -27,33 +27,29 @@ class Checkbox extends Component {
 
     render() {
         const { checked } = this.state;
-        const { title: TitleComponent, tag: TagComponent } = this.props;
+        const { title: TitleComponent, tag: TagComponent, name } = this.props;
+        const checkboxProps = ariaCheckboxProps(
+            checked,
+            this.update.bind(this),
+            {
+                id: name,
+                tabIndex: this.props.tabIndex
+            }
+        );
         return (
             <CheckboxContainer>
                 <span
-                    id={this.props.name}
                     ref={this.checkboxRef}
-                    tabIndex={this.props.tabIndex || 0}
-                    role="checkbox"
-                    aria-checked={checked}
-                    aria-labelledby={this.labelName}
-                    onClick={event => this.update(event)}
+                    {...checkboxProps}
                     className={cx(
                         CheckboxBoxWrap,
                         checked ? CheckboxCheckedClass : null
                     )}
-                    onKeyPress={event =>
-                        [32, 13].includes(event.charCode)
-                            ? this.update(event)
-                            : null
-                    }
                 >
                     <span className={css(CheckboxBoxInnerStyles)}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 16 16"
-                            // height={dimensions.icon}
-                            // width={dimensions.icon}
                         >
                             <path
                                 fill={checked ? 'white' : 'black'}
@@ -64,7 +60,7 @@ class Checkbox extends Component {
                     </span>
                 </span>
                 <CheckboxLabel
-                    for={this.labelName}
+                    for={name}
                     onClick={() => {
                         this.checkboxRef.current.focus();
                         this.update();
@@ -88,12 +84,9 @@ const ElementOrFunc = [PropTypes.element, PropTypes.func];
 
 const enhance = compose(
     setPropTypes({
-        name: PropTypes.string.isRequired,
         title: PropTypes.oneOfType(ElementOrFunc).isRequired,
-        onChange: PropTypes.func.isRequired,
-        checked: PropTypes.bool.isRequired,
-        tabIndex: PropTypes.number,
-        tag: PropTypes.oneOfType(ElementOrFunc)
+        tag: PropTypes.oneOfType(ElementOrFunc),
+        ...requiredPropTypes
     })
 );
 

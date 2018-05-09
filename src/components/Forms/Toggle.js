@@ -8,16 +8,11 @@ import {
     ToggleTitle,
     ToggleTag
 } from './Toggle.styles';
-
-const propsRequired = {
-    checked: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired
-};
+import { requiredPropTypes } from './shared';
 
 const enhanceToggle = compose(
     onlyUpdateForKeys(['checked']),
-    setPropTypes(propsRequired)
+    setPropTypes(requiredPropTypes)
 );
 
 const Toggle = enhanceToggle(
@@ -35,7 +30,7 @@ const Toggle = enhanceToggle(
                 <Switch
                     checked={this.state.checked}
                     onChange={() => this.update()}
-                    id={this.props.id}
+                    id={this.props.name}
                 />
             );
         }
@@ -47,7 +42,7 @@ export default Toggle;
 const propsRequiredWithLabel = {
     title: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
     tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
-    ...propsRequired
+    ...requiredPropTypes
 };
 
 const enhanceToggleLabel = compose(

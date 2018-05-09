@@ -22,7 +22,7 @@ const FilterCuisine = Loadable({
 });
 
 export const filterComponents = {
-    [FACET_QUARTER]: FilterQuarter,
-    [FACET_EXTRAS]: FilterExtras,
-    [FACET_CUISINE]: FilterCuisine
+    [FACET_QUARTER]: { component: FilterQuarter },
+    [FACET_EXTRAS]: { component: FilterExtras },
+    [FACET_CUISINE]: { component: FilterCuisine, modalAdvanced: true }
 };

@@ -4,8 +4,12 @@ import { connectRefinementList } from 'react-instantsearch/connectors';
 import { pure } from 'recompose';
 import Row from '../../components/Structures/Row';
 import ButtonSimple from '../../components/Buttons/ButtonSimple';
-import { FiltersContainer, FiltersModalStyles } from './Filters.styles';
 import { bs, dimensions } from '../../settings/styles';
+import {
+    FiltersContainer,
+    FiltersModalSimple,
+    FiltersModalAdvanced
+} from './Filters.styles';
 import {
     FACET_QUARTER,
     FACET_EXTRAS,
@@ -36,7 +40,7 @@ const FilterButton = unchange(({ children, onClick, ...props }) => (
 class Filters extends Component {
     state = {
         filtersOpen: false,
-        content: null,
+        content: {},
         contentKey: null,
         [FACET_QUARTER]: initial_refinements[FACET_QUARTER],
         [FACET_EXTRAS]: initial_refinements[FACET_EXTRAS],
@@ -107,7 +111,10 @@ class Filters extends Component {
     }
 
     render() {
-        const { content: Content } = this.state;
+        const {
+            style: styleProps,
+            content: { component: Content, modalAdvanced = false }
+        } = this.state;
         return (
             <div ref={this.containerRef}>
                 <FiltersContainer>
@@ -138,7 +145,11 @@ class Filters extends Component {
                     <Modal
                         isOpen={this.state.filtersOpen}
                         contentLabel="Filter content modal"
-                        style={FiltersModalStyles(this.state.style)}
+                        style={
+                            modalAdvanced
+                                ? FiltersModalAdvanced(styleProps)
+                                : FiltersModalSimple(styleProps)
+                        }
                         onRequestClose={() => this.onRequestClose()}
                     >
                         {Content && (

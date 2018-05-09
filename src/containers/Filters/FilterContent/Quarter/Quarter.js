@@ -4,14 +4,14 @@ import { orderBy } from 'lodash';
 import { setPropTypes, onlyUpdateForKeys, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../../../../components/Forms';
+import { Actions } from '../shared';
+import { FACET_QUARTER } from '../../Filters.constants';
 import {
     QuarterTag,
     QuarterList,
     QuarterListItem,
     QuarterContainer
 } from './Quarter.styles';
-import { Actions, EnhanceFilter } from '../shared';
-import { initial_refinements, FACET_QUARTER } from '../../Filters.constants';
 
 const unchangeable = onlyUpdateForKeys([]);
 
@@ -24,9 +24,7 @@ const Name = ({ count, label }) =>
     ));
 
 const Tag = unchangeable(() => (
-    <QuarterTag>
-        'Leicester Square · Covent Garden · Lots more words'
-    </QuarterTag>
+    <QuarterTag>Leicester Square · Covent Garden · Lots more words</QuarterTag>
 ));
 
 const List = ({ currentRefinement, refine, items, onChange, ...props }) => (
@@ -56,7 +54,7 @@ class Quarter extends Component {
         this.props.updateVirtuals(FACET_QUARTER, this.state.refinement, !force);
 
     componentDidMount() {
-        this.props.onMount(this);
+        if (this.props.onMount) this.props.onMount(this);
     }
 
     update([refine, value]) {

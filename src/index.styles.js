@@ -32,6 +32,10 @@ const typography = `
     
     ${hs}
 
+    button, input {
+        font-family: ${fontFamily};
+    }
+
     em {font-style: normal;}
 `;
 

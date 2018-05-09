@@ -35,7 +35,7 @@ class ExtraFilters extends Component {
         this.props.updateVirtuals(FACET_EXTRAS, this.state, !force);
 
     componentDidMount() {
-        this.props.onMount(this);
+        if (this.props.onMount) this.props.onMount(this);
     }
 
     onBarChange(refine) {
