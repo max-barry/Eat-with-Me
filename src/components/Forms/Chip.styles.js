@@ -3,14 +3,25 @@ import {
     colors,
     shevy,
     bs,
+    bsint,
     fontWeights,
     sInteractive,
-    transitionTimes
+    transitionTimes,
+    shadows
 } from '../../settings/styles';
 
+const weak = transitionTimes.weak;
+
 export const CHIP_EDGE_PADDING = bs(0.75);
+export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
 export const CHIP_MAX_WIDTH = '180px';
 export const CHIP_DOT_DIMENSION = 16;
+
+console.log();
+
+export const chipFocusClass = css({
+    boxShadow: shadows.focused
+});
 
 export const ChipLabel = styled('label')(
     sInteractive,
@@ -19,30 +30,30 @@ export const ChipLabel = styled('label')(
         fontSize: shevy.h6.fontSize,
         fontWeight: fontWeights.medium,
         position: 'relative',
-        border: `1px solid ${colors.greyLight}`,
+        border: `1px solid`,
         borderRadius: 6,
         zIndex: 0,
         overflow: 'hidden',
         display: 'inline-block',
-        transition: `background-color ${transitionTimes.weak}ms, color ${
-            transitionTimes.weak
-        }ms`,
-        // width: '100%',
+        backgroundColor: 'white',
+        transition: `background-color ${weak}ms, color ${weak}ms, box-shadow ${weak}ms`,
+        willChange: 'background-color, color, box-shadow',
         maxWidth: CHIP_MAX_WIDTH,
-        paddingTop: bs(0.25),
-        paddingBottom: bs(0.25),
-        paddingLeft: bs(2),
-        paddingRight: bs(0.5)
+        paddingTop: CHIP_VERTICAL_DOT_PADDING,
+        paddingBottom: CHIP_VERTICAL_DOT_PADDING,
+        paddingLeft: `${bsint(2)}px`,
+        paddingRight: `${bsint(0.5)}px`
     },
-    `&:hover {background-color: ${colors.offWhite}}`
+    `
+    &:hover {background-color: ${colors.offWhite}}
+    &:focus {outline: 0;}
+    `
 );
 
 export const chipLabelTextClass = css({
     display: 'block',
     whiteSpace: 'nowrap',
-    // width: '100%',
     overflow: 'hidden',
-    // maxWidth: `calc(${CHIP_MAX_WIDTH} - ${bs(0.5)})`,
     textOverflow: 'ellipsis'
 });
 
@@ -57,6 +68,7 @@ export const chipDotClass = css`
     border-radius: 50%;
     top: 22%;
     z-index: -1;
+    will-change: transform;
     &:focus {
         outline: 0;
     }

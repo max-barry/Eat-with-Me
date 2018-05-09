@@ -22,6 +22,8 @@ export const shevy = new Shevy({
 });
 
 export const { lineHeightSpacing: lhs, baseSpacing: bs } = shevy;
+export const bsint = (n, fixed) =>
+    parseFloat(bs(n).replace('px')).toFixed(fixed);
 
 export const sInteractive = css({
     cursor: 'pointer',
@@ -47,7 +49,8 @@ export const colors = {
     greyLight: '#f1f1f1',
     offWhite: '#fafafa',
     greyBorder: '#c7c7c7',
-    greyText: '#c4bcbc'
+    greyText: '#c4bcbc',
+    skeleton: '#E7ECEF'
 };
 
 export const dimensions = {

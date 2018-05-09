@@ -5,6 +5,7 @@ import { Spring, animated, config } from 'react-spring';
 import {
     ChipLabel as Label,
     chipDotClass as checkDot,
+    chipFocusClass as focusClass,
     chipLabelTextClass as textClass,
     CHIP_EDGE_PADDING,
     CHIP_DOT_DIMENSION
@@ -38,18 +39,21 @@ class Chip extends Component {
             title,
             ...props
         } = this.props;
+
         const checkboxProps = ariaCheckboxProps(
             this.state.checked,
             this.update,
             props
         );
-        // const { paddingTop: top, paddingLeft: left } = chipLabelPadding;
+
         return (
             <Label
-                onClick={this.update}
-                htmlFor={props.id}
+                onClick={checkboxProps.onClick}
+                onKeyPress={checkboxProps.onKeyPress}
+                className={this.state.focused ? focusClass : null}
                 style={{
-                    color: this.state.checked ? textColor : 'inherit'
+                    color: this.state.checked ? textColor : 'inherit',
+                    borderColor: this.state.checked ? color : colors.greyLight
                 }}
             >
                 <Spring
@@ -71,23 +75,25 @@ class Chip extends Component {
                     {styles => (
                         <animated.span>
                             <animated.span
-                                className={checkDot}
-                                style={{
-                                    backgroundColor: styles.backgroundColor,
-                                    transform: styles.transform,
-                                    left: CHIP_EDGE_PADDING
-                                }}
-                                {...checkboxProps}
-                            />
-                            <animated.span
+                                id={props.id}
                                 className={textClass}
                                 style={{
                                     transform: styles.transformLabel
                                 }}
                             >
                                 {title}
-                                {/* My rather long label */}
                             </animated.span>
+                            <animated.span
+                                className={checkDot}
+                                onFocus={() => this.setState({ focused: true })}
+                                onBlur={() => this.setState({ focused: false })}
+                                {...checkboxProps}
+                                style={{
+                                    backgroundColor: styles.backgroundColor,
+                                    transform: styles.transform,
+                                    left: CHIP_EDGE_PADDING
+                                }}
+                            />
                             <animated.span
                                 className={checkDot}
                                 style={{
@@ -98,7 +104,7 @@ class Chip extends Component {
                             >
                                 <Svg
                                     height={CHIP_DOT_DIMENSION * 0.65}
-                                    width={CHIP_DOT_DIMENSION * 0.8}
+                                    width="100%"
                                     fill={color}
                                     path={crossSvgPath}
                                 />
