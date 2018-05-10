@@ -14,7 +14,7 @@ const weak = transitionTimes.weak;
 
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
-export const CHIP_MAX_WIDTH = '180px';
+export const CHIP_MAX_WIDTH = '230px';
 export const CHIP_DOT_DIMENSION = 16;
 
 console.log();

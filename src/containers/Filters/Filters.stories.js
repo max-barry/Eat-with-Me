@@ -7,7 +7,13 @@ import Filters from './Filters';
 import Quarter from './FilterContent/Quarter/Quarter';
 import Extra from './FilterContent/Extra/Extra';
 import withSearch from '../../hocs/Search/Search';
-import { FACET_EXTRAS, initial_refinements } from './Filters.constants';
+import {
+    FACET_EXTRAS,
+    initial_refinements,
+    FACET_CUISINE,
+    FACET_QUARTER
+} from './Filters.constants';
+import Cuisine from './FilterContent/Cuisine/Cuisine';
 
 const hitComponent = ({ hit }) =>
     `${hit.name} | ${hit.quarter ? hit.quarter.name : 'no quarter'}`;
@@ -29,7 +35,16 @@ storiesOf('Filters', module)
     .add('Quarters', () => {
         const Enhanced = enhance(() => (
             <Quarter
-                attribute="quarter.name"
+                defaultRefinement={[]}
+                onRequestClose={() => console.log('Exit modal')}
+                updateVirtuals={() => console.log('Applied changes')}
+            />
+        ));
+        return <Enhanced />;
+    })
+    .add('Cusine', () => {
+        const Enhanced = enhance(() => (
+            <Cuisine
                 defaultRefinement={[]}
                 onRequestClose={() => console.log('Exit modal')}
                 updateVirtuals={() => console.log('Applied changes')}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { compose, setPropTypes } from 'recompose';
+import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { Spring, animated, config } from 'react-spring';
 import {
@@ -53,6 +53,7 @@ class Chip extends Component {
                 className={this.state.focused ? focusClass : null}
                 style={{
                     color: this.state.checked ? textColor : 'inherit',
+                    // backgroundColor: this.state.checked ? color : 'white',
                     borderColor: this.state.checked ? color : colors.greyLight
                 }}
             >
@@ -64,7 +65,7 @@ class Chip extends Component {
                     }}
                     to={{
                         transform: this.state.checked
-                            ? `scale(25)`
+                            ? `scale(20)`
                             : `scale(1)`,
                         transformLabel: this.state.checked
                             ? `translate3d(-${bs(1.5)}, 0px, 0)`
@@ -91,7 +92,11 @@ class Chip extends Component {
                                 style={{
                                     backgroundColor: styles.backgroundColor,
                                     transform: styles.transform,
-                                    left: CHIP_EDGE_PADDING
+                                    left: CHIP_EDGE_PADDING,
+                                    transformOrigin: `1px center`,
+                                    pointerEvents: this.state.checked
+                                        ? 'none'
+                                        : 'default'
                                 }}
                             />
                             <animated.span
@@ -123,7 +128,8 @@ const enhance = compose(
         title: PropTypes.string.isRequired,
         color: PropTypes.string,
         textColor: PropTypes.string
-    })
+    }),
+    onlyUpdateForKeys(['checked'])
 );
 
 export default enhance(Chip);

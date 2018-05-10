@@ -29,11 +29,11 @@ const BigSearchLongList = ({ items, loading, initialAnimation: initial }) => {
         <LongListContainer>
             <Trail
                 native
+                config={config.wobbly}
+                keys={grouped.map((_, i) => `list_${i}`)}
                 to={{
-                    // opacity: initial ? 1 : 0,
                     listProgress: initial ? 0 : 100
                 }}
-                keys={grouped.map((_, i) => `list_${i}`)}
             >
                 {grouped.map(list => ({ listProgress }) => (
                     <animated.ul
@@ -47,6 +47,7 @@ const BigSearchLongList = ({ items, loading, initialAnimation: initial }) => {
                     >
                         <Trail
                             native
+                            config={config.wobbly}
                             to={{
                                 opacity: initial ? 1 : 0,
                                 progress: initial ? 0 : 100
@@ -156,7 +157,7 @@ const enhance = compose(
         placeholder: PropTypes.string.isRequired,
         onChange: PropTypes.func.isRequired,
         items: PropTypes.arrayOf(
-            PropTypes.oneOfType(PropTypes.func, PropTypes.element)
+            PropTypes.oneOfType([PropTypes.func, PropTypes.element])
         ).isRequired,
         shouldDebounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
         type: PropTypes.string,

@@ -4,33 +4,44 @@ import { orderBy } from 'lodash';
 import { setPropTypes, onlyUpdateForKeys, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../../../../components/Forms';
-import {
-    CuisineList,
-    CuisineListItem,
-    CuisineContainer
-    // QuarterContainer
-} from './Cuisine.styles';
+// import {} from './Cuisine.styles';
 import { Actions } from '../shared';
 import { FACET_CUISINE } from '../../Filters.constants';
+import BigSearch from '../../../../components/BigSearch/BigSearch';
+import Chip from '../../../../components/Forms/Chip';
 
-const List = ({ currentRefinement, refine, items, onChange, ...props }) => (
-    <CuisineList>
-        {orderBy(items, ['count', 'label'], ['desc', 'asc']).map(
-            (cuisine, key) => (
-                <CuisineListItem key={key}>
-                    <Checkbox
-                        name={`cuisine_checkbox_${key}`}
-                        checked={cuisine.isRefined}
-                        title={() => cuisine.label}
-                        onChange={() => onChange(refine, cuisine.value)}
-                    />
-                </CuisineListItem>
+const List = ({
+    currentRefinement,
+    refine,
+    searchForItems,
+    items,
+    onChange,
+    ...props
+}) => (
+    <BigSearch
+        placeholder="Mexican, Indian, American..."
+        onChange={(event, callback) => {
+            searchForItems(event.target.value);
+            callback();
+        }}
+        items={orderBy(items, ['count', 'label'], ['desc', 'asc']).map(
+            (cuisine, i) => (
+                <Chip
+                    title={`${cuisine.label} (${cuisine.count})`}
+                    onChange={() => onChange(refine, cuisine.value)}
+                    name={`cuisine_${i}`}
+                    checked={cuisine.isRefined}
+                    key={i}
+                />
             )
         )}
-    </CuisineList>
+    />
 );
 
-const EnhancedCuisineList = connectRefinementList(List);
+const EnhancedCuisineList = compose(
+    onlyUpdateForKeys(['currentRefinement', 'items']),
+    connectRefinementList
+)(List);
 
 class Cuisine extends Component {
     state = { refinement: this.props.defaultRefinement };
@@ -49,20 +60,20 @@ class Cuisine extends Component {
 
     render() {
         return (
-            <CuisineContainer>
+            <div style={{ height: '100%' }}>
                 <EnhancedCuisineList
                     attribute={FACET_CUISINE}
                     defaultRefinemnet={this.props.defaultRefinemnet}
-                    searchable={true}
-                    limit={5}
+                    // searchable={true}
+                    limit={20}
                     onChange={(...args) => this.update(args)}
                     {...this.props}
                 />
-                <Actions
+                {/* <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}
-                />
-            </CuisineContainer>
+                /> */}
+            </div>
         );
     }
 }
@@ -72,7 +83,8 @@ const enhance = compose(
         defaultRefinement: PropTypes.array.isRequired,
         onRequestClose: PropTypes.func.isRequired,
         updateVirtuals: PropTypes.func.isRequired
-    })
+    }),
+    onlyUpdateForKeys(['defaultRefinement'])
 );
 
 export default enhance(Cuisine);

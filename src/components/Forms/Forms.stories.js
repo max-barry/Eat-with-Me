@@ -35,7 +35,7 @@ storiesOf('Forms', module)
                 {...props}
                 title="Mexican"
                 color="#B5FED9"
-                textColor="#577769"
+                textColor="#FFFFFF"
             />
         </div>
     ));

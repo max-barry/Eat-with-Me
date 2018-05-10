@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 import { connectRefinementList } from 'react-instantsearch/connectors';
-import { pure } from 'recompose';
+import { pure, onlyUpdateForKeys } from 'recompose';
 import Row from '../../components/Structures/Row';
 import ButtonSimple from '../../components/Buttons/ButtonSimple';
 import { bs, dimensions } from '../../settings/styles';
@@ -19,23 +19,24 @@ import {
 } from './Filters.constants';
 import { filterComponents } from './FilterContent';
 import { Modal } from '../../hocs/Modal/Modal';
-import { unchange } from '../../shared';
 
 const VirtualRefinement = connectRefinementList(() => null);
 
 // replace pure with updatewith... (the better one)
-const FilterButton = unchange(({ children, onClick, ...props }) => (
-    <li
-        {...props}
-        className={css(
-            { marginLeft: bs(0.25), marginRight: bs(0.25) },
-            `&:first-child {margin-left: 0}
+const FilterButton = onlyUpdateForKeys([])(
+    ({ children, onClick, ...props }) => (
+        <li
+            {...props}
+            className={css(
+                { marginLeft: bs(0.25), marginRight: bs(0.25) },
+                `&:first-child {margin-left: 0}
              &:last-child  {margin-right: 0}`
-        )}
-    >
-        <ButtonSimple onClick={onClick}>{children}</ButtonSimple>
-    </li>
-));
+            )}
+        >
+            <ButtonSimple onClick={onClick}>{children}</ButtonSimple>
+        </li>
+    )
+);
 
 class Filters extends Component {
     state = {

@@ -5,7 +5,6 @@ export const ariaCheckboxProps = (
     updateFunc,
     { id, tabIndex = 0 }
 ) => ({
-    id,
     tabIndex,
     role: 'checkbox',
     'aria-checked': checked,

@@ -14,7 +14,6 @@ export const FiltersModalSimple = ({ top, left }) => {
         overlay: {
             top,
             position: 'absolute',
-            // top: props.offsetTop(),
             left: 0,
             right: 0,
             bottom: 0,
@@ -44,16 +43,15 @@ export const FiltersModalAdvanced = ({ top, left }) => {
         overlay: {
             top,
             position: 'absolute',
-            // top: props.offsetTop(),
             left: 0,
             right: 0,
             bottom: 0,
-            height: '100%',
+            height: 'auto',
             backgroundColor: 'transparent'
         },
         content: {
-            top,
-            position: 'fixed',
+            position: 'absolute',
+            top: 0,
             left: 0,
             right: 0,
             bottom: 0,
@@ -64,7 +62,7 @@ export const FiltersModalAdvanced = ({ top, left }) => {
             WebkitOverflowScrolling: 'touch',
             borderRadius: dimensions.borderRadius,
             outline: 'none',
-            padding: bs()
+            padding: 0
         }
     };
 };

@@ -22,7 +22,8 @@ export const BigSearchThemes = {
 };
 
 export const BigSearchContainer = styled('div')`
-    height: 100%;
+    min-height: 100%;
+    padding-top: ${bs(2)};
     width: 100%;
     background: ${props => props.theme.background};
 

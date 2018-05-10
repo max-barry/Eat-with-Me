@@ -4,8 +4,6 @@ import { shevy, colors, fontWeights, bs } from '../../../settings/styles';
 export const ActionsList = styled('ul')(shevy.h6, {
     display: 'block',
     textAlign: 'right',
-    // justifyContent: 'space-between',
-    // maxWidth: dimensions.filtersComponentMinWidth * 0.5,
     marginLeft: 'auto',
     paddingTop: bs(0.75),
     borderTop: `1px solid ${colors.greyMid}`,
