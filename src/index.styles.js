@@ -65,5 +65,12 @@ injectGlobal`
         display: block;
     }
 
+    .ReactModal__Body--open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
     ${typography}
 `;

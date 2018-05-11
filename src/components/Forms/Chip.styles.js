@@ -15,9 +15,8 @@ const weak = transitionTimes.weak;
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
 export const CHIP_MAX_WIDTH = '230px';
+export const CHIP_HEIGHT = 30;
 export const CHIP_DOT_DIMENSION = 16;
-
-console.log();
 
 export const chipFocusClass = css({
     boxShadow: shadows.focused
@@ -31,6 +30,7 @@ export const ChipLabel = styled('label')(
         fontWeight: fontWeights.medium,
         position: 'relative',
         border: `1px solid`,
+        height: CHIP_HEIGHT,
         borderRadius: 6,
         zIndex: 0,
         overflow: 'hidden',
