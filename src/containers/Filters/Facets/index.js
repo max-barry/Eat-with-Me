@@ -20,5 +20,5 @@ const FilterCuisine = Loadable({
 export const facetDictionary = {
     [FACET_QUARTER]: { component: FilterQuarter },
     [FACET_EXTRAS]: { component: FilterExtras },
-    [FACET_CUISINE]: { component: FilterCuisine, modalAdvanced: true }
+    [FACET_CUISINE]: { component: FilterCuisine }
 };

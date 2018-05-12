@@ -3,12 +3,13 @@ import { storiesOf } from '@storybook/react';
 import { Hits } from 'react-instantsearch/dom';
 import faker from 'faker';
 import { compose, setDisplayName } from 'recompose';
+import { withState } from '@dump247/storybook-state';
 import { connectSearchBox } from 'react-instantsearch/connectors';
 import Filters from './Filters.containers';
 // import Quarter from './Facets/Quarter/Quarter.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
 import Extra from './Facets/Extra/Extra.containers';
-import Cuisine from './Facets/Cuisine/Cuisine.containers';
+import { CuisineTabs } from './Facets/Cuisine/Cuisine.components';
 import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
 import {
@@ -20,12 +21,21 @@ import {
 
 const onChange = () => console.log('Change');
 
-const randomRefinements = Array(8)
+const makeRefinements = n =>
+    Array(n)
+        .fill()
+        .map(_ => ({
+            label: faker.address.city(),
+            value: faker.address.city(),
+            count: faker.random.number(500),
+            isRefined: false
+        }));
+
+const randomGroupedRefinements = Array(3)
     .fill()
-    .map((_, i) => ({
-        label: faker.address.city(),
-        count: faker.random.number(500),
-        isRefined: false
+    .map(_ => ({
+        name: faker.address.state(),
+        items: makeRefinements(12)
     }));
 
 const withParent = BaseComponent => props => (
@@ -49,18 +59,29 @@ storiesOf('Filters', module)
         return <Enhanced />;
     })
     .add('Quarters', () => (
-        <QuarterList onChange={onChange} items={randomRefinements} />
+        <QuarterList onChange={onChange} items={makeRefinements(8)} />
     ))
-    // .add('Cusine', () => {
-    //     const Enhanced = enhance(() => (
-    //         <Cuisine
-    //             defaultRefinement={[]}
-    //             onRequestClose={() => console.log('Exit modal')}
-    //             updateVirtuals={() => console.log('Applied changes')}
-    //         />
-    //     ));
-    //     return <Enhanced />;
-    // })
+    .add(
+        'Cusine',
+        withState({ items: randomGroupedRefinements })(({ store }) => (
+            <CuisineTabs
+                items={store.state.items}
+                // onChange={onChange}
+                onChange={value => {
+                    store.set({
+                        items: store.state.items.map(panel => {
+                            panel.items = panel.items.map(cuisine => {
+                                if (cuisine.value === value)
+                                    cuisine.isRefined = !cuisine.isRefined;
+                                return cuisine;
+                            });
+                            return panel;
+                        })
+                    });
+                }}
+            />
+        ))
+    )
     .add('Extras.Bars', () => (
         <FacetBars currentRefinement={[false]} onChange={onChange} />
     ));

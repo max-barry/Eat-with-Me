@@ -70,6 +70,7 @@
         "@babel/cli": "^7.0.0-beta.42",
         "@babel/core": "^7.0.0-beta.42",
         "@babel/preset-env": "^7.0.0-beta.42",
+        "@dump247/storybook-state": "^1.5.0",
         "@storybook/addon-a11y": "^3.4.3",
         "@storybook/addon-actions": "*",
         "@storybook/addon-console": "*",

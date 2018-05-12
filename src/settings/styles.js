@@ -72,7 +72,8 @@ export const fontWeights = {
 };
 
 export const transitionTimes = {
-    weak: 65
+    weak: 65,
+    minimal: 110
 };
 
 export const shadows = {

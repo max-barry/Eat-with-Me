@@ -18,9 +18,9 @@ export const CHIP_MAX_WIDTH = '230px';
 export const CHIP_HEIGHT = 30;
 export const CHIP_DOT_DIMENSION = 16;
 
-export const chipFocusClass = css({
-    boxShadow: shadows.focused
-});
+// export const chipFocusClass = css({
+//     boxShadow: shadows.focused
+// });
 
 export const ChipLabel = styled('label')(
     sInteractive,
@@ -36,8 +36,8 @@ export const ChipLabel = styled('label')(
         overflow: 'hidden',
         display: 'inline-block',
         backgroundColor: 'white',
-        transition: `background-color ${weak}ms, color ${weak}ms, box-shadow ${weak}ms`,
-        willChange: 'background-color, color, box-shadow',
+        transition: `background-color ${weak}ms, color ${weak}ms`,
+        willChange: 'background-color, color',
         maxWidth: CHIP_MAX_WIDTH,
         paddingTop: CHIP_VERTICAL_DOT_PADDING,
         paddingBottom: CHIP_VERTICAL_DOT_PADDING,
@@ -46,7 +46,10 @@ export const ChipLabel = styled('label')(
     },
     `
     &:hover {background-color: ${colors.offWhite}}
-    &:focus {outline: 0;}
+    &:focus {outline: 0; box-shadow: ${shadows.focused};}
+    &[data-checked]:focus 
+        background-color: blue;
+    }
     `
 );
 

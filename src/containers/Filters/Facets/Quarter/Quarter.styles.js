@@ -3,10 +3,6 @@ import { bs } from '../../../../settings/styles';
 
 export const QUARTER_ITEM_WIDTH = 360;
 
-export const QuarterContainer = styled('div')({
-    display: 'inline-block'
-});
-
 export const QuarterList = styled('ul')({
     display: 'inline-flex',
     flexWrap: 'wrap',

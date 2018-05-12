@@ -3,15 +3,19 @@ import PropTypes from 'prop-types';
 export const ariaCheckboxProps = (
     checked,
     updateFunc,
-    { id, tabIndex = 0 }
+    { name, tabIndex = 0 }
 ) => ({
     tabIndex,
     role: 'checkbox',
     'aria-checked': checked,
-    'aria-labelledby': id,
-    onClick: event => updateFunc(event),
+    'aria-labelledby': name,
+    id: `id_${name}`,
+    onClick: event => {
+        console.log('checked');
+        updateFunc(!checked);
+    },
     onKeyPress: ({ charCode: key, ...event }) =>
-        key === 32 || key === 13 ? updateFunc(event) : null
+        key === 32 || key === 13 ? updateFunc(!checked) : null
 });
 
 export const requiredPropTypes = {

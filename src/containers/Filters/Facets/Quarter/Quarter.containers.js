@@ -3,10 +3,9 @@ import { setPropTypes, compose, withProps, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 import { connectRefinementList } from 'react-instantsearch/connectors';
-import { FacetActions as Actions } from '../shared.components';
+import { FacetActions as Actions } from '../Facets.components';
 import { FACET_QUARTER } from '../../Filters.shared';
 import { QuarterList as List } from './Quarter.components';
-import { QuarterContainer as Container } from './Quarter.styles';
 
 class Quarter extends Component {
     constructor(props) {
@@ -36,13 +35,13 @@ class Quarter extends Component {
 
     render() {
         return (
-            <Container>
+            <div>
                 <List items={this.items} onChange={this.update} />
                 <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}
                 />
-            </Container>
+            </div>
         );
     }
 }

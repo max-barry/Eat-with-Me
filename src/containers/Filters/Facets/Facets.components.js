@@ -19,6 +19,8 @@ const enhanceFacetActions = compose(
     })
 );
 
+// TODO : Add a reset button
+
 export const FacetActions = enhanceFacetActions(
     ({
         applyAction,
