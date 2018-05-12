@@ -4,16 +4,16 @@ import { Hits } from 'react-instantsearch/dom';
 import { compose } from 'recompose';
 import { connectSearchBox } from 'react-instantsearch/connectors';
 import Filters from './Filters';
-import Quarter from './FilterContent/Quarter/Quarter';
-import Extra from './FilterContent/Extra/Extra';
+import Quarter from './Facets/Quarter/Quarter';
+import Extra from './Facets/Extra/Extra';
+import Cuisine from './Facets/Cuisine/Cuisine';
 import withSearch from '../../hocs/Search/Search';
 import {
     FACET_EXTRAS,
     initial_refinements,
     FACET_CUISINE,
     FACET_QUARTER
-} from './Filters.constants';
-import Cuisine from './FilterContent/Cuisine/Cuisine';
+} from './filters.shared';
 
 const hitComponent = ({ hit }) =>
     `${hit.name} | ${hit.quarter ? hit.quarter.name : 'no quarter'}`;

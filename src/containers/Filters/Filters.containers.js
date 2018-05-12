@@ -1,42 +1,22 @@
 import React, { Component } from 'react';
-import { css } from 'emotion';
-import { connectRefinementList } from 'react-instantsearch/connectors';
-import { pure, onlyUpdateForKeys } from 'recompose';
 import Row from '../../components/Structures/Row';
-import ButtonSimple from '../../components/Buttons/ButtonSimple';
-import { bs, dimensions } from '../../settings/styles';
+import { Modal } from '../../hocs/Modal/Modal';
+import { dimensions } from '../../settings/styles';
+import { facetDictionary } from './Facets';
+import {
+    FACET_CUISINE,
+    FACET_EXTRAS,
+    FACET_IS_BAR,
+    FACET_QUARTER,
+    initial_refinements
+} from './filters.shared';
 import {
     FiltersContainer,
-    FiltersModalSimple,
-    FiltersModalAdvanced
+    FiltersModalAdvanced,
+    FiltersModalSimple
 } from './Filters.styles';
-import {
-    FACET_QUARTER,
-    FACET_EXTRAS,
-    FACET_CUISINE,
-    FACET_IS_BAR,
-    initial_refinements
-} from './Filters.constants';
-import { filterComponents } from './FilterContent';
-import { Modal } from '../../hocs/Modal/Modal';
-
-const VirtualRefinement = connectRefinementList(() => null);
 
 // replace pure with updatewith... (the better one)
-const FilterButton = onlyUpdateForKeys([])(
-    ({ children, onClick, ...props }) => (
-        <li
-            {...props}
-            className={css(
-                { marginLeft: bs(0.25), marginRight: bs(0.25) },
-                `&:first-child {margin-left: 0}
-             &:last-child  {margin-right: 0}`
-            )}
-        >
-            <ButtonSimple onClick={onClick}>{children}</ButtonSimple>
-        </li>
-    )
-);
 
 class Filters extends Component {
     state = {
@@ -87,7 +67,7 @@ class Filters extends Component {
         this.setState({
             contentKey,
             filtersOpen: true,
-            content: filterComponents[contentKey],
+            content: facetDictionary[contentKey],
             style: {
                 ...this.state.style,
                 left

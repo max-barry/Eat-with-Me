@@ -12,7 +12,7 @@ import VirtualList from 'react-tiny-virtual-list';
 import { Checkbox } from '../../../../components/Forms';
 // import {} from './Cuisine.styles';
 import { Actions } from '../shared';
-import { FACET_CUISINE } from '../../Filters.constants';
+import { FACET_CUISINE } from '../../filters.shared';
 // import BigSearch from '../../../../components/BigSearch/BigSearch';
 import Chip from '../../../../components/Forms/Chip';
 import {

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { setPropTypes, onlyUpdateForKeys, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { connectRefinementList } from 'react-instantsearch/connectors';
-import { Actions } from '../shared';
+import { FacetActions as Actions } from '../shared.components';
 import { ExtrasContainer, ExtrasFilterWrap } from './Extra.styles';
-import { FACET_IS_BAR, FACET_EXTRAS } from '../../Filters.constants';
+import { FACET_IS_BAR, FACET_EXTRAS } from '../../filters.shared';
 import { ToggleWithLabel } from '../../../../components/Forms';
 
 const IncludeBars = ({ refine, currentRefinement, onChange, ...props }) => (

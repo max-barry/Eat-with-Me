@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { compose } from 'recompose';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { FACET_CUISINE } from '../../Filters.constants';
+import { FACET_CUISINE } from '../../filters.shared';
 
 const CuisineTabs = props => (
     <Tabs>

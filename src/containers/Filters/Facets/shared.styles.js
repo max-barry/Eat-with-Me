@@ -1,7 +1,7 @@
 import styled from 'react-emotion';
 import { shevy, colors, fontWeights, bs } from '../../../settings/styles';
 
-export const ActionsList = styled('ul')(shevy.h6, {
+export const FacetActionsList = styled('ul')(shevy.h6, {
     display: 'block',
     textAlign: 'right',
     marginLeft: 'auto',
@@ -10,7 +10,7 @@ export const ActionsList = styled('ul')(shevy.h6, {
     marginBottom: 0
 });
 
-export const ActionsListItem = styled('li')(
+export const FacetActionsListItem = styled('li')(
     {
         display: 'inline-block',
         color: colors.greyText,

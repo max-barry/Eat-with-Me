@@ -46,10 +46,11 @@
         "recompose": "^0.26.0",
         "redux": "^4.0.0",
         "redux-actions": "^2.3.2",
-        "redux-devtools": "^3.4.1",
         "redux-logger": "^3.0.6",
+        "redux-promise-middleware": "^5.1.1",
         "redux-thunk": "^2.2.0",
         "shevyjs": "^1.1.0",
+        "type-to-reducer": "^1.1.0",
         "yup": "^0.24.1"
     },
     "scripts": {

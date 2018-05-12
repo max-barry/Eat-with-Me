@@ -1,10 +1,14 @@
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import * as reducers from './redux/ducks';
+import middlewares from './redux/middlewares';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Loadable from 'react-loadable';
 import registerServiceWorker from './registerServiceWorker';
-import ApolloClientStore from './graphql';
+import configureStore from './redux/store';
 import './index.styles';
 
 const App = Loadable({
@@ -14,11 +18,22 @@ const App = Loadable({
 
 // TODO : Authentication has been moved from index > app
 //        as a temporary bugfix for https://github.com/ReactTraining/react-router/issues/6072
+// const store = configureStore(window.REDUX_INITIAL_DATA);
+
+// const configureStore = initialState =>
+//     ;
+
+const store = createStore(
+    combineReducers(reducers),
+    applyMiddleware(...middlewares)
+);
+// export default configureStore;
+
 ReactDOM.render(
     <BrowserRouter>
-        <ApolloProvider client={ApolloClientStore}>
+        <Provider store={store}>
             <App />
-        </ApolloProvider>
+        </Provider>
     </BrowserRouter>,
     document.getElementById('root')
 );

@@ -1,33 +1,32 @@
-import React, { Component } from 'react';
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
-import { withRouter } from 'react-router';
-import Loadable from 'react-loadable';
-import { compose, withPropsOnChange } from 'recompose';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+import { Link, Route, Switch } from 'react-router-dom';
+import { compose, withPropsOnChange } from 'recompose';
 import { FIREBASE_CONFIG } from '../../settings/apis';
 import urls from '../../settings/urls';
-import {
-    withAuthenticationProvider,
-    withAuthenticationConsumer
-} from '../../hocs/Authentication';
-import Filters from '../Filters';
-import withSearch from '../../hocs/Search/Search';
+// import {
+//     withAuthenticationProvider,
+//     withAuthenticationConsumer
+// } from '../../hocs/Authentication';
+// import Filters from '../Filters';
+// import withSearch from '../../hocs/Search/Search';
 
 // Initialize Firebase but check an app doesn't exist
 if (!firebase.apps.length) {
     firebase.initializeApp(FIREBASE_CONFIG);
 }
 
-const Register = Loadable({
-    loader: _ => import('../Register'),
-    loading: () => <p>Loading register</p>
-});
+// const Register = Loadable({
+//     loader: _ => import('../Register'),
+//     loading: () => <p>Loading register</p>
+// });
 
-const NewCollection = Loadable({
-    loader: _ => import('../NewCollection'),
-    loading: () => <p>Loading new collection</p>
-});
+// const NewCollection = Loadable({
+//     loader: _ => import('../NewCollection'),
+//     loading: () => <p>Loading new collection</p>
+// });
 
 // const AsyncFeed = AsyncWrapper(_ => import('../Feed'));
 // const AsyncRestaurantDetail = AsyncWrapper(_ => import('../RestaurantDetail'));
@@ -62,11 +61,11 @@ class App extends Component {
                         path={urls.HOME.pathname}
                         component={() => <p>Home</p>}
                     />
-                    <Route
+                    {/* <Route
                         exact
                         path={urls.COLLECTIONS_NEW.pathname}
                         component={NewCollection}
-                    />
+                    /> */}
                     {/*<Route
                         exact
                         path={urls.RESTAURANT_SLUG.pathname}
@@ -87,8 +86,8 @@ class App extends Component {
                     this.modalUrls.includes(this.props.location.pathname)) && (
                     <Route
                         path={urls.REGISTER.pathname}
-                        component={() => <Register />}
-                        // component={() => <Register />} # todo ; make this {Register}
+                        component={() => <div>Register</div>}
+                        // component={() => <Register />}
                     />
                 )}
             </div>
@@ -104,10 +103,25 @@ const modalPropsHandler = withPropsOnChange(['location'], ownerProps => ({
     )
 }));
 
+// const mapStateToProps = state => {
+//     return {
+//         items: state.items,
+//         hasErrored: state.itemsHasErrored,
+//         isLoading: state.itemsIsLoading
+//     };
+// };
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         fetchCuisines: url => dispatch(databaseActions.fetchCuisines())
+//     };
+// };
+
 const enhance = compose(
-    withSearch,
+    // withSearch,
+    // connect(mapStateToProps, mapDispatchToProps),
     withRouter,
-    withAuthenticationProvider,
+    // withAuthenticationProvider,
     modalPropsHandler
 );
 
