@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import { onlyUpdateForKeys } from 'recompose';
-import connectRefinementList from 'react-instantsearch/connectors';
+import { connectRefinementList } from 'react-instantsearch/connectors';
 import { bs } from '../../settings/styles';
 import { ButtonSimple } from '../../components/Buttons';
 

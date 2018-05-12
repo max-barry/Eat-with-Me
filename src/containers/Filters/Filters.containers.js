@@ -3,15 +3,16 @@ import Row from '../../components/Structures/Row';
 import { Modal } from '../../hocs/Modal/Modal';
 import { dimensions } from '../../settings/styles';
 import { facetDictionary } from './Facets';
+import { VirtualRefinement, FilterButton } from './Filters.components';
 import {
     FACET_CUISINE,
     FACET_EXTRAS,
     FACET_IS_BAR,
     FACET_QUARTER,
-    initial_refinements
-} from './filters.shared';
+    initialRefinements
+} from './Filters.shared';
 import {
-    FiltersContainer,
+    FiltersContainer as Container,
     FiltersModalAdvanced,
     FiltersModalSimple
 } from './Filters.styles';
@@ -20,19 +21,24 @@ import {
 
 class Filters extends Component {
     state = {
-        filtersOpen: false,
+        open: false,
         content: {},
         contentKey: null,
-        [FACET_QUARTER]: initial_refinements[FACET_QUARTER],
-        [FACET_EXTRAS]: initial_refinements[FACET_EXTRAS],
-        [FACET_CUISINE]: initial_refinements[FACET_CUISINE],
+        [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
+        [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
+        [FACET_CUISINE]: initialRefinements[FACET_CUISINE],
         style: {
             left: 0,
             top: 0
         }
     };
-
     containerRef = React.createRef();
+
+    constructor(props) {
+        super(props);
+        this.updateVirtuals = this.updateVirtuals.bind(this);
+        this.onRequestClose = this.onRequestClose.bind(this);
+    }
 
     get container() {
         return this.containerRef.current;
@@ -60,13 +66,13 @@ class Filters extends Component {
         );
         // We need to check if the filters are already open
         // and save them down if they are
-        if (this.state.filtersOpen && this.rendered) {
+        if (this.state.open && this.rendered) {
             this.rendered.save(true);
         }
         // Set the new state with the left value and an open filter
         this.setState({
             contentKey,
-            filtersOpen: true,
+            open: true,
             content: facetDictionary[contentKey],
             style: {
                 ...this.state.style,
@@ -75,15 +81,15 @@ class Filters extends Component {
         });
     }
 
-    updateVirtuals([attr, refinements, close = true]) {
+    updateVirtuals(attr, refinements, close = true) {
         this.setState({
             [this.state.contentKey]: refinements,
-            filtersOpen: !close
+            open: !close
         });
     }
 
     onRequestClose() {
-        this.setState({ filtersOpen: false });
+        this.setState({ open: false });
     }
 
     componentDidMount() {
@@ -96,9 +102,10 @@ class Filters extends Component {
             style: styleProps,
             content: { component: Content, modalAdvanced = false }
         } = this.state;
+
         return (
             <div ref={this.containerRef}>
-                <FiltersContainer>
+                <Container>
                     <Row>
                         <FilterButton
                             onClick={e => this.openFilter(e, FACET_QUARTER)}
@@ -121,28 +128,26 @@ class Filters extends Component {
                             children="More..."
                         />
                     </Row>
-                </FiltersContainer>
+                </Container>
                 <div id="FilterCanvasWrap">
                     <Modal
-                        isOpen={this.state.filtersOpen}
-                        contentLabel="Filter content modal"
+                        isOpen={this.state.open}
+                        contentLabel="Filter tools modal"
+                        onRequestClose={this.onRequestClose}
                         style={
                             modalAdvanced
                                 ? FiltersModalAdvanced(styleProps)
                                 : FiltersModalSimple(styleProps)
                         }
-                        onRequestClose={() => this.onRequestClose()}
                     >
                         {Content && (
                             <Content
-                                onRequestClose={() => this.onRequestClose()}
+                                onRequestClose={this.onRequestClose}
                                 onMount={rendered => (this.rendered = rendered)}
                                 defaultRefinement={
                                     this.state[this.state.contentKey]
                                 }
-                                updateVirtuals={(...args) =>
-                                    this.updateVirtuals(args)
-                                }
+                                updateVirtuals={this.updateVirtuals}
                             />
                         )}
                     </Modal>

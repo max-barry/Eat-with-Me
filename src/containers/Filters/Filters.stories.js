@@ -1,79 +1,84 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import { Hits } from 'react-instantsearch/dom';
+import faker from 'faker';
 import { compose } from 'recompose';
 import { connectSearchBox } from 'react-instantsearch/connectors';
-import Filters from './Filters';
-import Quarter from './Facets/Quarter/Quarter';
-import Extra from './Facets/Extra/Extra';
-import Cuisine from './Facets/Cuisine/Cuisine';
+import Filters from './Filters.containers';
+// import Quarter from './Facets/Quarter/Quarter.containers';
+import { QuarterList } from './Facets/Quarter/Quarter.components';
+import Extra from './Facets/Extra/Extra.containers';
+import Cuisine from './Facets/Cuisine/Cuisine.containers';
+import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
 import {
     FACET_EXTRAS,
-    initial_refinements,
-    FACET_CUISINE,
-    FACET_QUARTER
-} from './filters.shared';
+    initialRefinements
+    // FACET_CUISINE,
+    // FACET_QUARTER
+} from './Filters.shared';
 
-const hitComponent = ({ hit }) =>
-    `${hit.name} | ${hit.quarter ? hit.quarter.name : 'no quarter'}`;
+const onChange = () => console.log('Change');
+
+const randomRefinements = Array(8)
+    .fill()
+    .map((_, i) => ({
+        label: faker.address.city(),
+        count: faker.random.number(500),
+        isRefined: false
+    }));
 
 const withParent = BaseComponent => props => (
     <div>
         <BaseComponent />
-        <Hits hitComponent={hitComponent} />
+        <Hits
+            hitComponent={({ hit }) =>
+                `${hit.name} | ${hit.quarter ? hit.quarter.name : 'no quarter'}`
+            }
+        />
     </div>
 );
 
-const enhance = compose(withSearch, withParent);
-
 storiesOf('Filters', module)
     .add('default', () => {
-        const Enhanced = enhance(() => <Filters />);
+        const Enhanced = compose(withSearch, withParent)(() => <Filters />);
         return <Enhanced />;
     })
-    .add('Quarters', () => {
-        const Enhanced = enhance(() => (
-            <Quarter
-                defaultRefinement={[]}
-                onRequestClose={() => console.log('Exit modal')}
-                updateVirtuals={() => console.log('Applied changes')}
-            />
-        ));
-        return <Enhanced />;
-    })
-    .add('Cusine', () => {
-        const Enhanced = enhance(() => (
-            <Cuisine
-                defaultRefinement={[]}
-                onRequestClose={() => console.log('Exit modal')}
-                updateVirtuals={() => console.log('Applied changes')}
-            />
-        ));
-        return <Enhanced />;
-    })
-    .add('Extras', () => {
-        const EnhancedVirtual = connectSearchBox(
-            class VirtualSearch extends Component {
-                constructor(props) {
-                    super(props);
-                    props.refine('chesh');
-                }
-                render() {
-                    return null;
-                }
-            }
-        );
+    .add('Quarters', () => (
+        <QuarterList onChange={onChange} items={randomRefinements} />
+    ))
+    // .add('Cusine', () => {
+    //     const Enhanced = enhance(() => (
+    //         <Cuisine
+    //             defaultRefinement={[]}
+    //             onRequestClose={() => console.log('Exit modal')}
+    //             updateVirtuals={() => console.log('Applied changes')}
+    //         />
+    //     ));
+    //     return <Enhanced />;
+    // })
+    .add('Extras: Bars', () => {
+        // const EnhancedVirtual = connectSearchBox(
+        //     class VirtualSearch extends Component {
+        //         constructor(props) {
+        //             super(props);
+        //             props.refine('chesh');
+        //         }
+        //         render() {
+        //             return null;
+        //         }
+        //     }
+        // );
 
-        const Enhanced = enhance(() => (
-            <div>
-                <EnhancedVirtual />
-                <Extra
-                    defaultRefinement={initial_refinements[FACET_EXTRAS]}
-                    onRequestClose={() => console.log('Exit modal')}
-                    updateVirtuals={() => console.log('Applied changes')}
-                />
-            </div>
-        ));
-        return <Enhanced />;
+        // const Enhanced = enhance(() => (
+        //     <div>
+        //         <EnhancedVirtual />
+        //         <Extra
+        //             defaultRefinement={initialRefinements[FACET_EXTRAS]}
+        //             onRequestClose={() => console.log('Exit modal')}
+        //             updateVirtuals={() => console.log('Applied changes')}
+        //         />
+        //     </div>
+        // ));
+        return <FacetBars currentRefinement={[false]} onChange={onChange} />;
     });

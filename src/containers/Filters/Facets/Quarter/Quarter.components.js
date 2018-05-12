@@ -1,7 +1,6 @@
 import React from 'react';
-import connectRefinementList from 'react-instantsearch/connectors';
-import { onlyUpdateForKeys } from 'recompose';
-import { orderBy } from 'lodash';
+import { onlyUpdateForKeys, setPropTypes, compose } from 'recompose';
+import PropTypes from 'prop-types';
 import {
     QuarterTag as Tag,
     QuarterList as List,
@@ -9,23 +8,24 @@ import {
 } from './Quarter.styles';
 import { Checkbox } from '../../../../components/Forms';
 
-const Name = onlyUpdateForKeys([])(({ count, label }) => (
+const Name = onlyUpdateForKeys([])(({ quarter }) => (
     <span>
         {' '}
-        {`${label} `} <em>{count}</em>{' '}
+        {`${quarter.label} `} <em>{quarter.count}</em>{' '}
     </span>
 ));
 
-const SimpleQuarterList = ({
-    currentRefinement,
-    refine,
-    items,
-    onChange,
-    ...props
-}) => (
-    <List>
-        {orderBy(items, ['count', 'label'], ['desc', 'asc']).map(
-            (quarter, key) => (
+const enhanceQuarterList = compose(
+    setPropTypes({
+        items: PropTypes.array.isRequired,
+        onChange: PropTypes.func.isRequired
+    })
+);
+
+export const QuarterList = enhanceQuarterList(
+    ({ items, onChange, ...props }) => (
+        <List>
+            {items.map((quarter, key) => (
                 <ListItem key={key}>
                     <Checkbox
                         name={`quarter_checkbox_${key}`}
@@ -37,12 +37,10 @@ const SimpleQuarterList = ({
                                 words
                             </Tag>
                         )}
-                        onChange={() => onChange(refine, quarter.value)}
+                        onChange={() => onChange(quarter.value)}
                     />
                 </ListItem>
-            )
-        )}
-    </List>
+            ))}
+        </List>
+    )
 );
-
-export const QuarterList = connectRefinementList(SimpleQuarterList);

@@ -1,19 +1,19 @@
 import React from 'react';
 import Loadable from 'react-loadable';
-import { FACET_QUARTER, FACET_EXTRAS, FACET_CUISINE } from '../filters.shared';
+import { FACET_QUARTER, FACET_EXTRAS, FACET_CUISINE } from '../Filters.shared';
 
 const FilterQuarter = Loadable({
-    loader: _ => import('./Quarter/Quarter'),
+    loader: _ => import('./Quarter'),
     loading: () => <p>Loading quarter filter</p>
 });
 
 const FilterExtras = Loadable({
-    loader: _ => import('./Extra/Extra'),
+    loader: _ => import('./Extra'),
     loading: () => <p>Loading extra filter</p>
 });
 
 const FilterCuisine = Loadable({
-    loader: _ => import('./Cuisine/Cuisine'),
+    loader: _ => import('./Cuisine'),
     loading: () => <p>Loading extra filter</p>
 });
 

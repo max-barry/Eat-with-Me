@@ -1,45 +1,56 @@
 import React, { Component } from 'react';
-import { setPropTypes, onlyUpdateForKeys, compose } from 'recompose';
+import {
+    setPropTypes,
+    compose,
+    withProps,
+    withHandlers,
+    withPropsOnChange
+} from 'recompose';
 import PropTypes from 'prop-types';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../shared.components';
-import { ExtrasContainer, ExtrasFilterWrap } from './Extra.styles';
-import { FACET_IS_BAR, FACET_EXTRAS } from '../../filters.shared';
-import { ToggleWithLabel } from '../../../../components/Forms';
+import {
+    ExtrasContainer as Container,
+    ExtrasFilterWrap as Wrap
+} from './Extra.styles';
+import { FACET_IS_BAR, FACET_EXTRAS } from '../../Filters.shared';
 
-const IncludeBars = ({ refine, currentRefinement, onChange, ...props }) => (
-    <ToggleWithLabel
-        id="include-bars"
-        onChange={() => onChange(refine)}
-        checked={currentRefinement.length > 1}
-        title={() => 'Include bars and pubs'}
-        tag={() => "We don't include bars and pubs in results by default"}
-    />
+import { FacetBars as Bars } from './Extra.components';
+
+const enhanceBars = compose(
+    withProps(props => ({
+        attribute: FACET_IS_BAR
+    })),
+    connectRefinementList,
+    withHandlers({
+        onChange: props => _ => props.onChange(props.refine)
+    })
 );
 
-const enhanceIncludeBars = compose(
-    onlyUpdateForKeys([]),
-    connectRefinementList
-);
-
-const EnhancedIncludeBars = enhanceIncludeBars(IncludeBars);
+const EnhancedBars = enhanceBars(Bars);
 
 class ExtraFilters extends Component {
     state = { ...this.props.defaultRefinement };
 
-    get bar() {
-        return this.state[FACET_IS_BAR];
+    constructor(props) {
+        super(props);
+        this.onBarChange = this.onBarChange.bind(this);
     }
-
-    save = (force = false) =>
-        this.props.updateVirtuals(FACET_EXTRAS, this.state, !force);
 
     componentDidMount() {
         if (this.props.onMount) this.props.onMount(this);
     }
 
+    get barRefinements() {
+        return this.state[FACET_IS_BAR].map(r => r.toString());
+    }
+
+    save = (force = false) =>
+        this.props.updateVirtuals(FACET_EXTRAS, this.state, !force);
+
     onBarChange(refine) {
-        const includeBars = this.bar.length === 1 ? [true, false] : [false];
+        const includeBars =
+            this.barRefinements.length === 1 ? [true, false] : [false];
         refine(includeBars);
         this.setState({
             ...this.state,
@@ -49,19 +60,18 @@ class ExtraFilters extends Component {
 
     render() {
         return (
-            <ExtrasContainer>
-                <ExtrasFilterWrap>
-                    <EnhancedIncludeBars
-                        attribute="is_bar"
-                        defaultRefinement={this.bar.map(r => r.toString())}
-                        onChange={refine => this.onBarChange(refine)}
+            <Container>
+                <Wrap>
+                    <EnhancedBars
+                        defaultRefinement={this.barRefinements}
+                        onChange={this.onBarChange}
                     />
-                </ExtrasFilterWrap>
+                </Wrap>
                 <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}
                 />
-            </ExtrasContainer>
+            </Container>
         );
     }
 }

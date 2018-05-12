@@ -1,35 +1,43 @@
 import React, { Component } from 'react';
-import { setPropTypes, compose } from 'recompose';
+import { setPropTypes, compose, withProps, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
+import { orderBy } from 'lodash';
+import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../shared.components';
-import { FACET_QUARTER } from '../../filters.shared';
+import { FACET_QUARTER } from '../../Filters.shared';
 import { QuarterList as List } from './Quarter.components';
 import { QuarterContainer as Container } from './Quarter.styles';
 
 class Quarter extends Component {
-    state = { refinement: this.props.defaultRefinement };
-
-    save = force =>
-        this.props.updateVirtuals(FACET_QUARTER, this.state.refinement, !force);
+    constructor(props) {
+        super(props);
+        this.update = this.update.bind(this);
+        this.save = this.save.bind(this);
+    }
 
     componentDidMount() {
         if (this.props.onMount) this.props.onMount(this);
     }
 
-    update([refine, value]) {
-        refine(value);
-        this.setState({ refinement: value });
+    get items() {
+        return orderBy(this.props.items, ['count', 'label'], ['desc', 'asc']);
+    }
+
+    save = (force = false) =>
+        this.props.updateVirtuals(
+            FACET_QUARTER,
+            this.props.currentRefinement,
+            !force
+        );
+
+    update(value) {
+        this.props.refine(value);
     }
 
     render() {
         return (
             <Container>
-                <List
-                    attribute={FACET_QUARTER}
-                    defaultRefinemnet={this.props.defaultRefinemnet}
-                    onChange={(...args) => this.update(args)}
-                    {...this.props}
-                />
+                <List items={this.items} onChange={this.update} />
                 <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}
@@ -41,10 +49,15 @@ class Quarter extends Component {
 
 const enhance = compose(
     setPropTypes({
-        defaultRefinement: PropTypes.array.isRequired,
         onRequestClose: PropTypes.func.isRequired,
+        defaultRefinement: PropTypes.array.isRequired,
         updateVirtuals: PropTypes.func.isRequired
-    })
+    }),
+    withPropsOnChange(['defaultRefinement'], ({ defaultRefinement }) => ({
+        defaultRefinement,
+        attribute: FACET_QUARTER
+    })),
+    connectRefinementList
 );
 
 export default enhance(Quarter);
