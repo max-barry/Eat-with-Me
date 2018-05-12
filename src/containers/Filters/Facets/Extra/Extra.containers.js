@@ -4,7 +4,7 @@ import {
     compose,
     withProps,
     withHandlers,
-    withPropsOnChange
+    setDisplayName
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { connectRefinementList } from 'react-instantsearch/connectors';
@@ -18,6 +18,7 @@ import { FACET_IS_BAR, FACET_EXTRAS } from '../../Filters.shared';
 import { FacetBars as Bars } from './Extra.components';
 
 const enhanceBars = compose(
+    setDisplayName('EnhancedBars'),
     withProps(props => ({
         attribute: FACET_IS_BAR
     })),

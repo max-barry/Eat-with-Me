@@ -1,9 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ToggleWithLabel } from '../../../../components/Forms';
-import { onlyUpdateForKeys, compose, setPropTypes } from 'recompose';
+import {
+    onlyUpdateForKeys,
+    compose,
+    setPropTypes,
+    setDisplayName
+} from 'recompose';
 
 const enhanceBars = compose(
+    setDisplayName('FacetBars'),
     setPropTypes({
         currentRefinement: PropTypes.array.isRequired,
         onChange: PropTypes.func.isRequired

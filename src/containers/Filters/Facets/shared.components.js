@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from 'react-emotion';
-import { setPropTypes, compose } from 'recompose';
+import { setPropTypes, compose, setDisplayName } from 'recompose';
 import PropTypes from 'prop-types';
 import { colors } from '../../../settings/styles';
 import ButtonLink from '../../../components/Buttons/ButtonLink';
@@ -10,6 +10,7 @@ import {
 } from './shared.styles';
 
 const enhanceFacetActions = compose(
+    setDisplayName('FacetActions'),
     setPropTypes({
         applyAction: PropTypes.func.isRequired,
         cancelAction: PropTypes.func.isRequired,

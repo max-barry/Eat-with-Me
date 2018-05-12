@@ -1,5 +1,10 @@
 import React from 'react';
-import { onlyUpdateForKeys, setPropTypes, compose } from 'recompose';
+import {
+    onlyUpdateForKeys,
+    setPropTypes,
+    compose,
+    setDisplayName
+} from 'recompose';
 import PropTypes from 'prop-types';
 import {
     QuarterTag as Tag,
@@ -16,6 +21,7 @@ const Name = onlyUpdateForKeys([])(({ quarter }) => (
 ));
 
 const enhanceQuarterList = compose(
+    setDisplayName('QuarterList'),
     setPropTypes({
         items: PropTypes.array.isRequired,
         onChange: PropTypes.func.isRequired
