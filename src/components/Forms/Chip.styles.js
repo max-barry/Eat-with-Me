@@ -7,7 +7,8 @@ import {
     fontWeights,
     sInteractive,
     transitionTimes,
-    shadows
+    shadows,
+    easings
 } from '../../settings/styles';
 
 const weak = transitionTimes.weak;
@@ -65,7 +66,6 @@ export const chipDotClass = css`
     width: ${CHIP_DOT_DIMENSION}px;
     left: ${CHIP_EDGE_PADDING};
     line-height: 1;
-    // transform-origin: 1px center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +74,15 @@ export const chipDotClass = css`
     top: 22%;
     z-index: -1;
     will-change: transform;
+    transform-origin: center;
+    transition: transform ${transitionTimes.short}ms ${easings.standard};
     &:focus {
         outline: 0;
     }
+`;
+
+export const chipDotActiveClass = css`
+    transform: scale(30);
+
+    // outline: 20px
 `;

@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 import { Spring, animated, config, Keyframes, interpolate } from 'react-spring';
 import {
     ChipLabel as Label,
-    chipDotClass as checkDot,
+    chipDotClass as dotClass,
+    chipDotActiveClass as dotActiveClass,
     chipFocusClass as focusClass,
     chipLabelTextClass as textClass,
     CHIP_EDGE_PADDING,
@@ -28,16 +29,6 @@ import { cx, css, keyframes } from 'emotion';
 // Move these basic update and state handlers to an abstract
 
 class Chip extends Component {
-    state = { sx: null, sy: null };
-
-    componentDidMount() {
-        const rect = this.ref.getBoundingClientRect();
-        this.setState({
-            sx: rect.width / CHIP_DOT_DIMENSION,
-            sy: rect.height / CHIP_DOT_DIMENSION
-        });
-    }
-
     render() {
         const { checked, onChange, label, ...props } = this.props;
         const checkboxProps = ariaCheckboxProps(checked, onChange, props);
@@ -60,21 +51,24 @@ class Chip extends Component {
                 <Spring
                     native
                     to={{
-                        x: checked ? -1 * CHIP_DOT_DIMENSION : 0,
-                        sx: checked ? this.state.sx : 1,
-                        sy: checked ? this.state.sy : 1,
-                        radius: checked ? 0 : '50%'
+                        x: checked ? -1 * CHIP_DOT_DIMENSION - bsint(0.5) : 0
+                        // sx: checked ? this.state.sx : 1,
+                        // sy: checked ? this.state.sy : 1,
+                        // radius: checked ? 0 : '50%'
                     }}
+                    config={config.stiff}
                 >
                     {/* script={next => (this.label = next)} */}
 
-                    {({ x, sx, sy, radius }) => {
+                    {({ x }) => {
                         // const translation = x.interpolate(
                         //     x => `translate3d(${x}px, 0px, 0)`
                         // );
                         // const scale = sx.interpolate(sx => `scaleX(${sx})`);
                         // console.log(translation);
                         // console.log(scale);
+                        delete checkboxProps.onClick;
+                        delete checkboxProps.onKeyPress;
                         return (
                             <Fragment>
                                 <animated.span
@@ -91,21 +85,24 @@ class Chip extends Component {
                                 </animated.span>
                                 <animated.span
                                     {...checkboxProps}
-                                    className={checkDot}
+                                    className={cx(
+                                        dotClass,
+                                        checked ? dotActiveClass : null
+                                    )}
                                     style={{
-                                        backgroundColor: props.color,
-                                        pointerEvents: checked
-                                            ? 'none'
-                                            : 'default',
-                                        borderRadius: radius.interpolate(
-                                            r => r
-                                        ),
-                                        // transform: interpolate(
-                                        //     [x, sx, sy],
-                                        //     (x, sx, sy) =>
-                                        //         `translate3d(${x}px, 0px, 0) scaleX(${sx}) scaleY(${sy})`
-                                        // ),
-                                        transformOrigin: 'left center'
+                                        backgroundColor: props.color
+                                        //     pointerEvents: checked
+                                        //         ? 'none'
+                                        //         : 'default',
+                                        //     borderRadius: radius.interpolate(
+                                        //         r => r
+                                        //     ),
+                                        //     // transform: interpolate(
+                                        //     //     [x, sx, sy],
+                                        //     //     (x, sx, sy) =>
+                                        //     //         `translate3d(${x}px, 0px, 0) scaleX(${sx}) scaleY(${sy})`
+                                        //     // ),
+                                        //     transformOrigin: 'left center'
                                     }}
                                 />
                             </Fragment>

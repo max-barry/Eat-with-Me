@@ -64,7 +64,14 @@ export const fontWeights = {
 
 export const transitionTimes = {
     weak: 65,
-    minimal: 110
+    minimal: 110,
+    short: 300
+};
+
+export const easings = {
+    standard: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+    in: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+    out: 'cubic-bezier(0.4, 0.0, 1, 1)'
 };
 
 export const shadows = {
