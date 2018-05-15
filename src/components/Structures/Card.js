@@ -14,7 +14,7 @@ import {
     CardActionRow as ActionRow,
     CardTitle,
     CardCompactTitle as CompactTitle,
-    CardCompactContainer as CompactContainer
+    cardCompactContainerClass as compactContainerClass
 } from './Card.styles';
 import { bs, sInteractive, colors, sElipsify } from '../../settings/styles';
 import { buttonSimpleClass } from '../Buttons/Button.styles';
@@ -67,79 +67,4 @@ export const Card = enhanceCard(
             {Action && <ActionRow>{Action}</ActionRow>}
         </Container>
     )
-);
-
-const enhanceCompactCard = compose(
-    setPropTypes({
-        title: PropTypes.string.isRequired,
-        onClick: PropTypes.func,
-        deck: PropTypes.string,
-        strap: PropTypes.string,
-        isExpanded: PropTypes.bool
-    })
-);
-
-export const CardCompact = enhanceCompactCard(
-    ({
-        title,
-        deck,
-        strap,
-        onClick,
-        onExpandedAction,
-        isExpanded,
-        color = colors.secondaryDark,
-        ...props
-    }) => {
-        return (
-            <CompactContainer {...props}>
-                <div className={sInteractive} onClick={() => onClick()}>
-                    <CompactTitle style={{ lineHeight: 1.3, color }}>
-                        {title}
-                    </CompactTitle>
-                    {strap && (
-                        <Strap
-                            style={{
-                                marginTop: bs(0.25),
-                                marginBottom: bs(0.25),
-                                lineHeight: 1
-                            }}
-                        >
-                            {strap}
-                        </Strap>
-                    )}
-                    {deck && (
-                        <Deck className={sElipsify} style={{ lineHeight: 1.3 }}>
-                            {deck}
-                        </Deck>
-                    )}
-                </div>
-                <Spring
-                    native
-                    from={{ opacity: 0 }}
-                    to={{ opacity: isExpanded ? 1 : 0 }}
-                    config={config.stiff}
-                >
-                    {styles => (
-                        <animated.button
-                            className={buttonSimpleClass}
-                            style={{ marginTop: bs(0.5), ...styles }}
-                            onClick={() => onExpandedAction()}
-                        >
-                            Button
-                        </animated.button>
-                    )}
-                </Spring>
-
-                {/* <Transition
-                    // native
-                    config={config.stiff}
-                    from={{ scale: 0, opacity: 0 }}
-                    enter={{ scale: 1, opacity: 1 }}
-                    leave={{ scale: 0, opacity: 0 }}
-                >
-                    {isExpanded && CompactActions}
-                </Transition> */}
-            </CompactContainer>
-        );
-    }
 );

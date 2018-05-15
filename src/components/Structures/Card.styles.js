@@ -21,7 +21,7 @@ export const cardImgClass = css({
     borderRadius: dimensions.borderRadius
 });
 
-export const CardStrap = styled('h4')(shevy.h6, {
+export const cardStrapClass = css(shevy.h6, {
     marginTop: bs(0.5),
     color: colors.greyDark
 });
@@ -35,6 +35,8 @@ export const CardTitle = styled('h3')(shevy.h5, {
     // fontWeight: fontWeights.medium
 });
 
+export const CardStrap = styled('h4')(cardStrapClass);
+
 export const CardBadge = styled('span')(shevy.overline, {
     // color: colors.greyDark
     backgroundColor: colors.primary,
@@ -45,11 +47,12 @@ export const CardBadge = styled('span')(shevy.overline, {
     padding: `${bs(0.0625)} ${bs(0.25)}`
 });
 
-export const CardDeck = styled('p')(shevy.h6, {
+export const cardDeckClass = css(shevy.h6, {
     marginBottom: 0,
     fontWeight: fontWeights.light
-    // color: colors.greyDark
 });
+
+export const CardDeck = styled('p')(cardDeckClass);
 
 export const CardActionRow = styled('div')(
     sFlexed,
@@ -60,15 +63,3 @@ export const CardActionRow = styled('div')(
     > *:last-child {margin-right: 0;}
 `
 );
-
-export const CardCompactContainer = styled('div')({
-    height: dimensions.cardCompact + bsint(1),
-    width: '100%',
-    padding: bs(0.5)
-});
-
-export const CardCompactTitle = styled('h4')(shevy.h6, sElipsify);
-
-export const cardCompactActionsClass = css({
-    height: dimensions.simpleButton
-});

@@ -51,7 +51,8 @@ export const dimensions = {
     filtersComponentMinWidth: 400,
     borderRadius: 3,
     tap: 48,
-    icon: 32
+    icon: 32,
+    swipeDismiss: 165
 };
 
 export const fontWeights = {

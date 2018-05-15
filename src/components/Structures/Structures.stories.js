@@ -59,5 +59,14 @@ storiesOf('Structures', module)
                 }
             />
         ))
-    )
-    .add('Card.Compact', () => <CardCompact {...makeCompact()} />);
+    );
+// .add(
+//     'Card.Compact',
+//     withState({ expanded: false, props: makeCompact() })(({ store }) => (
+//         <CardCompact
+//             {...store.state.props}
+//             isExpanded={store.state.expanded}
+//             onClick={() => store.set({ expanded: !store.state.expanded })}
+//         />
+//     ))
+// );

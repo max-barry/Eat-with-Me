@@ -36,8 +36,8 @@ export const ChipLabel = styled('label')(
         overflow: 'hidden',
         display: 'inline-block',
         backgroundColor: 'white',
-        transition: `background-color ${weak}ms, color ${weak}ms`,
-        willChange: 'background-color, color',
+        // transition: `background-color ${weak}ms, color ${weak}ms`,
+        // willChange: 'background-color, color',
         maxWidth: CHIP_MAX_WIDTH,
         paddingTop: CHIP_VERTICAL_DOT_PADDING,
         paddingBottom: CHIP_VERTICAL_DOT_PADDING,
@@ -45,11 +45,11 @@ export const ChipLabel = styled('label')(
         paddingRight: `${bsint(0.5)}px`
     },
     `
-    &:hover {background-color: ${colors.grey1}}
-    &:focus {outline: 0; box-shadow: ${shadows.focused};}
-    &[data-checked]:focus 
-        background-color: blue;
-    }
+    // &:hover {background-color: ${colors.grey1}}
+    // &:focus {outline: 0; box-shadow: ${shadows.focused};}
+    // &[data-checked]:focus 
+    //     background-color: blue;
+    // }
     `
 );
 
@@ -63,7 +63,9 @@ export const chipLabelTextClass = css({
 export const chipDotClass = css`
     height: ${CHIP_DOT_DIMENSION}px;
     width: ${CHIP_DOT_DIMENSION}px;
+    left: ${CHIP_EDGE_PADDING};
     line-height: 1;
+    // transform-origin: 1px center;
     display: flex;
     align-items: center;
     justify-content: center;

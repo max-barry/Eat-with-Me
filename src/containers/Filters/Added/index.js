@@ -1,1 +1,1 @@
-export { default } from './Added';
+export { default } from './Added.containers';

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { Spring, config } from 'react-spring';
-import { range } from 'lodash';
 import faker from 'faker';
 import { Gesture } from 'react-with-gesture';
-import { CardCompact } from '../../../components/Structures';
+import { clamp } from 'lodash';
+import { AddedItem } from './Added.components';
 import { dimensions, bsint } from '../../../settings/styles';
-import {
-    addedListItemClass as listItemClass,
-    AddedList as List
-} from './Added.styles';
+import { AddedList as List } from './Added.styles';
+import { calcWindowWidth } from '../../../shared';
 
 const makeCompact = _ => ({
     title: faker.company.catchPhrase(),
@@ -33,7 +31,17 @@ export default class extends Component {
 
     constructor(props) {
         super(props);
+
+        this.swipeDismissW = dimensions.swipeDismiss;
+        this.cardCompactW = dimensions.cardCompact;
+        this.halfDismissW = dimensions.swipeDismiss / 2;
+
         this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.computeStyles = this.computeStyles.bind(this);
+    }
+
+    componentDidMount() {
+        this.windowWidth = calcWindowWidth();
     }
 
     toggleExpanded(id) {
@@ -52,26 +60,57 @@ export default class extends Component {
         });
     }
 
+    computeStyles(down, xDelta, item) {
+        const clampedDelta = clamp(
+            xDelta,
+            -20, // Give it a little wobble backwards
+            this.windowWidth
+        );
+        const shouldDismiss = xDelta >= this.swipeDismissW;
+
+        const shouldFade = down && xDelta >= this.halfDismissW;
+
+        const fade = shouldFade
+            ? clamp(1 - (xDelta - this.halfDismissW) / this.halfDismissW, 0, 1)
+            : 1;
+
+        const onDidUpdate =
+            shouldDismiss && !down ? () => this.remove(item.id) : null;
+
+        return {
+            onDidUpdate,
+            fade,
+            calculatedX: down ? clampedDelta : shouldDismiss ? 500 : 0
+        };
+    }
+
     render() {
-        const { order, previousOrder, expanded } = this.state;
+        const { order, expanded } = this.state;
+        const swipeDismissW = this.swipeDismissW;
+        const cardCompactW = this.cardCompactW;
+        const halfDismissW = this.halfDismissW;
+        // const {
+        //     cardCompact: cardCompactW,
+        //     swipeDismiss: swipeDismissW
+        // } = dimensions;
+        // const halfDismissW = swipeDismissW / 2;
         return (
             <List>
                 {order.map((item, i) => {
-                    const expandedBeforeThis = order.filter(el => {
-                        return (
+                    // TODO : Must be able to optimise the below a bit to remove findindex
+                    const expandedBeforeThis = order.filter(
+                        el =>
                             order.findIndex(x => x.id === el.id) <
                                 order.findIndex(x => x.id === item.id) &&
                             expanded.includes(el.id)
-                        );
-                    });
+                    );
 
                     const isExpanded = expanded.includes(item.id);
 
-                    const n = i;
-                    const next = {
+                    const toStyle = {
                         y:
-                            n * dimensions.cardCompact +
-                            n * bsint(1) +
+                            i * cardCompactW +
+                            i * bsint(1) +
                             expandedBeforeThis.length *
                                 (dimensions.simpleButton + bsint(0.5))
                     };
@@ -79,7 +118,7 @@ export default class extends Component {
                     return (
                         <Spring
                             // from={previous}
-                            to={next}
+                            to={toStyle}
                             key={`order_spring_${item.id}`}
                             config={config.wobbly}
                         >
@@ -91,32 +130,41 @@ export default class extends Component {
                                 >
                                     <Gesture>
                                         {({ down, xDelta }) => {
+                                            const {
+                                                calculatedX,
+                                                fade,
+                                                onDidUpdate
+                                            } = this.computeStyles(
+                                                down,
+                                                xDelta,
+                                                item
+                                            );
+
+                                            const atRest =
+                                                xDelta <= 10 && xDelta >= 0;
+
                                             return (
                                                 <Spring
-                                                    // from={{ x: 0 }}
                                                     to={{
-                                                        x: down
-                                                            ? xDelta
-                                                            : xDelta > 200
-                                                                ? 500
-                                                                : 0
+                                                        x: calculatedX,
+                                                        opacity: fade
                                                     }}
-                                                    immediate={name =>
-                                                        down && name === 'x'
-                                                    }
                                                     key={`swipe_spring_${
                                                         item.id
                                                     }`}
                                                 >
-                                                    {({ x }) => (
-                                                        <CardCompact
+                                                    {({ x, opacity }) => (
+                                                        <AddedItem
                                                             {...item}
                                                             key={item.id}
+                                                            onDidUpdate={
+                                                                onDidUpdate
+                                                            }
                                                             isExpanded={
-                                                                isExpanded &&
-                                                                !down
+                                                                isExpanded
                                                             }
                                                             style={{
+                                                                opacity,
                                                                 transform: `translate3d(${x}px, 0px, 0)`
                                                             }}
                                                             onExpandedAction={() =>
@@ -124,14 +172,13 @@ export default class extends Component {
                                                                     item.id
                                                                 )
                                                             }
-                                                            className={
-                                                                listItemClass
-                                                            }
-                                                            onClick={() =>
-                                                                this.toggleExpanded(
-                                                                    item.id
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                if (atRest) {
+                                                                    this.toggleExpanded(
+                                                                        item.id
+                                                                    );
+                                                                }
+                                                            }}
                                                         />
                                                     )}
                                                 </Spring>
