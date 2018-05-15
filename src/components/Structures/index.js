@@ -1,1 +1,1 @@
-export { Row } from './Row';
+export { Card, CardCompact } from './Card';

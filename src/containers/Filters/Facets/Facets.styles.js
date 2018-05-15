@@ -6,14 +6,14 @@ export const FacetActionsList = styled('ul')(shevy.h6, {
     textAlign: 'right',
     marginLeft: 'auto',
     paddingTop: bs(0.75),
-    borderTop: `1px solid ${colors.greyMid}`,
+    borderTop: `1px solid ${colors.grey2}`,
     marginBottom: 0
 });
 
 export const FacetActionsListItem = styled('li')(
     {
         display: 'inline-block',
-        color: colors.greyText,
+        color: colors.greyDark,
         fontWeight: fontWeights.medium
     },
     `

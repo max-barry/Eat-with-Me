@@ -9,6 +9,7 @@ import {
     ToggleTag
 } from './Toggle.styles';
 import { requiredPropTypes } from './shared';
+import { colors } from '../../settings/styles';
 
 const enhanceToggle = compose(
     onlyUpdateForKeys(['checked']),
@@ -31,6 +32,8 @@ const Toggle = enhanceToggle(
                     checked={this.state.checked}
                     onChange={() => this.update()}
                     id={this.props.name}
+                    offColor={colors.grey2}
+                    onColor={colors.secondary}
                 />
             );
         }

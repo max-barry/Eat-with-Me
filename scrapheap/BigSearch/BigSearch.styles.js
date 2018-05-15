@@ -10,8 +10,8 @@ import { darken, lighten } from 'polished';
 
 export const BigSearchThemes = {
     default: {
-        background: colors.offWhite,
-        darkerColor: darken(0.45, colors.offWhite),
+        background: colors.grey1,
+        darkerColor: darken(colors.grey2),
         focusBorderColor: colors.secondary
     },
     primary: {
@@ -94,7 +94,7 @@ export const bigSearchLongClass = css`
 
 const lineHeight = 26;
 const color = colors.skeleton;
-const shineColor = colors.offWhite;
+const shineColor = colors.grey1;
 
 // @link https://codepen.io/oslego/pen/XdvWmd
 const bigSearchLoadingAnimation = keyframes`

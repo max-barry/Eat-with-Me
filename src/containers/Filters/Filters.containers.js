@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Row from '../../components/Structures/Row';
 import { Modal } from '../../hocs/Modal/Modal';
-import { dimensions } from '../../settings/styles';
+import { dimensions, sFlexed } from '../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
 import {
@@ -106,7 +105,7 @@ class Filters extends Component {
         return (
             <div ref={this.containerRef}>
                 <Container>
-                    <Row>
+                    <ul className={sFlexed}>
                         <FilterButton
                             onClick={e => this.openFilter(e, FACET_QUARTER)}
                             children="Region"
@@ -127,7 +126,7 @@ class Filters extends Component {
                             onClick={e => this.openFilter(e, FACET_EXTRAS)}
                             children="More..."
                         />
-                    </Row>
+                    </ul>
                 </Container>
                 <div id="FilterCanvasWrap">
                     <Modal

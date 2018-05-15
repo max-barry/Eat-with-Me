@@ -22,8 +22,8 @@ const Chip = ({
     checked,
     onChange,
     label,
-    color = colors.primary,
-    textColor = 'white',
+    color = colors.secondary,
+    textColor = colors.white,
     ...props
 }) => {
     const checkboxProps = ariaCheckboxProps(checked, onChange, props);
@@ -39,7 +39,7 @@ const Chip = ({
             className={props.className}
             data-checked={checked}
             style={{
-                borderColor: checked ? color : colors.greyLight
+                borderColor: checked ? color : colors.grey1
             }}
         >
             <Spring

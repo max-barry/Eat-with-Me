@@ -48,7 +48,7 @@ export const CheckboxBoxInnerStyles = css(
         width: dimensions.icon,
         padding: '6px',
         backgroundColor: 'white',
-        border: `1px solid ${colors.greyBorder}`,
+        border: `1px solid ${colors.greyDark}`,
         transition: `background-color ${transitionTimes.weak}ms`
     },
     `
@@ -57,7 +57,7 @@ export const CheckboxBoxInnerStyles = css(
     } 
     .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}):focus & {
         outline: 0;
-        background-color: ${colors.greyLight};
+        background-color: ${colors.grey1};
     }
     .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}):focus & svg {
         opacity: 0.2;
@@ -66,25 +66,23 @@ export const CheckboxBoxInnerStyles = css(
         opacity: 0.1;
     }
     .${CheckboxBoxWrap}.${CheckboxCheckedClass} & {
-        background-color: ${colors.primary};
-        border-color: ${colors.primary};
+        background-color: ${colors.secondary};
+        border-color: ${colors.secondary};
     }
     .${CheckboxBoxWrap}.${CheckboxCheckedClass}:focus & {
-        background-color: ${darken(0.1, colors.primary)};
+        background-color: ${colors.secondaryDark};
         box-shadow: ${shadows.focused};
     }
 `
 );
 
 export const CheckboxTitleStyles = css(shevy.h6, {
-    fontWeight: fontWeights.medium,
-    marginBottom: 0,
     em: {
-        color: colors.greyText
+        color: colors.greyDark
     }
 });
 
 export const CheckboxTagStyles = css(shevy.h6, {
-    marginBottom: 0,
-    color: colors.greyText
+    color: colors.greyDark,
+    fontWeight: shevy.content.fontWeight
 });

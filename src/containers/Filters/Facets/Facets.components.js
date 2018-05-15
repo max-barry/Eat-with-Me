@@ -7,7 +7,7 @@ import ButtonLink from '../../../components/Buttons/ButtonLink';
 import {
     FacetActionsList as ActionsList,
     FacetActionsListItem as ActionsListItem
-} from './shared.styles';
+} from './Facets.styles';
 
 const enhanceFacetActions = compose(
     setDisplayName('FacetActions'),

@@ -10,6 +10,9 @@ const hs = [1, 2, 3, 4, 5, 6]
                 font-size: ${headings[`h${size}`].fontSize};
                 line-height: ${headings[`h${size}`].lineHeight};
                 margin-bottom: ${headings[`h${size}`].marginBottom};
+                font-weight: ${
+                    size <= 3 ? fontWeights.heavy : fontWeights.medium
+                };
             }
     `
     )
@@ -20,7 +23,7 @@ const typography = `
         font-size: ${content.fontSize};
         line-height: ${content.lineHeight};
         font-family: ${fontFamily};
-        font-weight: ${fontWeights.regular};
+        font-weight: ${content.fontWeight};
         // letter-spacing: 0.01em;
     }
 

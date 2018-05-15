@@ -25,7 +25,7 @@ export const CHIP_DOT_DIMENSION = 16;
 export const ChipLabel = styled('label')(
     sInteractive,
     {
-        // backgroundColor: colors.offWhite,
+        // backgroundColor: colors.grey1,
         fontSize: shevy.h6.fontSize,
         fontWeight: fontWeights.medium,
         position: 'relative',
@@ -45,7 +45,7 @@ export const ChipLabel = styled('label')(
         paddingRight: `${bsint(0.5)}px`
     },
     `
-    &:hover {background-color: ${colors.offWhite}}
+    &:hover {background-color: ${colors.grey1}}
     &:focus {outline: 0; box-shadow: ${shadows.focused};}
     &[data-checked]:focus 
         background-color: blue;

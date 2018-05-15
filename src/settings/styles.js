@@ -1,11 +1,80 @@
 import { css } from 'react-emotion';
 import Shevy from 'shevyjs';
 
+export const sInteractive = css({
+    cursor: 'pointer',
+    userSelect: 'none'
+});
+
+export const sElipsify = css({
+    maxWidth: '100%',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis'
+});
+
+export const sFlexed = css({
+    display: 'flex',
+    flexDirection: 'row'
+});
+
+export const sFlexedCenter = css(sFlexed, {
+    justifyContent: 'center',
+    alignItems: 'center'
+});
+
+export const colors = {
+    primary: '#ffdd03',
+    primaryLight: '#ffff54',
+    primaryDark: '#c7ac00',
+    secondary: '#0325ff',
+    secondaryLight: '#7055ff',
+    secondaryDark: '#0000ca',
+    valid: '#66bb6a',
+    error: '#B00020',
+    grey1: '#f5f5f5',
+    grey2: '#eeeeee',
+    greyDark: '#c2c2c2',
+    skeleton: '#E7ECEF',
+    black: '#131313',
+    white: '#fff'
+};
+
+export const dimensions = {
+    container: 1024,
+    navigation: 80,
+    navigation__logo: 52,
+    filtersBar: 60,
+    card: 270,
+    cardCompact: 60,
+    simpleButton: 36,
+    filtersComponentMinWidth: 400,
+    borderRadius: 3,
+    tap: 48,
+    icon: 32
+};
+
+export const fontWeights = {
+    light: 300,
+    regular: 400,
+    medium: 500,
+    heavy: 600
+};
+
+export const transitionTimes = {
+    weak: 65,
+    minimal: 110
+};
+
+export const shadows = {
+    focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`
+};
+
 export const fontFamily = `"HK Nova", Helvetica Neue, sans-serif`;
 
-export const shevy = new Shevy({
+const shevyConf = new Shevy({
     baseFontSize: '17px',
-    baseLineHeight: 1.3,
+    baseLineHeight: 1.4,
     // AirBnb do a [0.7, 0.85, 1, 1.2, 1.45, 1.75] scale around 20
     // This takes that same scale but from a base of 17
     baseFontScale: [
@@ -21,61 +90,18 @@ export const shevy = new Shevy({
     proximityFactor: 0.85
 });
 
-export const { lineHeightSpacing: lhs, baseSpacing: bs } = shevy;
-export const bsint = (n, fixed) =>
-    parseFloat(bs(n).replace('px')).toFixed(fixed);
-
-export const sInteractive = css({
-    cursor: 'pointer',
-    userSelect: 'none'
-});
-
-export const sFlexed = css({
-    display: 'flex',
-    flexDirection: 'row'
-});
-
-export const sFlexedCenter = css(sFlexed, {
-    justifyContent: 'center',
-    alignItems: 'center'
-});
-
-export const colors = {
-    primary: '#EF2D56',
-    secondary: '#F0F66E',
-    accent: '#96BDC6',
-    valid: 'green',
-    greyMid: '#E7ECEF',
-    greyLight: '#f1f1f1',
-    offWhite: '#fafafa',
-    greyBorder: '#c7c7c7',
-    greyText: '#c4bcbc',
-    skeleton: '#E7ECEF'
+shevyConf.content.fontWeight = fontWeights.regular;
+shevyConf.h6.fontWeight = fontWeights.medium;
+shevyConf.h6.marginBottom = 0;
+shevyConf.overline = {
+    ...shevyConf.h6,
+    fontWeight: fontWeights.heavy,
+    lineHeight: 1,
+    color: colors.greyDark,
+    textTransform: 'uppercase'
 };
 
-export const dimensions = {
-    container: 1024,
-    navigation: 80,
-    navigation__logo: 52,
-    filtersBar: 60,
-    filtersComponentMinWidth: 400,
-    borderRadius: 2,
-    tap: 48,
-    icon: 32
-};
+export const { lineHeightSpacing: lhs, baseSpacing: bs } = shevyConf;
+export const shevy = shevyConf;
 
-export const fontWeights = {
-    light: 300,
-    regular: 300,
-    medium: 500,
-    heavy: 600
-};
-
-export const transitionTimes = {
-    weak: 65,
-    minimal: 110
-};
-
-export const shadows = {
-    focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`
-};
+export const bsint = (n, fixed) => parseFloat(bs(n).replace('px'));

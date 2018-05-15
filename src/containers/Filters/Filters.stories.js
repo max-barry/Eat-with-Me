@@ -1,23 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Hits } from 'react-instantsearch/dom';
 import faker from 'faker';
+import { shuffle } from 'lodash';
 import { compose, setDisplayName } from 'recompose';
 import { withState } from '@dump247/storybook-state';
-import { connectSearchBox } from 'react-instantsearch/connectors';
 import Filters from './Filters.containers';
-// import Quarter from './Facets/Quarter/Quarter.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
-import Extra from './Facets/Extra/Extra.containers';
 import { CuisineTabs } from './Facets/Cuisine/Cuisine.components';
 import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
-import {
-    FACET_EXTRAS,
-    initialRefinements
-    // FACET_CUISINE,
-    // FACET_QUARTER
-} from './Filters.shared';
+import AddedList from './Added';
 
 const onChange = () => console.log('Change');
 
@@ -84,4 +77,5 @@ storiesOf('Filters', module)
     )
     .add('Extras.Bars', () => (
         <FacetBars currentRefinement={[false]} onChange={onChange} />
-    ));
+    ))
+    .add('Card List', () => <AddedList />);

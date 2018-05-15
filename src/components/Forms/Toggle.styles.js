@@ -7,12 +7,12 @@ export const ToggleLabelText = styled('div')({
     width: 220
 });
 
-const textStyles = { ...shevy.h6, marginBottom: 0 };
+const textStyles = { ...shevy.h6 };
 export const ToggleTitle = styled('h5')({
-    ...textStyles,
-    fontWeight: fontWeights.medium
+    ...textStyles
 });
 export const ToggleTag = styled('h6')({
     ...textStyles,
-    color: colors.greyText
+    fontWeight: shevy.content.fontWeight,
+    color: colors.greyDark
 });

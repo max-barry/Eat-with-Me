@@ -27,7 +27,7 @@ export const FiltersModalSimple = ({ top, left }) => {
             right: 'auto',
             bottom: 'auto',
             minWidth: dimensions.filtersComponentMinWidth,
-            border: `1px solid ${colors.greyBorder}`,
+            border: `1px solid ${colors.greyDark}`,
             background: 'white',
             overflow: 'auto',
             WebkitOverflowScrolling: 'touch',

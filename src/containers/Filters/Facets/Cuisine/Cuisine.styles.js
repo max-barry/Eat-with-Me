@@ -19,7 +19,7 @@ export const cuisineTabsClass = css({
 
 export const cuisineHeaderListClass = css({
     display: 'inline-flex',
-    borderBottom: `1px solid ${colors.greyMid}`,
+    borderBottom: `1px solid ${colors.grey2}`,
     marginBottom: bs(1.5)
     // display: 'inline-grid',
     // justifyItems: 'start',
@@ -34,8 +34,8 @@ export const cuisineHeaderClass = css(
         padding: `${bs(0.5)} ${bs(0.25)}`,
         margin: `0 ${bs(0.25)} 0 ${bs(0.25)}`,
         position: 'relative',
-        color: colors.greyText
-        // borderBottom: `3px solid ${colors.greyMid}`
+        color: colors.greyDark
+        // borderBottom: `3px solid ${colors.grey2}`
     },
     `
     &::before {
@@ -52,22 +52,22 @@ export const cuisineHeaderClass = css(
     }
     &:focus, &:hover {
         outline: 0;
-        background-color: ${colors.offWhite};
+        background-color: ${colors.grey1};
         &::before {
-            background-color: ${colors.greyLight};
+            background-color: ${colors.grey1};
             transform: none;
         }
     }
     &.react-tabs__tab--selected {
-        background-color: ${colors.offWhite};
+        // background-color: ${colors.grey1};
         
         &::before {
-            background-color: ${colors.primary};
+            background-color: ${colors.secondaryDark};
             transform: none;
         }
         
         &:focus {
-            background-color: ${darken(0.05, colors.offWhite)};
+            background-color: ${colors.grey1};
         }
     }
 `

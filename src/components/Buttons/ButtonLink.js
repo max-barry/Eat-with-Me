@@ -16,15 +16,14 @@ export default styled('button')(
     css`
         &:hover {
             text-decoration: underline;
-            background-color: ${colors.offWhite};
+            background-color: ${colors.grey1};
         }
         &:focus {
             outline: none;
-            // border-color: ${darken(0.08, colors.greyLight)};
-            background-color: ${colors.offWhite};
+            background-color: ${colors.grey1};
         }
         &:active {
-            background-color: ${darken(0.03, colors.offWhite)};
+            background-color: ${colors.grey2};
         }
     `
 );
