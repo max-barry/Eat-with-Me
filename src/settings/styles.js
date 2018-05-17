@@ -50,8 +50,10 @@ export const dimensions = {
     simpleButton: 36,
     filtersComponentMinWidth: 400,
     borderRadius: 3,
+    chip: 30,
     tap: 48,
     icon: 32,
+    outlineOffset: 3,
     swipeDismiss: 165
 };
 

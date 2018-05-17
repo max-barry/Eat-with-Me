@@ -12,7 +12,7 @@ import {
     CheckboxBoxInnerStyles
 } from './Checkbox.styles';
 import { tick as svgtick } from '../SVGs/paths';
-import { ariaCheckboxProps, requiredPropTypes } from './shared';
+import { ariaCheckboxProps, requiredPropTypes } from './Forms.shared';
 
 class Checkbox extends Component {
     state = { checked: this.props.checked };

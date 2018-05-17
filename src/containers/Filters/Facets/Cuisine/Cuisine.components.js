@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import ChipLite from '../../../../components/Forms/ChipLite';
 import Chip from '../../../../components/Forms/Chip';
 import {
     cuisineTabsClass as tabsClass,
@@ -8,8 +9,26 @@ import {
     cuisinePanelClass as panelClass,
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
+import { compose, lifecycle } from 'recompose';
 
-export const CuisineTabs = ({ items, onChange }) => (
+const enhance = compose();
+// lifecycle({
+//     componentDidUpdate(prevProps) {
+//         Object.keys(this.props).forEach(key => {
+//             if (this.props[key] !== prevProps[key]) {
+//                 console.log(
+//                     key,
+//                     'changed from',
+//                     prevProps[key],
+//                     'to',
+//                     this.props[key]
+//                 );
+//             }
+//         });
+//     }
+// })
+
+export const CuisineTabs = enhance(({ items, onChange }) => (
     <Tabs className={tabsClass}>
         <TabList className={headerListClass}>
             {items.map((panel, i) => (
@@ -23,8 +42,8 @@ export const CuisineTabs = ({ items, onChange }) => (
             <TabPanel className={panelClass} key={`tabPanel_${i}`}>
                 {panel.items.map((cuisine, z) => (
                     <Chip
-                        className={chipClass}
                         key={`checkbox_${z}`}
+                        className={chipClass}
                         label={cuisine.label}
                         checked={cuisine.isRefined}
                         name={`cuisine_${z}`}
@@ -34,4 +53,4 @@ export const CuisineTabs = ({ items, onChange }) => (
             </TabPanel>
         ))}
     </Tabs>
-);
+));

@@ -8,15 +8,17 @@ import {
     sInteractive,
     transitionTimes,
     shadows,
-    easings
+    easings,
+    dimensions
 } from '../../settings/styles';
+import crossSvg from '../SVGs/images/cross.svg';
 
 const weak = transitionTimes.weak;
 
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
 export const CHIP_MAX_WIDTH = '230px';
-export const CHIP_HEIGHT = 30;
+export const CHIP_HEIGHT = dimensions.chip;
 export const CHIP_DOT_DIMENSION = 16;
 
 // export const chipFocusClass = css({
@@ -26,19 +28,16 @@ export const CHIP_DOT_DIMENSION = 16;
 export const ChipLabel = styled('label')(
     sInteractive,
     {
-        // backgroundColor: colors.grey1,
         fontSize: shevy.h6.fontSize,
         fontWeight: fontWeights.medium,
         position: 'relative',
         border: `1px solid`,
         height: CHIP_HEIGHT,
-        borderRadius: 6,
+        borderRadius: dimensions.borderRadius * 2,
         zIndex: 0,
         overflow: 'hidden',
         display: 'inline-block',
         backgroundColor: 'white',
-        // transition: `background-color ${weak}ms, color ${weak}ms`,
-        // willChange: 'background-color, color',
         maxWidth: CHIP_MAX_WIDTH,
         paddingTop: CHIP_VERTICAL_DOT_PADDING,
         paddingBottom: CHIP_VERTICAL_DOT_PADDING,
@@ -46,13 +45,36 @@ export const ChipLabel = styled('label')(
         paddingRight: `${bsint(0.5)}px`
     },
     `
-    // &:hover {background-color: ${colors.grey1}}
-    // &:focus {outline: 0; box-shadow: ${shadows.focused};}
-    // &[data-checked]:focus 
-    //     background-color: blue;
-    // }
+    &::before {
+        content: "×";
+        width: ${CHIP_DOT_DIMENSION}px;
+        height: ${CHIP_DOT_DIMENSION}px;
+        font-size: ${CHIP_DOT_DIMENSION + 4}px;
+        line-height: ${CHIP_DOT_DIMENSION + 2}px;
+        text-align: center;
+        display: block;
+        position: absolute;
+        right: ${CHIP_EDGE_PADDING};
+        border-radius: 50%;
+        transform: scale(0);
+    }
+
+    &:focus {
+        outline: 1px dashed ${colors.greyDark};
+        outline-offset: 3px;
+    }
     `
 );
+
+export const chipActiveClass = css`
+    &::before {
+        // backg
+        // background-color:
+        // console.log(props);
+        // return 'red';
+        // }};
+    }
+`;
 
 export const chipLabelTextClass = css({
     display: 'block',

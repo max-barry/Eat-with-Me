@@ -8,7 +8,7 @@ import {
     ToggleTitle,
     ToggleTag
 } from './Toggle.styles';
-import { requiredPropTypes } from './shared';
+import { requiredPropTypes } from './Forms.shared';
 import { colors } from '../../settings/styles';
 
 const enhanceToggle = compose(

@@ -4,6 +4,7 @@ import { withState } from '@dump247/storybook-state';
 import Checkbox from './Checkbox';
 import Toggle, { ToggleWithLabel } from './Toggle';
 import Chip from './Chip';
+import ChipLite from './ChipLite';
 import { colors } from '../../settings/styles';
 
 const props = {
@@ -42,4 +43,22 @@ storiesOf('Forms', module)
                 textColor="white"
             />
         ))
+    )
+    .add(
+        'ChipLite',
+        withState({ checked: false })(({ store }) => {
+            delete props.title;
+            delete props.tag;
+            return (
+                <ChipLite
+                    {...props}
+                    checked={store.state.checked}
+                    label="Mexican"
+                    onChange={() => {
+                        console.log('clicked');
+                        store.set({ checked: !store.state.checked });
+                    }}
+                />
+            );
+        })
     );
