@@ -23,7 +23,7 @@ const capBevel = side => `
 //     position: 'relative'
 // });
 
-export const RangeList = styled('ul')(sFlexedCenter);
+export const RangeList = styled('ul')({});
 
 export const RangeListItem = styled('li')(sFlexedCenter, {
     // borderRadius: dimensions.borderRadius * 2
@@ -53,13 +53,19 @@ export const RangeLabel = styled('label')(
         transition: `background-color ${transitionTimes.weak}ms`
     },
     `
+    &[aria-disabled="true"] {
+        display: none;
+    }
+
     li:first-child & {
         ${capBevel('left')};
     }
+
     li:last-child & {
         ${capBevel('right')};
         border-right: ${EXTERIOR_BORDER};
     }
+    
     &:hover, &:focus-within {
         background-color: ${colors.grey1};
     }

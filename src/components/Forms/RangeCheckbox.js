@@ -24,7 +24,7 @@ class RangeCheckbox extends Component {
 
         return (
             <List>
-                {items.map(({ label: Content, checked, id }, i) => {
+                {items.map(({ label: Content, checked, id, disabled }, i) => {
                     const classes = {
                         // [noPreviousClass]:
                         //     checked && (!items[i - 1] || !items[i - 1].checked),
@@ -36,12 +36,20 @@ class RangeCheckbox extends Component {
                         <ListItem key={`listItem_${i}`}>
                             <Label
                                 className={cx(classes)}
-                                {...makeAriaLabelProps(checked, id, () =>
-                                    onChange(id)
+                                {...makeAriaLabelProps(
+                                    checked,
+                                    id,
+                                    () => onChange(id),
+                                    disabled
                                 )}
                             >
                                 <Check
-                                    {...makeAriaCheckboxProps(checked, id)}
+                                    {...makeAriaCheckboxProps(
+                                        checked,
+                                        id,
+                                        0,
+                                        disabled
+                                    )}
                                 />
                                 {typeof Content === 'function' ? (
                                     <Content />
@@ -59,7 +67,17 @@ class RangeCheckbox extends Component {
 
 const enhance = compose(
     setPropTypes({
-        items: PropTypes.array.isRequired
+        items: PropTypes.arrayOf(
+            PropTypes.shape({
+                checked: PropTypes.bool.isRequired,
+                label: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+                    .isRequired,
+                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+                    .isRequired
+            })
+        ).isRequired,
+
+        onChange: PropTypes.func.isRequired
     })
     // withAriaProps
 );

@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { setPropTypes, compose, withProps, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
-import { orderBy } from 'lodash';
+// import { orderBy } from 'lodash';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../Facets.components';
-import { FACET_QUARTER } from '../../Filters.shared';
-import { QuarterList as List } from './Quarter.components';
+import { FACET_PRICE } from '../../Filters.shared';
+import { PriceOptions } from './Price.components';
+// import RangeCheckbox from '../../../../components/Forms/RangeCheckbox';
 
-class Quarter extends Component {
+class Price extends Component {
     constructor(props) {
         super(props);
         this.update = this.update.bind(this);
@@ -18,13 +19,13 @@ class Quarter extends Component {
         if (this.props.onMount) this.props.onMount(this);
     }
 
-    get items() {
-        return orderBy(this.props.items, ['count', 'label'], ['desc', 'asc']);
-    }
+    // get items() {
+    //     return orderBy(this.props.items, ['count', 'label'], ['desc', 'asc']);
+    // }
 
     save = (force = false) =>
         this.props.updateVirtuals(
-            FACET_QUARTER,
+            FACET_PRICE,
             this.props.currentRefinement,
             !force
         );
@@ -36,7 +37,7 @@ class Quarter extends Component {
     render() {
         return (
             <Fragment>
-                <List items={this.items} onChange={this.update} />
+                <PriceOptions items={this.props.items} />
                 <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}
@@ -54,9 +55,9 @@ const enhance = compose(
     }),
     withPropsOnChange(['defaultRefinement'], ({ defaultRefinement }) => ({
         defaultRefinement,
-        attribute: FACET_QUARTER
+        attribute: FACET_PRICE
     })),
     connectRefinementList
 );
 
-export default enhance(Quarter);
+export default enhance(Price);

@@ -8,6 +8,7 @@ import {
     FACET_EXTRAS,
     FACET_IS_BAR,
     FACET_QUARTER,
+    FACET_PRICE,
     initialRefinements
 } from './Filters.shared';
 import {
@@ -26,6 +27,7 @@ class Filters extends Component {
         [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
         [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
         [FACET_CUISINE]: initialRefinements[FACET_CUISINE],
+        [FACET_PRICE]: initialRefinements[FACET_PRICE],
         style: {
             left: 0,
             top: 0
@@ -115,7 +117,7 @@ class Filters extends Component {
                             children="Cuisine"
                         />
                         <FilterButton
-                            onClick={e => this.openFilter(e)}
+                            onClick={e => this.openFilter(e, FACET_PRICE)}
                             children="Price"
                         />
                         <FilterButton
@@ -155,6 +157,10 @@ class Filters extends Component {
                 <VirtualRefinement
                     attribute={FACET_QUARTER}
                     defaultRefinement={this.state[FACET_QUARTER]}
+                />
+                <VirtualRefinement
+                    attribute={FACET_PRICE}
+                    defaultRefinement={this.state[FACET_PRICE]}
                 />
                 <VirtualRefinement
                     attribute={FACET_IS_BAR}

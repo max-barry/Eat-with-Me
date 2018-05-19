@@ -8,6 +8,7 @@ import { withState } from '@dump247/storybook-state';
 import Filters from './Filters.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
 import { CuisineTabs } from './Facets/Cuisine/Cuisine.components';
+import { PriceOptions } from './Facets/Price/Price.components';
 import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
 import AddedList from './Added';
@@ -51,7 +52,7 @@ storiesOf('Filters', module)
         )(() => <Filters />);
         return <Enhanced />;
     })
-    .add('Quarters', () => (
+    .add('Quarter', () => (
         <QuarterList onChange={onChange} items={makeRefinements(8)} />
     ))
     .add(
@@ -75,6 +76,16 @@ storiesOf('Filters', module)
             />
         ))
     )
+    .add('Price', () => (
+        <PriceOptions
+            onChange={onChange}
+            items={[-1, 1, 2, 3, 4].map(v => ({
+                label: v.toString(),
+                value: v,
+                isRefined: faker.random.boolean()
+            }))}
+        />
+    ))
     .add('Extras.Bars', () => (
         <FacetBars currentRefinement={[false]} onChange={onChange} />
     ))
