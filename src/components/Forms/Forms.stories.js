@@ -1,11 +1,13 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
+import faker from 'faker';
 import Checkbox from './Checkbox';
 import Toggle, { ToggleWithLabel } from './Toggle';
 import Chip from './Chip';
 import ChipLite from './ChipLite';
 import { colors } from '../../settings/styles';
+import RangeCheckbox from './RangeCheckbox';
 
 const props = {
     id: 'someid',
@@ -60,5 +62,26 @@ storiesOf('Forms', module)
                     }}
                 />
             );
+        })
+    )
+    .add(
+        'RangeCheckbox',
+        withState({
+            items: [
+                { label: () => <span>Dog</span>, checked: true, id: 1 },
+                { label: faker.lorem.word(), checked: true, id: 2 },
+                { label: faker.lorem.word(), checked: false, id: 3 },
+                { label: () => <span>Cat</span>, checked: false, id: 4 }
+            ]
+        })(({ store }) => {
+            const items = store.state.items;
+            const update = id => {
+                const newItems = items.map(item => {
+                    if (item.id === id) item.checked = !item.checked;
+                    return item;
+                });
+                store.set({ items: newItems });
+            };
+            return <RangeCheckbox items={items} onChange={update} />;
         })
     );

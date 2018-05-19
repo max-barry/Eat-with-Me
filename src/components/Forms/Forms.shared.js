@@ -19,23 +19,27 @@ export const ariaCheckboxProps = (
         key === 32 || key === 13 ? updateFunc(!checked) : null
 });
 
+export const makeAriaCheckboxProps = (checked, name, tabIndex = 0) => ({
+    role: 'checkbox',
+    'aria-checked': checked,
+    'aria-labelledby': `label_${name}`,
+    id: `checkbox_${name}`,
+    tabIndex: tabIndex
+});
+
+export const makeAriaLabelProps = (checked, name, onChange) => ({
+    checked,
+    id: `label_${name}`,
+    htmlFor: `checkbox_${name}`,
+    onClick: event => onChange(!checked),
+    onKeyPress: ({ charCode: key, ...event }) =>
+        key === 32 || key === 13 ? onChange(!checked) : null
+});
+
 export const withAriaProps = withProps(
-    ({ checked, name, onChange, tabIndex = 0 }) => ({
-        aria: {
-            role: 'checkbox',
-            'aria-checked': checked,
-            'aria-labelledby': `label_${name}`,
-            id: `checkbox_${name}`,
-            tabIndex: tabIndex
-        },
-        ariaLabel: {
-            checked,
-            id: `label_${name}`,
-            for: `checkbox_${name}`,
-            onClick: event => onChange(!checked),
-            onKeyPress: ({ charCode: key, ...event }) =>
-                key === 32 || key === 13 ? onChange(!checked) : null
-        }
+    ({ checked, name, onChange, tabIndex }) => ({
+        aria: makeAriaCheckboxProps(checked, name, tabIndex),
+        ariaLabel: makeAriaLabelProps(checked, name, onChange)
     })
 );
 
