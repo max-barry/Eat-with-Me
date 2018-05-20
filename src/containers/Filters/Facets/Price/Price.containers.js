@@ -1,13 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import { setPropTypes, compose, withProps, withPropsOnChange } from 'recompose';
+import React, { Fragment } from 'react';
+import { setPropTypes, compose, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
-// import { orderBy } from 'lodash';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../Facets.components';
 import { FACET_PRICE } from '../../Filters.shared';
 import { PriceOptions } from './Price.components';
 import { withFacetAll } from '../Facets.shared';
-// import RangeCheckbox from '../../../../components/Forms/RangeCheckbox';
 
 const Price = ({ items, update, save, onRequestClose }) => (
     <Fragment>
