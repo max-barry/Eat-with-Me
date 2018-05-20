@@ -86,14 +86,7 @@ export default class extends Component {
 
     render() {
         const { order, expanded } = this.state;
-        const swipeDismissW = this.swipeDismissW;
         const cardCompactW = this.cardCompactW;
-        const halfDismissW = this.halfDismissW;
-        // const {
-        //     cardCompact: cardCompactW,
-        //     swipeDismiss: swipeDismissW
-        // } = dimensions;
-        // const halfDismissW = swipeDismissW / 2;
         return (
             <List>
                 {order.map((item, i) => {

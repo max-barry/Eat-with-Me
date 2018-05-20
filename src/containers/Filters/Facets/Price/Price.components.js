@@ -13,7 +13,7 @@ const enhance = compose(
                     disabled,
                     id: value,
                     int: parseFloat(label, 10),
-                    checked: isRefined,
+                    checked: !isRefined,
                     label: !disabled ? '£'.repeat(parseFloat(label), 10) : label
                 };
             }),

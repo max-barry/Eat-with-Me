@@ -13,8 +13,8 @@ import {
 } from './Filters.shared';
 import {
     FiltersContainer as Container,
-    FiltersModalAdvanced,
-    FiltersModalSimple
+    filtersModalAdvanced,
+    filtersModalSimple
 } from './Filters.styles';
 
 // replace pure with updatewith... (the better one)
@@ -137,8 +137,8 @@ class Filters extends Component {
                         onRequestClose={this.onRequestClose}
                         style={
                             modalAdvanced
-                                ? FiltersModalAdvanced(styleProps)
-                                : FiltersModalSimple(styleProps)
+                                ? filtersModalAdvanced(styleProps)
+                                : filtersModalSimple(styleProps)
                         }
                     >
                         {Content && (

@@ -67,17 +67,19 @@ class RangeCheckbox extends Component {
 
 const enhance = compose(
     setPropTypes({
+        onChange: PropTypes.func.isRequired,
         items: PropTypes.arrayOf(
             PropTypes.shape({
                 checked: PropTypes.bool.isRequired,
                 label: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
                     .isRequired,
-                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-                    .isRequired
+                id: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.array,
+                    PropTypes.number
+                ]).isRequired
             })
-        ).isRequired,
-
-        onChange: PropTypes.func.isRequired
+        ).isRequired
     })
     // withAriaProps
 );

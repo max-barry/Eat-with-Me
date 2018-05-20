@@ -11,10 +11,7 @@ export const ariaCheckboxProps = (
     'aria-checked': checked,
     'aria-labelledby': name,
     id: `id_${name}`,
-    onClick: event => {
-        console.log('checked');
-        updateFunc(!checked);
-    },
+    onClick: event => updateFunc(!checked),
     onKeyPress: ({ charCode: key, ...event }) =>
         key === 32 || key === 13 ? updateFunc(!checked) : null
 });

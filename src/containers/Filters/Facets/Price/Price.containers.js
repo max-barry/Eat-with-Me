@@ -37,7 +37,7 @@ class Price extends Component {
     render() {
         return (
             <Fragment>
-                <PriceOptions items={this.props.items} />
+                <PriceOptions items={this.props.items} onChange={this.update} />
                 <Actions
                     applyAction={() => this.save()}
                     cancelAction={this.props.onRequestClose}

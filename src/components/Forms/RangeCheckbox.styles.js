@@ -23,7 +23,7 @@ const capBevel = side => `
 //     position: 'relative'
 // });
 
-export const RangeList = styled('ul')({});
+export const RangeList = styled('ul')(sFlexed);
 
 export const RangeListItem = styled('li')(sFlexedCenter, {
     // borderRadius: dimensions.borderRadius * 2
