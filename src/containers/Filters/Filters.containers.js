@@ -68,7 +68,7 @@ class Filters extends Component {
         // We need to check if the filters are already open
         // and save them down if they are
         if (this.state.open && this.rendered) {
-            this.rendered.save(true);
+            this.rendered.props.save(true);
         }
         // Set the new state with the left value and an open filter
         this.setState({
@@ -82,7 +82,7 @@ class Filters extends Component {
         });
     }
 
-    updateVirtuals(attr, refinements, close = true) {
+    updateVirtuals(refinements, close = true) {
         this.setState({
             [this.state.contentKey]: refinements,
             open: !close

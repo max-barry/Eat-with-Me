@@ -23,8 +23,8 @@ export const FacetBars = enhanceBars(
             name="include-bars"
             onChange={onChange}
             checked={refinements.length > 1}
-            title={() => 'Include bars and pubs'}
-            tag={() => "We don't include bars and pubs in results by default"}
+            title="Include bars and pubs"
+            tag="We don't include bars and pubs in results by default"
         />
     )
 );

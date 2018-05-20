@@ -69,11 +69,19 @@ class Checkbox extends Component {
                 </span>
                 <CheckboxLabel {...ariaLabel}>
                     <span className={CheckboxTitleStyles}>
-                        <TitleComponent />
+                        {typeof TitleComponent === 'string' ? (
+                            TitleComponent
+                        ) : (
+                            <TitleComponent />
+                        )}
                     </span>
                     {TagComponent && (
                         <span className={CheckboxTagStyles}>
-                            <TagComponent />
+                            {typeof TagComponent === 'string' ? (
+                                TagComponent
+                            ) : (
+                                <TagComponent />
+                            )}
                         </span>
                     )}
                 </CheckboxLabel>

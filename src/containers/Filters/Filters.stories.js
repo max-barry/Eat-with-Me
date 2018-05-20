@@ -52,9 +52,23 @@ storiesOf('Filters', module)
         )(() => <Filters />);
         return <Enhanced />;
     })
-    .add('Quarter', () => (
-        <QuarterList onChange={onChange} items={makeRefinements(8)} />
-    ))
+    .add(
+        'Quarter',
+        withState({ items: makeRefinements(8) })(({ store }) => (
+            <QuarterList
+                onChange={value => {
+                    store.set({
+                        items: store.state.items.map(refinemnet => {
+                            if (refinemnet.value === value)
+                                refinemnet.isRefined = !refinemnet.isRefined;
+                            return refinemnet;
+                        })
+                    });
+                }}
+                items={store.state.items}
+            />
+        ))
+    )
     .add(
         'Cusine',
         withState({ items: randomGroupedRefinements })(({ store }) => (

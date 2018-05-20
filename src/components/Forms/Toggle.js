@@ -50,8 +50,16 @@ const Toggle = enhanceToggle(
 export default Toggle;
 
 const propsRequiredWithLabel = {
-    title: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-    tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    title: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.func,
+        PropTypes.string
+    ]).isRequired,
+    tag: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.func,
+        PropTypes.string
+    ]),
     ...requiredPropTypes
 };
 
@@ -65,11 +73,19 @@ export const ToggleWithLabel = enhanceToggleLabel(
         <ToggleLabel for={props.id}>
             <ToggleLabelText>
                 <ToggleTitle>
-                    <TitleComponent />
+                    {typeof TitleComponent === 'string' ? (
+                        TitleComponent
+                    ) : (
+                        <TitleComponent />
+                    )}
                 </ToggleTitle>
                 {TagComponent && (
                     <ToggleTag>
-                        <TagComponent />
+                        {typeof TagComponent === 'string' ? (
+                            TagComponent
+                        ) : (
+                            <TagComponent />
+                        )}
                     </ToggleTag>
                 )}
             </ToggleLabelText>
