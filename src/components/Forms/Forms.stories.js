@@ -13,22 +13,42 @@ const props = {
     id: 'someid',
     name: 'somename',
     checked: false,
-    onChange: () => console.log('Action'),
-    title: () => 'Title for component',
-    tag: () => 'Tag underneath the title'
+    onChange: () => console.log('Action')
 };
 
 storiesOf('Forms', module)
-    .add('Checkbox', () => <Checkbox {...props} />)
+    .add(
+        'Checkbox',
+        withState({ checked: false })(({ store }) => (
+            <Checkbox
+                title={() => 'Title for component'}
+                tag={() => 'Tag underneath the title'}
+                name="somename"
+                checked={store.state.checked}
+                onChange={() => store.set({ checked: !store.state.checked })}
+            />
+        ))
+    )
     .add('Toggle', () => <Toggle {...props} />)
-    .add('Toggle with label', () => <ToggleWithLabel {...props} />)
+    .add(
+        'Toggle with label',
+        withState({ checked: false })(({ store }) => (
+            <ToggleWithLabel
+                title={() => 'Title for component'}
+                tag={() => 'Tag underneath the title'}
+                name="somename"
+                checked={store.state.checked}
+                onChange={() => store.set({ checked: !store.state.checked })}
+            />
+        ))
+    )
     .add(
         'Chip',
         withState({ checked: false })(({ store }) => (
             <Chip
-                {...props}
                 checked={store.state.checked}
                 onChange={() => store.set({ checked: !store.state.checked })}
+                name="mexican"
                 label="Mexican"
             />
         ))
@@ -46,18 +66,16 @@ storiesOf('Forms', module)
             />
         ))
     )
+
     .add(
         'ChipLite',
         withState({ checked: false })(({ store }) => {
-            delete props.title;
-            delete props.tag;
             return (
                 <ChipLite
-                    {...props}
-                    checked={store.state.checked}
                     label="Mexican"
+                    name="mexican"
+                    checked={store.state.checked}
                     onChange={() => {
-                        console.log('clicked');
                         store.set({ checked: !store.state.checked });
                     }}
                 />

@@ -7,13 +7,9 @@ import {
     fontWeights,
     sInteractive,
     transitionTimes,
-    shadows,
     easings,
     dimensions
 } from '../../settings/styles';
-import crossSvg from '../SVGs/images/cross.svg';
-
-const weak = transitionTimes.weak;
 
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
@@ -59,22 +55,14 @@ export const ChipLabel = styled('label')(
         transform: scale(0);
     }
 
-    &:focus {
+    &:focus-within {
         outline: 1px dashed ${colors.greyDark};
         outline-offset: 3px;
     }
     `
 );
 
-export const chipActiveClass = css`
-    &::before {
-        // backg
-        // background-color:
-        // console.log(props);
-        // return 'red';
-        // }};
-    }
-`;
+export const chipActiveClass = css``;
 
 export const chipLabelTextClass = css({
     display: 'block',
@@ -105,6 +93,4 @@ export const chipDotClass = css`
 
 export const chipDotActiveClass = css`
     transform: scale(30);
-
-    // outline: 20px
 `;

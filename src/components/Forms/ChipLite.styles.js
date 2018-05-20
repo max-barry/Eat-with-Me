@@ -30,13 +30,17 @@ export const ChipLiteLabel = styled('label')(
             transitionTimes.minimal
         }ms`
     },
-    `&:hover {background-color: ${colors.grey2}}`
+    `
+    &:hover { background-color: ${colors.grey2} }
+    &:focus-within {
+        outline: 1px dashed ${colors.greyDark};
+        outline-offset: ${dimensions.outlineOffset}px;
+    }`
 );
 
-export const chipLiteFocusedClass = css({
-    outline: `1px dashed ${colors.greyDark}`,
-    outlineOffset: dimensions.outlineOffset
-});
+// export const chipLiteFocusedClass = css({
+
+// });
 
 export const chipLiteActiveClass = css(
     {

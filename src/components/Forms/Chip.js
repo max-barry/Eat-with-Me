@@ -1,35 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import {
-    compose,
-    setPropTypes,
-    onlyUpdateForKeys,
-    withState,
-    defaultProps,
-    withHandlers,
-    lifecycle
-} from 'recompose';
+import { compose, setPropTypes, defaultProps } from 'recompose';
 import PropTypes from 'prop-types';
-import { Spring, animated, config, Keyframes, interpolate } from 'react-spring';
+import { Spring, animated, config } from 'react-spring';
+import { cx, css } from 'emotion';
 import {
     ChipLabel as Label,
     chipDotClass as dotClass,
     chipActiveClass as activeClass,
     chipDotActiveClass as dotActiveClass,
-    chipFocusClass as focusClass,
     chipLabelTextClass as textClass,
-    CHIP_EDGE_PADDING,
-    CHIP_DOT_DIMENSION,
-    CHIP_HEIGHT
+    CHIP_DOT_DIMENSION
 } from './Chip.styles';
-import {
-    ariaCheckboxProps,
-    requiredPropTypes,
-    withAriaProps
-} from './Forms.shared';
-import { colors, bs, bsint } from '../../settings/styles';
-import { cross as crossSvgPath } from '../SVGs/paths';
-import Svg from '../SVGs';
-import { cx, css, keyframes } from 'emotion';
+import { requiredPropTypes, withAriaProps } from './Forms.shared';
+import { colors, bsint } from '../../settings/styles';
 
 // Move these basic update and state handlers to an abstract
 
@@ -124,7 +107,7 @@ const enhance = compose(
         color: PropTypes.string,
         textColor: PropTypes.string
     }),
-    withAriaProps
+    withAriaProps()
     // onlyUpdateForKeys([])
 );
 

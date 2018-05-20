@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import Switch from 'react-switch';
 import PropTypes from 'prop-types';
 import { onlyUpdateForKeys, compose, setPropTypes } from 'recompose';
+import { transparentize } from 'polished';
 import {
     ToggleLabel,
     ToggleLabelText,
     ToggleTitle,
     ToggleTag
+    // toggleSwitchClass
 } from './Toggle.styles';
 import { requiredPropTypes } from './Forms.shared';
 import { colors } from '../../settings/styles';
@@ -29,11 +31,16 @@ const Toggle = enhanceToggle(
         render() {
             return (
                 <Switch
+                    // className={toggleSwitchClass}
                     checked={this.state.checked}
                     onChange={() => this.update()}
                     id={this.props.name}
                     offColor={colors.grey2}
                     onColor={colors.secondary}
+                    activeBoxShadow={`0px 0px 2px 3px ${transparentize(
+                        0.7,
+                        colors.black
+                    )}`}
                 />
             );
         }

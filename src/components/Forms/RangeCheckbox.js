@@ -71,8 +71,12 @@ const enhance = compose(
         items: PropTypes.arrayOf(
             PropTypes.shape({
                 checked: PropTypes.bool.isRequired,
-                label: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-                    .isRequired,
+                label: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.number,
+                    PropTypes.func,
+                    PropTypes.element
+                ]).isRequired,
                 id: PropTypes.oneOfType([
                     PropTypes.string,
                     PropTypes.array,

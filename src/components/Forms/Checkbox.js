@@ -12,35 +12,43 @@ import {
     CheckboxBoxInnerStyles
 } from './Checkbox.styles';
 import { tick as svgtick } from '../SVGs/paths';
-import { ariaCheckboxProps, requiredPropTypes } from './Forms.shared';
+import {
+    ariaCheckboxProps,
+    requiredPropTypes,
+    withAriaProps
+} from './Forms.shared';
 
 class Checkbox extends Component {
-    state = { checked: this.props.checked };
-    checkboxRef = React.createRef();
+    // state = { checked: this.props.checked };
+    // checkboxRef = React.createRef();
 
-    update(event) {
-        // Update the component state change
-        this.setState({ checked: !this.state.checked });
-        // Call the passed onChange function
-        this.props.onChange(this.state.checked, event);
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.update = this.update.bind(this);
+    // }
+
+    // update(event) {
+    //     // // Update the component state change
+    //     // this.setState({ checked: !this.state.checked });
+    //     // Call the passed onChange function
+    //     this.props.onChange(this.state.checked, event);
+    // }
 
     render() {
-        const { checked } = this.state;
-        const { title: TitleComponent, tag: TagComponent, name } = this.props;
-        const checkboxProps = ariaCheckboxProps(
+        const {
             checked,
-            this.update.bind(this),
-            {
-                id: name,
-                tabIndex: this.props.tabIndex
-            }
-        );
+            title: TitleComponent,
+            tag: TagComponent,
+            aria,
+            ariaLabel,
+            ...props
+            // name
+        } = this.props;
         return (
             <CheckboxContainer>
                 <span
-                    ref={this.checkboxRef}
-                    {...checkboxProps}
+                    // ref={this.checkboxRef}
+                    {...aria}
                     className={cx(
                         CheckboxBoxWrap,
                         checked ? CheckboxCheckedClass : null
@@ -59,13 +67,7 @@ class Checkbox extends Component {
                         </svg>
                     </span>
                 </span>
-                <CheckboxLabel
-                    for={name}
-                    onClick={() => {
-                        this.checkboxRef.current.focus();
-                        this.update();
-                    }}
-                >
+                <CheckboxLabel {...ariaLabel}>
                     <span className={CheckboxTitleStyles}>
                         <TitleComponent />
                     </span>
@@ -80,14 +82,14 @@ class Checkbox extends Component {
     }
 }
 
-const ElementOrFunc = [PropTypes.element, PropTypes.func];
-
 const enhance = compose(
     setPropTypes({
-        title: PropTypes.oneOfType(ElementOrFunc).isRequired,
-        tag: PropTypes.oneOfType(ElementOrFunc),
+        title: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+            .isRequired,
+        tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
         ...requiredPropTypes
-    })
+    }),
+    withAriaProps(true)
 );
 
 export default enhance(Checkbox);

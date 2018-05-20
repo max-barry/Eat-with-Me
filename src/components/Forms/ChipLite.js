@@ -9,7 +9,7 @@ import {
 } from './Forms.shared';
 import {
     ChipLiteLabel as Label,
-    chipLiteFocusedClass as focusedClass,
+    // chipLiteFocusedClass as focusedClass,
     chipLiteActiveClass as activeClass,
     ChipCheckboxProxy as CheckboxProxy,
     CHIP_LITE_DOT_DIMENSION,
@@ -20,7 +20,7 @@ import Svg from '../SVGs';
 import { colors } from '../../settings/styles';
 
 class ChipLite extends Component {
-    state = { focused: false };
+    // state = { focused: false };
 
     // componentDidUpdate(prevProps) {
     //     Object.keys(this.props).forEach(key => {
@@ -53,14 +53,14 @@ class ChipLite extends Component {
                 {...props}
                 className={cx(
                     className,
-                    checked ? activeClass : null,
-                    this.state.focused ? focusedClass : null
+                    checked ? activeClass : null
+                    // this.state.focused ? focusedClass : null
                 )}
             >
                 <CheckboxProxy
                     {...aria}
-                    onFocus={() => this.setState({ focused: true })}
-                    onBlur={() => this.setState({ focused: false })}
+                    // onFocus={() => this.setState({ focused: true })}
+                    // onBlur={() => this.setState({ focused: false })}
                 >
                     <Svg
                         height={CHIP_LITE_DOT_DIMENSION * 0.75}
@@ -80,7 +80,7 @@ const enhance = compose(
         ...requiredPropTypes,
         label: PropTypes.string.isRequired
     }),
-    withAriaProps
+    withAriaProps()
 );
 
 export default enhance(ChipLite);
