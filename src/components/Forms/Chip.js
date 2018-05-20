@@ -1,5 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { compose, setPropTypes, defaultProps } from 'recompose';
+import {
+    compose,
+    setPropTypes,
+    defaultProps,
+    onlyUpdateForKeys
+} from 'recompose';
 import PropTypes from 'prop-types';
 import { Spring, animated, config } from 'react-spring';
 import { cx, css } from 'emotion';
@@ -107,8 +112,8 @@ const enhance = compose(
         color: PropTypes.string,
         textColor: PropTypes.string
     }),
-    withAriaProps()
-    // onlyUpdateForKeys([])
+    withAriaProps(),
+    onlyUpdateForKeys(['checked'])
 );
 
 export default enhance(Chip);

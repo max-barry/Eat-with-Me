@@ -9,9 +9,21 @@ import {
     cuisinePanelClass as panelClass,
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 
-const enhance = compose();
+const enhance = compose(
+    withHandlers({
+        update: ({ items, onChange }) => (panelLabel, cuisineLabel) => {
+            // Find the value associated with this label
+            // (kind of assumes all labels and panel names are unique)
+            const panel = items.find(({ name }) => name === panelLabel);
+            const cuisine = panel.items.find(
+                ({ label }) => label === cuisineLabel
+            );
+            onChange(cuisine.value);
+        }
+    })
+);
 // lifecycle({
 //     componentDidUpdate(prevProps) {
 //         Object.keys(this.props).forEach(key => {
@@ -28,7 +40,7 @@ const enhance = compose();
 //     }
 // })
 
-export const CuisineTabs = enhance(({ items, onChange }) => (
+export const CuisineTabs = enhance(({ items, update }) => (
     <Tabs className={tabsClass}>
         <TabList className={headerListClass}>
             {items.map((panel, i) => (
@@ -47,7 +59,7 @@ export const CuisineTabs = enhance(({ items, onChange }) => (
                         label={cuisine.label}
                         checked={cuisine.isRefined}
                         name={`cuisine_${z}`}
-                        onChange={isChecked => onChange(cuisine.value)}
+                        onChange={_ => update(panel.name, cuisine.label)}
                     />
                 ))}
             </TabPanel>

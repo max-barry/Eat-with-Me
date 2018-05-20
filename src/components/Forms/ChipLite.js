@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { compose, setPropTypes } from 'recompose';
+import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { cx } from 'emotion';
 import {
@@ -80,7 +80,8 @@ const enhance = compose(
         ...requiredPropTypes,
         label: PropTypes.string.isRequired
     }),
-    withAriaProps()
+    withAriaProps(),
+    onlyUpdateForKeys(['checked'])
 );
 
 export default enhance(ChipLite);
