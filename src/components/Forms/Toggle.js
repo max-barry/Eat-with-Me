@@ -35,7 +35,7 @@ const Toggle = enhanceToggle(
                     checked={this.state.checked}
                     onChange={() => this.update()}
                     id={this.props.name}
-                    offColor={colors.grey2}
+                    offColor={colors.greyDark}
                     onColor={colors.secondary}
                     activeBoxShadow={`0px 0px 2px 3px ${transparentize(
                         0.7,
