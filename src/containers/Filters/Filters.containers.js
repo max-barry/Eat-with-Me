@@ -101,33 +101,37 @@ class Filters extends Component {
     render() {
         const {
             style: styleProps,
-            content: { component: Content, modalAdvanced = false }
+            content: { component: Content, modalAdvanced = false },
+            ...state
         } = this.state;
+
+        const navigation = [
+            [FACET_QUARTER, 'Region'],
+            [FACET_CUISINE, 'Cuisine'],
+            [FACET_PRICE, 'Price'],
+            [null, 'Neighborhood'],
+            [FACET_EXTRAS, 'More...']
+        ];
+
+        const virtuals = [
+            [FACET_QUARTER, state[FACET_QUARTER]],
+            [FACET_CUISINE, state[FACET_CUISINE]],
+            [FACET_PRICE, state[FACET_PRICE]],
+            // [null, null],
+            [FACET_IS_BAR, state[FACET_EXTRAS][FACET_IS_BAR]]
+        ];
 
         return (
             <div ref={this.containerRef}>
                 <Container>
                     <ul className={sFlexed}>
-                        <FilterButton
-                            onClick={e => this.openFilter(e, FACET_QUARTER)}
-                            children="Region"
-                        />
-                        <FilterButton
-                            onClick={e => this.openFilter(e, FACET_CUISINE)}
-                            children="Cuisine"
-                        />
-                        <FilterButton
-                            onClick={e => this.openFilter(e, FACET_PRICE)}
-                            children="Price"
-                        />
-                        <FilterButton
-                            onClick={e => this.openFilter(e)}
-                            children="Neighborhood"
-                        />
-                        <FilterButton
-                            onClick={e => this.openFilter(e, FACET_EXTRAS)}
-                            children="More..."
-                        />
+                        {navigation.map(([facet, label], i) => (
+                            <FilterButton
+                                key={`filter_button_${i}`}
+                                onClick={e => this.openFilter(e, facet)}
+                                children={label}
+                            />
+                        ))}
                     </ul>
                 </Container>
                 <div id="FilterCanvasWrap">
@@ -154,22 +158,13 @@ class Filters extends Component {
                     </Modal>
                 </div>
 
-                <VirtualRefinement
-                    attribute={FACET_QUARTER}
-                    defaultRefinement={this.state[FACET_QUARTER]}
-                />
-                <VirtualRefinement
-                    attribute={FACET_PRICE}
-                    defaultRefinement={this.state[FACET_PRICE]}
-                />
-                <VirtualRefinement
-                    attribute={FACET_IS_BAR}
-                    defaultRefinement={this.state[FACET_EXTRAS][FACET_IS_BAR]}
-                />
-                <VirtualRefinement
-                    attribute={FACET_CUISINE}
-                    defaultRefinement={this.state[FACET_CUISINE]}
-                />
+                {virtuals.map(([facet, current], z) => (
+                    <VirtualRefinement
+                        key={`virtual_${z}`}
+                        attribute={facet}
+                        defaultRefinement={current}
+                    />
+                ))}
             </div>
         );
     }
