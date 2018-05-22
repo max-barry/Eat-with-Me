@@ -44,3 +44,13 @@ export const withItemsOrdered = (
     withPropsOnChange(['items'], props => ({
         items: postprocess(orderBy(props.items, attributes, direction))
     }));
+
+export const withPanelledUpdate = withHandlers({
+    update: ({ items, onChange }) => (panelLabel, itemLabel) => {
+        // Find the value associated with this label
+        // (kind of assumes all labels and panel names are unique)
+        const panel = items.find(({ name }) => name === panelLabel);
+        const item = panel.items.find(({ label }) => label === itemLabel);
+        onChange(item.value);
+    }
+});

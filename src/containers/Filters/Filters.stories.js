@@ -2,9 +2,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Hits } from 'react-instantsearch/dom';
 import faker from 'faker';
-import { shuffle } from 'lodash';
 import { compose, setDisplayName } from 'recompose';
 import { withState } from '@dump247/storybook-state';
+import { Provider } from '../../stories/decorators';
 import Filters from './Filters.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
 import { CuisineTabs } from './Facets/Cuisine/Cuisine.components';
@@ -44,6 +44,7 @@ const withParent = BaseComponent => props => (
 );
 
 storiesOf('Filters', module)
+    .addDecorator(story => <Provider story={story()} />)
     .add('default', () => {
         const Enhanced = compose(
             setDisplayName('Filters'),

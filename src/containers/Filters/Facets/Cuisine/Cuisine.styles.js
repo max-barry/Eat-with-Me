@@ -9,11 +9,9 @@ import {
     colors,
     transitionTimes
 } from '../../../../settings/styles';
-import { darken, transitions } from 'polished';
 
 export const cuisineTabsClass = css({
     maxWidth: dimensions.filtersComponentMinWidth * 1.5,
-    // padding: bs(0.5)
     marginBottom: bs(2)
 });
 
@@ -21,9 +19,6 @@ export const cuisineHeaderListClass = css({
     display: 'inline-flex',
     borderBottom: `1px solid ${colors.grey2}`,
     marginBottom: bs(1.5)
-    // display: 'inline-grid',
-    // justifyItems: 'start',
-    // 'grid-template-columns': '1fr 1fr 1fr'
 });
 
 export const cuisineHeaderClass = css(
@@ -35,7 +30,6 @@ export const cuisineHeaderClass = css(
         margin: `0 ${bs(0.25)} 0 ${bs(0.25)}`,
         position: 'relative',
         color: colors.greyDark
-        // borderBottom: `3px solid ${colors.grey2}`
     },
     `
     &::before {
@@ -59,7 +53,6 @@ export const cuisineHeaderClass = css(
         }
     }
     &.react-tabs__tab--selected {
-        // background-color: ${colors.grey1};
         
         &::before {
             background-color: ${colors.secondaryDark};
@@ -74,23 +67,9 @@ export const cuisineHeaderClass = css(
 );
 
 export const cuisinePanelClass = css(sFlexed, {
-    // display: 'flex',
     flexWrap: 'wrap'
-
-    // gridTemplateColumns: 'auto auto auto auto auto',
-    // gridTemplateRows: '140px 100fr',
-    // justifyItems: 'start',
-    // gridGap: `${bs(1)} ${bs(0.5)}`
-    // gridColumnGap: 20,
-    // gridRowGap: 20
-    //     justify-items: stretch,
-    //     align-items: stretch,
 });
 
 export const cuisineChipClass = css({
     margin: bs(0.25)
 });
-
-// .container {
-//
-//  }

@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import * as reducers from './redux/ducks';
-import middlewares from './redux/middlewares';
+// import { createStore } from 'redux';
+// import * as reducers from './redux/ducks';
+// import middlewares from './redux/middlewares';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -23,10 +23,7 @@ const App = Loadable({
 // const configureStore = initialState =>
 //     ;
 
-const store = createStore(
-    combineReducers(reducers),
-    applyMiddleware(...middlewares)
-);
+const store = configureStore();
 // export default configureStore;
 
 ReactDOM.render(

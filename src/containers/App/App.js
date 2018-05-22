@@ -1,11 +1,14 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link, Route, Switch } from 'react-router-dom';
 import { compose, withPropsOnChange } from 'recompose';
+import { prop, path, pick } from 'ramda';
 import { FIREBASE_CONFIG } from '../../settings/apis';
 import urls from '../../settings/urls';
+import { hardwareActions } from '../../redux/ducks/hardware';
 // import {
 //     withAuthenticationProvider,
 //     withAuthenticationConsumer
@@ -41,6 +44,15 @@ class App extends Component {
         return !location.state || !location.state.modal
             ? { ...prevState, previousLocation: location }
             : null;
+    }
+
+    componentDidMount() {
+        const { setNetworkStatus } = this.props;
+        // Add an event listener to capture any network changes
+        window.addEventListener('online', setNetworkStatus);
+        window.addEventListener('offline', setNetworkStatus);
+        // Launch an initial set of the network status
+        setNetworkStatus({ type: 'online' });
     }
 
     render() {
@@ -97,8 +109,7 @@ class App extends Component {
 
 const modalPropsHandler = withPropsOnChange(['location'], ownerProps => ({
     isModal: !!(
-        ownerProps.location.state &&
-        ownerProps.location.state.modal &&
+        path(['location', 'state', 'modal'], ownerProps) &&
         this.previousLocation !== ownerProps.location
     )
 }));
@@ -119,10 +130,11 @@ const modalPropsHandler = withPropsOnChange(['location'], ownerProps => ({
 
 const enhance = compose(
     // withSearch,
-    // connect(mapStateToProps, mapDispatchToProps),
+    // connect(prop('database'), databaseActions),
     withRouter,
     // withAuthenticationProvider,
-    modalPropsHandler
+    modalPropsHandler,
+    connect(pick(['hardware']), hardwareActions)
 );
 
 export default enhance(App);

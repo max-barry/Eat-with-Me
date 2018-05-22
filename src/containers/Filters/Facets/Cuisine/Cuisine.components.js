@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import ChipLite from '../../../../components/Forms/ChipLite';
+import { compose } from 'recompose';
+// import ChipLite from '../../../../components/Forms/ChipLite';
 import Chip from '../../../../components/Forms/Chip';
 import {
     cuisineTabsClass as tabsClass,
@@ -9,36 +10,9 @@ import {
     cuisinePanelClass as panelClass,
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
-import { compose, lifecycle, withHandlers } from 'recompose';
+import { withPanelledUpdate } from '../Facets.shared';
 
-const enhance = compose(
-    withHandlers({
-        update: ({ items, onChange }) => (panelLabel, cuisineLabel) => {
-            // Find the value associated with this label
-            // (kind of assumes all labels and panel names are unique)
-            const panel = items.find(({ name }) => name === panelLabel);
-            const cuisine = panel.items.find(
-                ({ label }) => label === cuisineLabel
-            );
-            onChange(cuisine.value);
-        }
-    })
-);
-// lifecycle({
-//     componentDidUpdate(prevProps) {
-//         Object.keys(this.props).forEach(key => {
-//             if (this.props[key] !== prevProps[key]) {
-//                 console.log(
-//                     key,
-//                     'changed from',
-//                     prevProps[key],
-//                     'to',
-//                     this.props[key]
-//                 );
-//             }
-//         });
-//     }
-// })
+const enhance = compose(withPanelledUpdate);
 
 export const CuisineTabs = enhance(({ items, update }) => (
     <Tabs className={tabsClass}>

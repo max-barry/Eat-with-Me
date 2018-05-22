@@ -48,7 +48,7 @@ class Filters extends Component {
     openFilter(event, contentKey) {
         // Get the bounding rect of the clicked element
         // to work out left value
-        let { left } = event.target.getBoundingClientRect();
+        let { left, bottom } = event.target.getBoundingClientRect();
         // Adjust for the window being very small and
         // the filter now being off the screen
         // Delta is either 0 if no adjustment is needed or an integer
@@ -77,6 +77,7 @@ class Filters extends Component {
             content: facetDictionary[contentKey],
             style: {
                 ...this.state.style,
+                top: bottom,
                 left
             }
         });
@@ -91,11 +92,6 @@ class Filters extends Component {
 
     onRequestClose() {
         this.setState({ open: false });
-    }
-
-    componentDidMount() {
-        const { left, bottom } = this.container.getBoundingClientRect();
-        this.setState({ style: { left, top: bottom } });
     }
 
     render() {
