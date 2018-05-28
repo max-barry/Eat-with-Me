@@ -8,6 +8,7 @@ import Chip from './Chip';
 import ChipLite from './ChipLite';
 import RangeCheckbox from './RangeCheckbox';
 import ChipDismissible from './ChipDismissible';
+import Badge from './Badge';
 
 storiesOf('Forms', module)
     .add(
@@ -89,6 +90,7 @@ storiesOf('Forms', module)
             dismiss={() => console.log('Dismissed')}
         />
     ))
+    .add('Badge', () => <Badge count={faker.random.number(12)} />)
     .add(
         'RangeCheckbox',
         withState({
