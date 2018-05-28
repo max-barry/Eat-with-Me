@@ -16,15 +16,11 @@ export const FiltersContainer = styled('nav')({
     borderBottom: `1px solid ${colors.grey2}`,
     marginBottom: FILTER_NAV_SPACING,
     paddingTop: FILTER_NAV_SPACING
-    // flexDirection: 'column',
-    // paddingLeft: bs(0.5),
-    // paddingRight: bs(0.5)
 });
 
 const filtersNavBar = css(sFlexed, {
     alignItems: 'center',
     paddingBottom: FILTER_NAV_SPACING
-    // minHeight: dimensions.filtersBar,
 });
 
 export const FiltersButtonList = styled('ul')(filtersNavBar, {});
