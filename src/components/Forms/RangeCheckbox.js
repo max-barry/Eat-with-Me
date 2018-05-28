@@ -12,7 +12,7 @@ import {
 import { makeAriaCheckboxProps, makeAriaLabelProps } from './Forms.shared';
 
 const RangeCheckbox = ({ items, onChange, ...props }) => (
-    <List>
+    <List {...props}>
         {items.map(({ label: Content, checked, id, disabled }, i) => (
             <ListItem key={`listItem_${i}`}>
                 <Label

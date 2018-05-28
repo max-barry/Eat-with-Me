@@ -34,7 +34,7 @@ export const colors = {
     error: '#B00020',
     grey1: '#f5f5f5',
     grey2: '#eeeeee',
-    greyDark: '#c2c2c2',
+    greyDark: '#9e9e9e',
     skeleton: '#E7ECEF',
     black: '#131313',
     white: '#fff'

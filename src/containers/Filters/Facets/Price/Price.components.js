@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { orderBy } from 'lodash';
 import RangeCheckbox from '../../../../components/Forms/RangeCheckbox';
 import { compose, withProps } from 'recompose';
 import { priceIntToSymbol } from '../Facets.shared';
+import { bs, shevy, colors } from '../../../../settings/styles';
+import styled from 'react-emotion';
 
 const enhance = compose(
     withProps(props => ({
@@ -24,6 +26,17 @@ const enhance = compose(
     }))
 );
 
+const PriceTitle = styled('h5')(shevy.h6, {});
+const PriceDeck = styled('h6')(shevy.h6, { color: colors.greyDark });
+
 export const PriceOptions = enhance(({ items, onChange }) => (
-    <RangeCheckbox items={items} onChange={value => onChange(value)} />
+    <Fragment>
+        <PriceTitle>Choose a price range</PriceTitle>
+        <PriceDeck>Filter by price</PriceDeck>
+        <RangeCheckbox
+            items={items}
+            onChange={value => onChange(value)}
+            style={{ marginBottom: bs(2), marginTop: bs() }}
+        />
+    </Fragment>
 ));
