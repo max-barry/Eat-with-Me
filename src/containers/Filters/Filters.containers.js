@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import { pick } from 'ramda';
 import { Modal } from '../../hocs/Modal/Modal';
-import { dimensions, sFlexed, bsint } from '../../settings/styles';
+import { dimensions } from '../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
-import { ChipDismissible } from '../../components/Forms';
 import {
     FACET_CUISINE,
     FACET_EXTRAS,
@@ -15,13 +17,12 @@ import {
 import {
     FiltersContainer as Container,
     FiltersButtonList as ButtonList,
-    FiltersStatusArea as StatusArea,
-    filtersStatusElementClass as statusElementClass,
+    // FiltersStatusArea as StatusArea,
     filtersModalAdvanced,
     filtersModalSimple,
     FILTER_NAV_SPACING
 } from './Filters.styles';
-import { priceIntToSymbol } from './Facets/Facets.shared';
+import { cuisineActions } from '../../redux/ducks/cuisine';
 
 // replace pure with updatewith... (the better one)
 
@@ -68,6 +69,10 @@ class Filters extends Component {
             // [null, null,
             [FACET_IS_BAR]: state[FACET_EXTRAS][FACET_IS_BAR]
         };
+    }
+
+    componentDidMount() {
+        this.props.fetchCuisinesFromCacheFirst();
     }
 
     openFilter(event, contentKey) {
@@ -194,4 +199,6 @@ class Filters extends Component {
     }
 }
 
-export default Filters;
+const enhance = compose(connect(pick(['cuisine']), cuisineActions));
+
+export default enhance(Filters);

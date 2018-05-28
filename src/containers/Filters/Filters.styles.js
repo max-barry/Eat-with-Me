@@ -28,13 +28,7 @@ const filtersNavBar = css(sFlexed, {
 });
 
 export const FiltersButtonList = styled('ul')(filtersNavBar, {});
-export const FiltersStatusArea = styled('div')(filtersNavBar, {});
-
-export const filtersStatusElementClass = css`
-    &:not(:last-child) {
-        margin-right: ${bs(0.5)};
-    }
-`;
+// export const FiltersStatusArea = styled('div')(filtersNavBar, {});
 
 export const filtersModalSimple = ({ top, left }) => ({
     overlay: {

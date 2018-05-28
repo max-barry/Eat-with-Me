@@ -36,11 +36,6 @@ const enhance = compose(
     })),
     connectRefinementList,
     connect(pick(['cuisine']), cuisineActions),
-    lifecycle({
-        componentDidMount() {
-            this.props.fetchCuisinesFromCacheFirst();
-        }
-    }),
     branch(
         props => !cuisineHasLoadedSelector(props),
         renderComponent(() => 'No canzdo')

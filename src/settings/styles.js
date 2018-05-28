@@ -42,6 +42,7 @@ export const colors = {
 
 export const dimensions = {
     container: 1024,
+    badge: 18,
     navigation: 80,
     navigation__logo: 52,
     filtersBar: 60,

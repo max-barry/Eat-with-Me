@@ -11,6 +11,8 @@ import {
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
 import { withPanelledUpdate } from '../Facets.shared';
+import { Badge } from '../../../../components/Forms';
+import { bsint, dimensions } from '../../../../settings/styles';
 
 const enhance = compose(withPanelledUpdate);
 
@@ -19,7 +21,19 @@ export const CuisineTabs = enhance(({ items, update }) => (
         <TabList className={headerListClass}>
             {items.map((panel, i) => (
                 <Tab className={headerClass} key={`tab_${i}`}>
-                    {panel.name}
+                    {panel.name}{' '}
+                    <Badge
+                        aria-hidden={true}
+                        style={{
+                            position: 'absolute',
+                            top: 5,
+                            right: -0.7 * dimensions.badge
+                        }}
+                        count={
+                            panel.items.filter(cuisine => cuisine.isRefined)
+                                .length
+                        }
+                    />
                 </Tab>
             ))}
         </TabList>
