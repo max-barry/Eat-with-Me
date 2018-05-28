@@ -26,16 +26,17 @@ const ChipDismissible = ({
     <Container>
         <Wrap aria-describedby="dismissable-chip-label">
             <ActionButton
+                onClick={() => action()}
                 className={css(
                     { backgroundColor, color },
                     `&:focus, &:hover { background-color: ${backgroundColorDark}; }
-                 &:focus:not(:active) { border-color: ${color}; }`
+                    &:focus:not(:active) { border-color: ${color}; }`
                 )}
             >
                 {actionLabel}
                 <Ink duration={500} />
             </ActionButton>
-            <DismissButton>
+            <DismissButton onClick={() => dismiss()}>
                 <Svg fill={colors.greyDark} path={cross} />
                 <Ink duration={500} />
             </DismissButton>
