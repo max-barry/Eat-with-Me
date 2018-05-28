@@ -50,6 +50,7 @@ const enhance = compose(
             items: [
                 {
                     name: 'Most popular',
+                    hideCount: true,
                     items: items.filter(item => favorites.includes(item.label))
                 },
                 {

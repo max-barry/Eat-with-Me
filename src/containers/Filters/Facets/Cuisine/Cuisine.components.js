@@ -30,8 +30,11 @@ export const CuisineTabs = enhance(({ items, update }) => (
                             right: -0.7 * dimensions.badge
                         }}
                         count={
-                            panel.items.filter(cuisine => cuisine.isRefined)
-                                .length
+                            panel.hideCount
+                                ? 0
+                                : panel.items.filter(
+                                      cuisine => cuisine.isRefined
+                                  ).length
                         }
                     />
                 </Tab>

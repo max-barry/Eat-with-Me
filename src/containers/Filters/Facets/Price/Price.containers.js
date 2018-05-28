@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../Facets.components';
 import { FACET_PRICE } from '../../Filters.shared';
-import { PriceOptions } from './Price.components';
+import { PriceOptions as Options } from './Price.components';
 import { withFacetAll } from '../Facets.shared';
 
 const Price = ({ items, update, save, onRequestClose }) => (
     <Fragment>
-        <PriceOptions items={items} onChange={value => update(value)} />
+        <Options items={items} onChange={value => update(value)} />
         <Actions applyAction={_ => save()} cancelAction={onRequestClose} />
     </Fragment>
 );
