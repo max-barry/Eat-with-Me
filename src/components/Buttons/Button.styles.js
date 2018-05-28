@@ -41,15 +41,12 @@ export const buttonSimpleClass = css(
         backgroundColor: colors.grey1
     },
     `
-    &:hover {
+    &:hover, &:focus {
+        outline: 0;
         background-color: ${darken(0.01, colors.grey2)};
-    }
-    &:focus {
-        outline: none;
     }
     &:focus:not(:active) {
         border: 1px dashed ${colors.greyDark};
-        background-color: ${darken(0.01, colors.grey2)};
     }
     &:active {
         background-color: ${darken(0.03, colors.grey2)};

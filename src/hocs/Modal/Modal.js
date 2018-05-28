@@ -16,12 +16,6 @@ class ModalComponent extends Component {
 }
 
 const enhance = compose(
-    // mapProps(props =>
-    //     Object.entries(props).reduce((previous, [name, prop]) => {
-    //         previous[name] = typeof prop === 'function' ? prop(props) : prop;
-    //         return previous;
-    //     }, {})
-    // ),
     setPropTypes({
         onRequestClose: PropTypes.func.isRequired,
         isOpen: PropTypes.oneOfType([PropTypes.bool, PropTypes.func])

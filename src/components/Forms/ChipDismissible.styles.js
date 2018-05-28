@@ -14,7 +14,7 @@ import {
 export const ChipDismissibleContainer = styled('div')({});
 
 export const ChipDismissibleWrap = styled('div')(sFlexed, {
-    maxWidth: dimensions.simpleButton * 8
+    maxWidth: dimensions.simpleButton * 6
 });
 
 export const ChipDismissibleLabel = styled('span')(shevy.overline, {

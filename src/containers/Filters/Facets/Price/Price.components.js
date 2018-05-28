@@ -2,6 +2,7 @@ import React from 'react';
 import { orderBy } from 'lodash';
 import RangeCheckbox from '../../../../components/Forms/RangeCheckbox';
 import { compose, withProps } from 'recompose';
+import { priceIntToSymbol } from '../Facets.shared';
 
 const enhance = compose(
     withProps(props => ({
@@ -14,7 +15,7 @@ const enhance = compose(
                     id: value,
                     int: parseFloat(label, 10),
                     checked: isRefined,
-                    label: !disabled ? '£'.repeat(parseFloat(label), 10) : label
+                    label: !disabled ? priceIntToSymbol(label) : label
                 };
             }),
             ['int'],

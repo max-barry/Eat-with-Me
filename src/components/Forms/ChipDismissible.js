@@ -21,9 +21,10 @@ const ChipDismissible = ({
     action,
     actionLabel,
     dismiss,
-    label
+    label,
+    ...props
 }) => (
-    <Container>
+    <Container {...props}>
         <Wrap aria-describedby="dismissable-chip-label">
             <ActionButton
                 onClick={() => action()}

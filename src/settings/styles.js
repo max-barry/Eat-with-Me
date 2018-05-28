@@ -77,7 +77,8 @@ export const easings = {
 };
 
 export const shadows = {
-    focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`
+    focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`,
+    overlay: `0px 0px 4px rgba(0, 0, 0, 0.1)`
 };
 
 export const fontFamily = `"HK Nova", Helvetica Neue, sans-serif`;

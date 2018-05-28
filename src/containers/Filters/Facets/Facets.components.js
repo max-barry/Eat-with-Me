@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { colors } from '../../../settings/styles';
 import ButtonLink from '../../../components/Buttons/ButtonLink';
 import {
-    FacetActionsList as ActionsList,
-    FacetActionsListItem as ActionsListItem
+    FacetActionsList as List,
+    FacetActionsListItem as ListItem
 } from './Facets.styles';
 
 const enhanceFacetActions = compose(
@@ -28,18 +28,18 @@ export const FacetActions = enhanceFacetActions(
         applyLabel = 'Apply',
         cancelLabel = 'Cancel'
     }) => (
-        <ActionsList>
-            <ActionsListItem>
+        <List>
+            <ListItem>
                 <ButtonLink onClick={cancelAction}>{cancelLabel}</ButtonLink>
-            </ActionsListItem>
-            <ActionsListItem>
+            </ListItem>
+            <ListItem>
                 <ButtonLink
                     onClick={applyAction}
-                    className={css({ color: colors.accent })}
+                    className={css({ color: colors.primaryDark })}
                 >
                     {applyLabel}
                 </ButtonLink>
-            </ActionsListItem>
-        </ActionsList>
+            </ListItem>
+        </List>
     )
 );

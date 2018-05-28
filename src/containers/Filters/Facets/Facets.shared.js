@@ -54,3 +54,5 @@ export const withPanelledUpdate = withHandlers({
         onChange(item.value);
     }
 });
+
+export const priceIntToSymbol = int => '£'.repeat(parseFloat(int), 10);

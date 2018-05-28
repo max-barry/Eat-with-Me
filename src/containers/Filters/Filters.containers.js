@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Modal } from '../../hocs/Modal/Modal';
-import { dimensions, sFlexed } from '../../settings/styles';
+import { dimensions, sFlexed, bsint } from '../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
+import { ChipDismissible } from '../../components/Forms';
 import {
     FACET_CUISINE,
     FACET_EXTRAS,
@@ -13,9 +14,14 @@ import {
 } from './Filters.shared';
 import {
     FiltersContainer as Container,
+    FiltersButtonList as ButtonList,
+    FiltersStatusArea as StatusArea,
+    filtersStatusElementClass as statusElementClass,
     filtersModalAdvanced,
-    filtersModalSimple
+    filtersModalSimple,
+    FILTER_NAV_SPACING
 } from './Filters.styles';
+import { priceIntToSymbol } from './Facets/Facets.shared';
 
 // replace pure with updatewith... (the better one)
 
@@ -33,16 +39,35 @@ class Filters extends Component {
             top: 0
         }
     };
+    navigation = {
+        [FACET_QUARTER]: 'Region',
+        [FACET_CUISINE]: 'Cuisine',
+        [FACET_PRICE]: 'Price',
+        // [null]: 'Neighborhood',
+        [FACET_EXTRAS]: 'More...'
+    };
     containerRef = React.createRef();
 
     constructor(props) {
         super(props);
         this.updateVirtuals = this.updateVirtuals.bind(this);
+        this.clearFacet = this.clearFacet.bind(this);
         this.onRequestClose = this.onRequestClose.bind(this);
     }
 
     get container() {
         return this.containerRef.current;
+    }
+
+    get virtuals() {
+        const state = this.state;
+        return {
+            [FACET_QUARTER]: state[FACET_QUARTER],
+            [FACET_CUISINE]: state[FACET_CUISINE],
+            [FACET_PRICE]: state[FACET_PRICE],
+            // [null, null,
+            [FACET_IS_BAR]: state[FACET_EXTRAS][FACET_IS_BAR]
+        };
     }
 
     openFilter(event, contentKey) {
@@ -77,7 +102,7 @@ class Filters extends Component {
             content: facetDictionary[contentKey],
             style: {
                 ...this.state.style,
-                top: bottom,
+                top: bottom + FILTER_NAV_SPACING,
                 left
             }
         });
@@ -88,6 +113,10 @@ class Filters extends Component {
             [this.state.contentKey]: refinements,
             open: !close
         });
+    }
+
+    clearFacet(facet) {
+        console.log('Clear it');
     }
 
     onRequestClose() {
@@ -101,34 +130,33 @@ class Filters extends Component {
             ...state
         } = this.state;
 
-        const navigation = [
-            [FACET_QUARTER, 'Region'],
-            [FACET_CUISINE, 'Cuisine'],
-            [FACET_PRICE, 'Price'],
-            [null, 'Neighborhood'],
-            [FACET_EXTRAS, 'More...']
-        ];
-
-        const virtuals = [
-            [FACET_QUARTER, state[FACET_QUARTER]],
-            [FACET_CUISINE, state[FACET_CUISINE]],
-            [FACET_PRICE, state[FACET_PRICE]],
-            // [null, null],
-            [FACET_IS_BAR, state[FACET_EXTRAS][FACET_IS_BAR]]
-        ];
+        const navigation = Object.entries(this.navigation);
+        const virtualsDict = this.virtuals;
+        const virtuals = Object.entries(virtualsDict);
 
         return (
             <div ref={this.containerRef}>
                 <Container>
-                    <ul className={sFlexed}>
-                        {navigation.map(([facet, label], i) => (
-                            <FilterButton
-                                key={`filter_button_${i}`}
-                                onClick={e => this.openFilter(e, facet)}
-                                children={label}
-                            />
-                        ))}
-                    </ul>
+                    <ButtonList>
+                        {navigation.map(([facet, label], i) => {
+                            const virtual = virtualsDict[facet];
+                            const hasValue =
+                                virtual !== undefined
+                                    ? virtual.some(n => n)
+                                    : Object.entries(state[facet]).some(
+                                          ([k, v]) => v.some(z => z)
+                                      );
+                            return (
+                                <FilterButton
+                                    key={`filter_button_${i}`}
+                                    onClick={e => this.openFilter(e, facet)}
+                                    children={label}
+                                    hasValue={hasValue}
+                                />
+                            );
+                        })}
+                    </ButtonList>
+                    {/* <StatusArea>{statuses}</StatusArea> */}
                 </Container>
                 <div id="FilterCanvasWrap">
                     <Modal
