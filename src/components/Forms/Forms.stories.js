@@ -9,6 +9,7 @@ import ChipLite from './ChipLite';
 import RangeCheckbox from './RangeCheckbox';
 import ChipDismissible from './ChipDismissible';
 import Badge from './Badge';
+import { colors } from '../../settings/styles';
 
 storiesOf('Forms', module)
     .add(
@@ -84,10 +85,19 @@ storiesOf('Forms', module)
     )
     .add('ChipDismissible', () => (
         <ChipDismissible
+            actionLabel={faker.lorem.words(5)}
+            action={() => console.log('Action')}
+            dismiss={() => console.log('Dismissed')}
+        />
+    ))
+    .add('ChipDismissible (with label + color)', () => (
+        <ChipDismissible
             label={faker.lorem.words(2)}
             actionLabel={faker.lorem.words(5)}
             action={() => console.log('Action')}
             dismiss={() => console.log('Dismissed')}
+            backgroundColor={colors.primaryLight}
+            color={colors.black}
         />
     ))
     .add('Badge', () => <Badge count={faker.random.number(12)} />)

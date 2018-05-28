@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, setPropTypes, defaultProps } from 'recompose';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
+import { darken } from 'polished';
 import Ink from 'react-ink';
 import {
     ChipDismissibleContainer as Container,
@@ -16,7 +17,6 @@ import { colors } from '../../settings/styles';
 
 const ChipDismissible = ({
     backgroundColor,
-    backgroundColorDark,
     color,
     action,
     actionLabel,
@@ -30,15 +30,26 @@ const ChipDismissible = ({
                 onClick={() => action()}
                 className={css(
                     { backgroundColor, color },
-                    `&:focus, &:hover { background-color: ${backgroundColorDark}; }
-                    &:focus:not(:active) { border-color: ${color}; }`
+                    `&:focus, &:hover { background-color: ${darken(
+                        0.02,
+                        backgroundColor
+                    )}; }
+                    &:focus:not(:active) { border-color: ${darken(
+                        0.3,
+                        backgroundColor
+                    )}; }`
                 )}
             >
                 {actionLabel}
                 <Ink duration={500} />
             </ActionButton>
             <DismissButton onClick={() => dismiss()}>
-                <Svg fill={colors.greyDark} path={cross} />
+                <Svg
+                    fill={colors.greyDark}
+                    path={cross}
+                    height={11}
+                    width={11}
+                />
                 <Ink duration={500} />
             </DismissButton>
         </Wrap>
@@ -48,9 +59,8 @@ const ChipDismissible = ({
 
 const enhance = compose(
     defaultProps({
-        backgroundColor: colors.secondary,
-        backgroundColorDark: colors.secondaryDark,
-        color: colors.white
+        backgroundColor: colors.grey1,
+        color: colors.greyDark
     }),
     setPropTypes({
         action: PropTypes.func.isRequired,
@@ -58,7 +68,6 @@ const enhance = compose(
         dismiss: PropTypes.func.isRequired,
         label: PropTypes.string,
         backgroundColor: PropTypes.string,
-        backgroundColorDark: PropTypes.string,
         color: PropTypes.string
     })
 );

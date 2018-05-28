@@ -1,4 +1,5 @@
 import styled, { css } from 'react-emotion';
+import { darken } from 'polished';
 import {
     sInteractive,
     shevy,
@@ -8,13 +9,14 @@ import {
     sFlexed,
     bs,
     transitionTimes,
-    sElipsify
+    sElipsify,
+    fontWeights
 } from '../../settings/styles';
 
 export const ChipDismissibleContainer = styled('div')({});
 
 export const ChipDismissibleWrap = styled('div')(sFlexed, {
-    maxWidth: dimensions.simpleButton * 6
+    maxWidth: dimensions.simpleButton * 5
 });
 
 export const ChipDismissibleLabel = styled('span')(shevy.overline, {
@@ -24,14 +26,16 @@ export const ChipDismissibleLabel = styled('span')(shevy.overline, {
 
 const chipDismissibleButton = css(
     sInteractive,
-    shevy.h6,
+    shevy.overline,
     {
+        textTransform: 'none',
+        fontWeight: fontWeights.medium,
         backgroundColor: 'transparent',
         position: 'relative',
         border: `1px dashed transparent`,
-        height: dimensions.simpleButton,
+        // height: dimensions.simpleButton,
         lineHeight: 1,
-        padding: `0 ${bs(0.5)}`,
+        padding: `${bs(0.25)} ${bs(0.5)}`,
         transition: `background-color ${transitionTimes.weak}ms`
     },
     `&:focus { outline: 0; }`
@@ -50,10 +54,10 @@ export const ChipDismissibleDismissButton = styled('button')(
     sFlexedCenter,
     chipDismissibleButton,
     {
-        backgroundColor: colors.grey1,
+        backgroundColor: colors.grey2,
         borderTopRightRadius: dimensions.borderRadius,
         borderBottomRightRadius: dimensions.borderRadius
     },
-    `&:focus, &:hover { background-color: ${colors.grey2} }
+    `&:focus, &:hover { background-color: ${darken(0.03, colors.grey2)} }
      &:focus:not(:active) { border-color: ${colors.greyDark} }`
 );
