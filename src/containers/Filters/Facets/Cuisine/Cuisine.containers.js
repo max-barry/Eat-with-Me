@@ -7,7 +7,7 @@ import {
     renderComponent
 } from 'recompose';
 import { connect } from 'react-redux';
-import { pluck } from 'ramda';
+import { pluck, pick } from 'ramda';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { FacetActions as Actions } from '../Facets.components';
 import { CuisineTabs as Tabs } from './Cuisine.components';

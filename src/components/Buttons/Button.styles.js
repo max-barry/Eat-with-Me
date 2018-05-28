@@ -26,7 +26,8 @@ export const ButtonBase = css(sInteractive, sFlexed, {
     margin: 0,
     lineHeight: 1,
     transition: `background-color ${time.weak}ms`,
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'relative'
 });
 
 export const buttonSimpleClass = css(
@@ -45,6 +46,8 @@ export const buttonSimpleClass = css(
     }
     &:focus {
         outline: none;
+    }
+    &:focus:not(:active) {
         border: 1px dashed ${colors.greyDark};
         background-color: ${darken(0.01, colors.grey2)};
     }
@@ -69,7 +72,7 @@ export const atcActiveClass = css(
         color: colors.white
     },
     `
-    &:focus {
+    &:focus:not(:active) {
         border-color: ${colors.white};
     }
     &:focus, &:hover {

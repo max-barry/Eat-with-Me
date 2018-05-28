@@ -6,15 +6,8 @@ import Checkbox from './Checkbox';
 import Toggle, { ToggleWithLabel } from './Toggle';
 import Chip from './Chip';
 import ChipLite from './ChipLite';
-import { colors } from '../../settings/styles';
 import RangeCheckbox from './RangeCheckbox';
-
-const props = {
-    id: 'someid',
-    name: 'somename',
-    checked: false,
-    onChange: () => console.log('Action')
-};
+import ChipDismissible from './ChipDismissible';
 
 storiesOf('Forms', module)
     .add(
@@ -29,7 +22,16 @@ storiesOf('Forms', module)
             />
         ))
     )
-    .add('Toggle', () => <Toggle {...props} />)
+    .add(
+        'Toggle',
+        withState({ checked: false })(({ store }) => (
+            <Toggle
+                name="somename"
+                checked={store.state.checked}
+                onChange={() => store.set({ checked: !store.state.checked })}
+            />
+        ))
+    )
     .add(
         'Toggle with label',
         withState({ checked: false })(({ store }) => (
@@ -57,31 +59,36 @@ storiesOf('Forms', module)
         'Chip (green)',
         withState({ checked: false })(({ store }) => (
             <Chip
-                {...props}
                 checked={store.state.checked}
                 onChange={() => store.set({ checked: !store.state.checked })}
+                name="mexican"
                 label="Mexican"
                 color="#B5FED9"
                 textColor="white"
             />
         ))
     )
-
     .add(
         'ChipLite',
-        withState({ checked: false })(({ store }) => {
-            return (
-                <ChipLite
-                    label="Mexican"
-                    name="mexican"
-                    checked={store.state.checked}
-                    onChange={() => {
-                        store.set({ checked: !store.state.checked });
-                    }}
-                />
-            );
-        })
+        withState({ checked: false })(({ store }) => (
+            <ChipLite
+                label="Mexican"
+                name="mexican"
+                checked={store.state.checked}
+                onChange={() => {
+                    store.set({ checked: !store.state.checked });
+                }}
+            />
+        ))
     )
+    .add('ChipDismissible', () => (
+        <ChipDismissible
+            label={faker.lorem.words(2)}
+            actionLabel={faker.lorem.words(5)}
+            action={() => console.log('Action')}
+            dismiss={() => console.log('Dismissed')}
+        />
+    ))
     .add(
         'RangeCheckbox',
         withState({

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Spring, animated } from 'react-spring';
 import { interpolate } from 'flubber'; // Polymorph is a small alternative
 
+// TODO : Remove all the silly state stuff and just add a "from" "to" on the parent
+
 class Svg extends Component {
     state = {
         previousPath: this.props.path,

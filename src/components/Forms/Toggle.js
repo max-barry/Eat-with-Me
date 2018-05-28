@@ -13,6 +13,8 @@ import {
 import { requiredPropTypes } from './Forms.shared';
 import { colors } from '../../settings/styles';
 
+// TODO : Make this totally controlled by the parent
+
 const enhanceToggle = compose(
     onlyUpdateForKeys(['checked']),
     setPropTypes(requiredPropTypes)

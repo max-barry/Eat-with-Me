@@ -13,7 +13,7 @@ import {
     shadows
 } from '../../settings/styles';
 
-export const CheckboxCheckedClass = 'CheckboxBox--checked';
+export const checkboxCheckedClass = 'CheckboxBox--checked';
 
 export const CheckboxContainer = styled('div')(sFlexed, {
     alignItems: 'center'
@@ -30,7 +30,7 @@ export const CheckboxLabel = styled('label')(
     `&:last-child { margin-bottom: 0; }`
 );
 
-export const CheckboxBoxWrap = css(
+export const checkboxBoxWrapClass = css(
     sFlexedCenter,
     sInteractive,
     {
@@ -40,7 +40,7 @@ export const CheckboxBoxWrap = css(
     `&:focus {outline: 0}`
 );
 
-export const CheckboxBoxInnerStyles = css(
+export const checkboxBoxInnerClass = css(
     {
         display: 'block',
         borderRadius: dimensions.borderRadius,
@@ -52,37 +52,37 @@ export const CheckboxBoxInnerStyles = css(
         transition: `background-color ${transitionTimes.weak}ms`
     },
     `
-    .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}) & svg {
+    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}) & svg {
         opacity: 0;
     } 
-    .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}):focus & {
+    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):focus & {
         outline: 0;
         background-color: ${colors.grey1};
     }
-    .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}):focus & svg {
+    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):focus & svg {
         opacity: 0.2;
     }
-    .${CheckboxBoxWrap}:not(.${CheckboxCheckedClass}):hover & svg {
+    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):hover & svg {
         opacity: 0.1;
     }
-    .${CheckboxBoxWrap}.${CheckboxCheckedClass} & {
+    .${checkboxBoxWrapClass}.${checkboxCheckedClass} & {
         background-color: ${colors.secondary};
         border-color: ${colors.secondary};
     }
-    .${CheckboxBoxWrap}.${CheckboxCheckedClass}:focus & {
+    .${checkboxBoxWrapClass}.${checkboxCheckedClass}:focus & {
         background-color: ${colors.secondaryDark};
         box-shadow: ${shadows.focused};
     }
 `
 );
 
-export const CheckboxTitleStyles = css(shevy.h6, {
+export const checkboxTitleClass = css(shevy.h6, {
     em: {
         color: colors.greyDark
     }
 });
 
-export const CheckboxTagStyles = css(shevy.h6, {
+export const checkboxTagClass = css(shevy.h6, {
     color: colors.greyDark,
     fontWeight: shevy.content.fontWeight
 });

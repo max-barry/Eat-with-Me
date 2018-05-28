@@ -11,26 +11,25 @@ import {
 import PropTypes from 'prop-types';
 import { Spring, animated, config, interpolate } from 'react-spring';
 import posed, { PoseGroup } from 'react-pose';
-import { bs, shevy, colors, dimensions } from '../../settings/styles';
+import Ink from 'react-ink';
+import { bs, colors } from '../../settings/styles';
 import {
-    ButtonBase,
     buttonSimpleClass,
     atcClass,
     atcSecondTextClass,
     atcActiveClass
 } from './Button.styles';
-import { tick, cross, add } from '../SVGs/paths';
-import { tween } from 'popmotion';
-import pose from 'popmotion-pose';
+import { cross, add } from '../SVGs/paths';
 import Svg from '../SVGs';
 
 const enhanceButtonSimple = compose(
     setPropTypes({ onClick: PropTypes.func.isRequired })
 );
 
-const ButtonSimple = ({ children, className, ...props }) => (
+const ButtonSimple = ({ children, className, hasInk = true, ...props }) => (
     <button className={cx(buttonSimpleClass, className)} {...props}>
         {children}
+        {hasInk && <Ink duration={500} />}
     </button>
 );
 
@@ -71,6 +70,7 @@ export const ButtonAddToCollection = enhanceButtonAddToCollection(
             icon={added ? cross : add}
             fill={added ? colors.white : colors.black}
             className={cx(atcClass, added ? atcActiveClass : null)}
+            hasInk={false}
             {...props}
         >
             <Spring

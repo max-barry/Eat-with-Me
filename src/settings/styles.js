@@ -105,11 +105,14 @@ shevyConf.h6.fontWeight = fontWeights.medium;
 shevyConf.h6.marginBottom = 0;
 shevyConf.overline = {
     ...shevyConf.h6,
+    fontSize: 12,
     fontWeight: fontWeights.heavy,
     lineHeight: 1,
     color: colors.greyDark,
     textTransform: 'uppercase'
 };
+
+// TODO : Add an unselectable to the overline
 
 export const { lineHeightSpacing: lhs, baseSpacing: bs } = shevyConf;
 export const shevy = shevyConf;
