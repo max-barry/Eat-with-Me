@@ -1,9 +1,5 @@
 import styled from 'react-emotion';
-import {
-    fontWeights,
-    transitionTimes,
-    dimensions
-} from '../../settings/styles';
+import { transitionTimes, dimensions } from '../../settings/styles';
 
 const DIMENSION = dimensions.badge;
 
@@ -16,7 +12,6 @@ export const BadgeWrap = styled('span')(
         height: DIMENSION,
         borderRadius: '50%',
         textAlign: 'center',
-        fontWeight: fontWeights.medium,
         transformOrigin: 'center',
         transition: `transform ${transitionTimes.minimal}ms`
     },
