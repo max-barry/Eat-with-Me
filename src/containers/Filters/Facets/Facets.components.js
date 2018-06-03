@@ -3,43 +3,43 @@ import { css } from 'react-emotion';
 import { setPropTypes, compose, setDisplayName } from 'recompose';
 import PropTypes from 'prop-types';
 import { colors } from '../../../settings/styles';
-import ButtonLink from '../../../components/Buttons/ButtonLink';
+import { ButtonLink, ButtonSimpleIcon } from '../../../components/Buttons';
 import {
     FacetActionsList as List,
     FacetActionsListItem as ListItem
 } from './Facets.styles';
+import { cross } from '../../../components/SVGs/paths';
 
 const enhanceFacetActions = compose(
     setDisplayName('FacetActions'),
     setPropTypes({
-        applyAction: PropTypes.func.isRequired,
-        cancelAction: PropTypes.func.isRequired,
-        applyLabel: PropTypes.string,
-        cancelLabel: PropTypes.string
+        apply: PropTypes.func.isRequired,
+        cancel: PropTypes.func.isRequired,
+        clear: PropTypes.func
     })
 );
 
 // TODO : Add a reset button
 
-export const FacetActions = enhanceFacetActions(
-    ({
-        applyAction,
-        cancelAction,
-        applyLabel = 'Apply',
-        cancelLabel = 'Cancel'
-    }) => (
-        <List>
+export const FacetActions = enhanceFacetActions(({ apply, cancel, clear }) => (
+    <List>
+        {clear && (
             <ListItem>
-                <ButtonLink onClick={cancelAction}>{cancelLabel}</ButtonLink>
+                <ButtonSimpleIcon onClick={() => clear()} icon={cross}>
+                    Clear all
+                </ButtonSimpleIcon>
             </ListItem>
-            <ListItem>
-                <ButtonLink
-                    onClick={applyAction}
-                    className={css({ color: colors.primaryDark })}
-                >
-                    {applyLabel}
-                </ButtonLink>
-            </ListItem>
-        </List>
-    )
-);
+        )}
+        <ListItem>
+            <ButtonLink onClick={() => cancel()}>Cancel</ButtonLink>
+        </ListItem>
+        <ListItem>
+            <ButtonLink
+                onClick={() => apply()}
+                className={css({ color: colors.primaryDark })}
+            >
+                Apply
+            </ButtonLink>
+        </ListItem>
+    </List>
+));

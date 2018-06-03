@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { default as ReactModal } from 'react-modal';
 import PropTypes from 'prop-types';
-import { setPropTypes, compose, mapProps } from 'recompose';
+import { setPropTypes, compose, onlyUpdateForKeys } from 'recompose';
 
 ReactModal.setAppElement('#root');
 
@@ -16,6 +16,7 @@ class ModalComponent extends Component {
 }
 
 const enhance = compose(
+    onlyUpdateForKeys(['children', 'isOpen']),
     setPropTypes({
         onRequestClose: PropTypes.func.isRequired,
         isOpen: PropTypes.oneOfType([PropTypes.bool, PropTypes.func])

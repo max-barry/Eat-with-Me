@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { compose } from 'recompose';
 // import ChipLite from '../../../../components/Forms/ChipLite';
-import Chip from '../../../../components/Forms/Chip';
+import { Chip } from '../../../../components/Forms';
 import {
     cuisineTabsClass as tabsClass,
     cuisineHeaderListClass as headerListClass,
@@ -14,9 +14,9 @@ import { withPanelledUpdate } from '../Facets.shared';
 import { Badge } from '../../../../components/Forms';
 import { bsint, dimensions } from '../../../../settings/styles';
 
-const enhance = compose(withPanelledUpdate);
+// const enhance = compose(withPanelledUpdate);
 
-export const CuisineTabs = enhance(({ items, update }) => (
+export const CuisineTabs = ({ items, update }) => (
     <Tabs className={tabsClass}>
         <TabList className={headerListClass}>
             {items.map((panel, i) => (
@@ -50,10 +50,10 @@ export const CuisineTabs = enhance(({ items, update }) => (
                         label={cuisine.label}
                         checked={cuisine.isRefined}
                         name={`cuisine_${z}`}
-                        onChange={_ => update(panel.name, cuisine.label)}
+                        onChange={_ => update(cuisine.label)}
                     />
                 ))}
             </TabPanel>
         ))}
     </Tabs>
-));
+);

@@ -12,6 +12,7 @@ const withSearch = BaseComponent => props => (
         appId={ALGOLIA_APP_ID}
         apiKey={ALGOLIA_API_KEY}
         indexName={ALGOLIA_RESTAURANTS_INDEX}
+        onSearchStateChange={console.log}
     >
         <BaseComponent {...props} />
     </InstantSearch>

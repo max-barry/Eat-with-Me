@@ -28,8 +28,8 @@ const FilterPrice = Loadable({
 });
 
 export const facetDictionary = {
-    [FACET_QUARTER]: { component: FilterQuarter },
-    [FACET_EXTRAS]: { component: FilterExtras },
-    [FACET_CUISINE]: { component: FilterCuisine },
-    [FACET_PRICE]: { component: FilterPrice }
+    [FACET_QUARTER]: FilterQuarter,
+    [FACET_EXTRAS]: FilterExtras,
+    [FACET_CUISINE]: FilterCuisine,
+    [FACET_PRICE]: FilterPrice
 };

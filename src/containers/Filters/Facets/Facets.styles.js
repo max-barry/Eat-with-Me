@@ -2,7 +2,8 @@ import styled from 'react-emotion';
 import { shevy, colors, fontWeights, bs } from '../../../settings/styles';
 
 export const FacetActionsList = styled('ul')(shevy.h6, {
-    display: 'block',
+    display: 'flex',
+    justifyContent: 'flex-end',
     textAlign: 'right',
     marginLeft: 'auto',
     paddingTop: bs(0.75),
@@ -17,6 +18,6 @@ export const FacetActionsListItem = styled('li')(
         fontWeight: fontWeights.medium
     },
     `
-    &:first-child {margin-right: ${bs(2)};}
+    &:not(:last-child) { margin-right: ${bs(2)}; }
     `
 );

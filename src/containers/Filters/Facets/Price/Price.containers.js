@@ -6,26 +6,23 @@ import { FacetActions as Actions } from '../Facets.components';
 import { FACET_PRICE } from '../../Filters.shared';
 import { PriceOptions as Options } from './Price.components';
 import { withFacetAll } from '../Facets.shared';
+import { withPropsChecker } from '../../../../hocs/Debug/debug';
 
-const Price = ({ items, update, save, onRequestClose }) => (
+const Price = ({ items, update, actions }) => (
     <Fragment>
         <Options items={items} onChange={value => update(value)} />
-        <Actions applyAction={_ => save()} cancelAction={onRequestClose} />
+        <Actions {...actions} />
     </Fragment>
 );
 
 const enhance = compose(
-    setPropTypes({
-        onRequestClose: PropTypes.func.isRequired,
-        defaultRefinement: PropTypes.array.isRequired,
-        updateVirtuals: PropTypes.func.isRequired
-    }),
     withPropsOnChange(['defaultRefinement'], ({ defaultRefinement }) => ({
         defaultRefinement,
         attribute: FACET_PRICE
     })),
     connectRefinementList,
-    withFacetAll
+    withFacetAll,
+    withPropsChecker
 );
 
 export default enhance(Price);

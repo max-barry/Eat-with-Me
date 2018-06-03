@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createFactory } from 'react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
@@ -17,24 +17,30 @@ import {
 import {
     FiltersContainer as Container,
     FiltersButtonList as ButtonList,
-    // FiltersStatusArea as StatusArea,
-    filtersModalAdvanced,
     filtersModalSimple,
     FILTER_NAV_SPACING
 } from './Filters.styles';
 import { cuisineActions } from '../../redux/ducks/cuisine';
+import {
+    // CurrentRefinements,
+    connectCurrentRefinements
+} from 'react-instantsearch/connectors';
+import { orderBy } from 'lodash';
 
-// replace pure with updatewith... (the better one)
+// TODO : You connect to the redux store and use that to populate the ITEMS key on the content
+// OR can you use the context API like the VirtualRefinement does? Just pull in the context and wrap the content
 
 class Filters extends Component {
     state = {
         open: false,
-        content: {},
+        content: null,
         contentKey: null,
+        // contentItems: [],
         [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
         [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
         [FACET_CUISINE]: initialRefinements[FACET_CUISINE],
         [FACET_PRICE]: initialRefinements[FACET_PRICE],
+        hasValue: {},
         style: {
             left: 0,
             top: 0
@@ -48,12 +54,20 @@ class Filters extends Component {
         [FACET_EXTRAS]: 'More...'
     };
     containerRef = React.createRef();
+    virtualRefs = {
+        [FACET_QUARTER]: React.createRef(),
+        [FACET_CUISINE]: React.createRef(),
+        [FACET_PRICE]: React.createRef(),
+        // [null, null,
+        [FACET_IS_BAR]: React.createRef()
+    };
 
     constructor(props) {
         super(props);
-        this.updateVirtuals = this.updateVirtuals.bind(this);
-        this.clearFacet = this.clearFacet.bind(this);
+        // this.updateVirtuals = this.updateVirtuals.bind(this);
+        this.clear = this.clear.bind(this);
         this.onRequestClose = this.onRequestClose.bind(this);
+        this.apply = this.apply.bind(this);
     }
 
     get container() {
@@ -75,7 +89,20 @@ class Filters extends Component {
         this.props.fetchCuisinesFromCacheFirst();
     }
 
+    getCurrentOpenItems(contentKey) {
+        const key = contentKey || this.state.contentKey;
+        if (!key) return null;
+        const virtual = this.virtualRefs[key].current;
+        return orderBy(
+            virtual.state.props.items,
+            ['count', 'label'],
+            ['desc', 'asc']
+        );
+    }
+
     openFilter(event, contentKey) {
+        // Check we're not just reopening an already open facet
+        if (contentKey === this.state.contentKey && this.state.open) return;
         // Get the bounding rect of the clicked element
         // to work out left value
         let { left, bottom } = event.target.getBoundingClientRect();
@@ -95,33 +122,76 @@ class Filters extends Component {
                 0
             )
         );
+        // Some useful variables
+        const { open, rendered, ...state } = this.state;
         // We need to check if the filters are already open
         // and save them down if they are
-        if (this.state.open && this.rendered) {
-            this.rendered.props.save(true);
+        if (open && rendered) {
+            rendered.props.save(true);
         }
+        // Now get the ref of the virtual representing this facet
+        // const items = virtual.state.props.items;
+        const contentProps = {
+            // items,
+            close: this.onRequestClose,
+            apply: this.apply,
+            // refine: this.updateVirtuals,
+            onMount: rendered => (this.rendered = rendered),
+            clear: () => this.clear(contentKey)
+        };
+        // Get the virtual (and it's current items) from the dict of refs
+        const virtual = this.virtualRefs[contentKey].current;
         // Set the new state with the left value and an open filter
         this.setState({
-            contentKey,
-            open: true,
             content: facetDictionary[contentKey],
+            contentKey,
+            contentProps,
+            // contentItems: this.getCurrentOpenItems(contentKey),
+            open: true,
             style: {
-                ...this.state.style,
+                ...state.style,
                 top: bottom + FILTER_NAV_SPACING,
                 left
             }
         });
     }
 
-    updateVirtuals(refinements, close = true) {
+    // updateVirtuals(refinements) {
+    //     const contentKey = this.state.contentKey;
+    //     const virtual = this.virtualRefs[contentKey].current;
+    //     // console.log(virtual.state.props);
+    //     // Run a refine
+    //     // console.log(refinements);
+    //     console.log(refinements);
+    //     virtual.refine(refinements);
+    //     // console.log('update virtual exit');
+    //     // const newRefinedVirtual = this.virtualRefs[contentKey].current;
+    //     // console.log(newRefinedVirtual);
+    //     // this.setState({
+    //     //     [contentKey]: refinements,
+    //     //     contentItems: newRefinedVirtual.state.props.items
+    //     // });
+    // }
+
+    apply(refinements, close = true) {
+        const state = this.state;
+        const contentKey = state.contentKey;
+        // Refine the virtuals
+        const virtual = this.virtualRefs[contentKey].current;
+        virtual.refine(refinements);
+        // Update the state
         this.setState({
-            [this.state.contentKey]: refinements,
-            open: !close
+            [contentKey]: refinements,
+            open: !close,
+            hasValue: {
+                ...state.hasValue,
+                [contentKey]: refinements.some(n => n)
+            }
         });
     }
 
-    clearFacet(facet) {
-        console.log('Clear it');
+    clear(facet) {
+        console.log('Clear it: ' + facet);
     }
 
     onRequestClose() {
@@ -130,68 +200,69 @@ class Filters extends Component {
 
     render() {
         const {
+            hasValue,
+            contentProps,
+            contentKey,
+            contentItems,
             style: styleProps,
-            content: { component: Content, modalAdvanced = false },
+            content: Content,
             ...state
         } = this.state;
 
         const navigation = Object.entries(this.navigation);
         const virtualsDict = this.virtuals;
         const virtuals = Object.entries(virtualsDict);
+        const openItems = this.getCurrentOpenItems();
+        // console.log('rerender');
 
         return (
             <div ref={this.containerRef}>
                 <Container>
                     <ButtonList>
-                        {navigation.map(([facet, label], i) => {
-                            const virtual = virtualsDict[facet];
-                            const hasValue =
-                                virtual !== undefined
-                                    ? virtual.some(n => n)
-                                    : Object.entries(state[facet]).some(
-                                          ([k, v]) => v.some(z => z)
-                                      );
-                            return (
-                                <FilterButton
-                                    key={`filter_button_${i}`}
-                                    onClick={e => this.openFilter(e, facet)}
-                                    children={label}
-                                    hasValue={hasValue}
-                                />
-                            );
-                        })}
+                        {navigation.map(([facet, label], i) => (
+                            <FilterButton
+                                key={`filter_button_${i}`}
+                                onClick={e => this.openFilter(e, facet)}
+                                children={label}
+                                hasValue={!!hasValue[facet]}
+                            />
+                        ))}
                     </ButtonList>
                     {/* <StatusArea>{statuses}</StatusArea> */}
                 </Container>
                 <div id="FilterCanvasWrap">
                     <Modal
-                        isOpen={this.state.open}
+                        isOpen={state.open}
                         contentLabel="Filter tools modal"
                         onRequestClose={this.onRequestClose}
-                        style={
-                            modalAdvanced
-                                ? filtersModalAdvanced(styleProps)
-                                : filtersModalSimple(styleProps)
-                        }
+                        style={filtersModalSimple(styleProps)}
                     >
                         {Content && (
-                            <Content
-                                onRequestClose={this.onRequestClose}
-                                onMount={rendered => (this.rendered = rendered)}
-                                defaultRefinement={
-                                    this.state[this.state.contentKey]
-                                }
-                                updateVirtuals={this.updateVirtuals}
-                            />
-                        )}
+                            <Content {...contentProps} initial={openItems} />
+                        )
+                        // <Content
+                        //     onRequestClose={this.onRequestClose}
+                        //     updateVirtuals={this.updateVirtuals}
+                        //     onMount={rendered => (this.rendered = rendered)}
+                        //     clearFacet={() =>
+                        //         this.clearFacet(this.state.contentKey)
+                        //     }
+                        //     refinement={this.state[this.state.contentKey]}
+                        //     defaultRefinement={
+                        //         this.state[this.state.contentKey]
+                        //     }
+                        // />
+                        }
                     </Modal>
                 </div>
 
                 {virtuals.map(([facet, current], z) => (
                     <VirtualRefinement
+                        ref={this.virtualRefs[facet]}
                         key={`virtual_${z}`}
                         attribute={facet}
-                        defaultRefinement={current}
+                        limit={20}
+                        // defaultRefinement={current}
                     />
                 ))}
             </div>
@@ -199,6 +270,9 @@ class Filters extends Component {
     }
 }
 
-const enhance = compose(connect(pick(['cuisine']), cuisineActions));
+const enhance = compose(
+    connectCurrentRefinements,
+    connect(pick(['cuisine']), cuisineActions)
+);
 
 export default enhance(Filters);

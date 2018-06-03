@@ -18,7 +18,8 @@ import {
 import {
     withFacetSave,
     withFacetLifecycle,
-    withFacetPropTypes
+    withFacetPropTypes,
+    withCondenseFacetActions
 } from '../Facets.shared';
 
 const enhanceBars = compose(
@@ -62,10 +63,7 @@ class ExtraFilters extends Component {
                         onChange={this.onBarChange}
                     />
                 </Wrap>
-                <Actions
-                    applyAction={() => this.props.save()}
-                    cancelAction={this.props.onRequestClose}
-                />
+                <Actions {...this.props.actions} />
             </Container>
         );
     }
@@ -84,10 +82,11 @@ const enhance = compose(
         }
     ),
     withHandlers({
-        save: ({ updateVirtuals, refinement }) => (force = false) =>
-            updateVirtuals(refinement, !force)
+        save: ({ apply, refinement }) => (force = false) =>
+            apply(refinement, !force)
     }),
-    withFacetLifecycle
+    withFacetLifecycle,
+    withCondenseFacetActions
 );
 
 export default enhance(ExtraFilters);
