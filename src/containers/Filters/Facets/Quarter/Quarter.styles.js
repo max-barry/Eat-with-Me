@@ -1,4 +1,4 @@
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import { bs } from '../../../../settings/styles';
 
 export const QUARTER_ITEM_WIDTH = 360;
@@ -20,10 +20,9 @@ export const QuarterListItem = styled('li')(
     `
 );
 
-export const QuarterTag = styled('span')(
+export const quarterTagClass = css(
     {
         maxWidth: 300,
-        // paddingRight: bs(),
         display: 'block',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
