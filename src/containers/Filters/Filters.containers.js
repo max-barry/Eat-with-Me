@@ -1,4 +1,4 @@
-import React, { Component, createFactory } from 'react';
+import React, { Component } from 'react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
@@ -85,19 +85,40 @@ class Filters extends Component {
         };
     }
 
+    get extraKeys() {
+        return Object.keys(this.state[FACET_EXTRAS]);
+    }
+
     componentDidMount() {
         this.props.fetchCuisinesFromCacheFirst();
     }
 
+    orderItems(items) {
+        return orderBy(items, ['count', 'label'], ['desc', 'asc']);
+    }
+
     getCurrentOpenItems(contentKey) {
+        let items = null;
         const key = contentKey || this.state.contentKey;
-        if (!key) return null;
-        const virtual = this.virtualRefs[key].current;
-        return orderBy(
-            virtual.state.props.items,
-            ['count', 'label'],
-            ['desc', 'asc']
-        );
+        // If it's the extras tab, we need to source from multiple virtuals
+        if (key === FACET_EXTRAS) {
+            // Reduce a list of the extras until you've built an object
+            // with a key per extra facet and the standard
+            // items array as the value of that key
+            items = this.extraKeys.reduce((acc, cur) => {
+                const virtual = this.virtualRefs[cur].current;
+                acc[cur] = this.orderItems(virtual.state.props.items);
+                return acc;
+            }, {});
+        } else if (key) {
+            // Otherwise just check we have a key (first render won't)
+            // and grab the virtual for that key
+            const virtual = this.virtualRefs[key].current;
+            // Now fish out the items for that virtual an order them
+            items = this.orderItems(virtual.state.props.items);
+        }
+        // Return the items
+        return items;
     }
 
     openFilter(event, contentKey) {
@@ -140,7 +161,7 @@ class Filters extends Component {
             clear: () => this.clear(contentKey)
         };
         // Get the virtual (and it's current items) from the dict of refs
-        const virtual = this.virtualRefs[contentKey].current;
+        // const virtual = this.virtualRefs[contentKey].current;
         // Set the new state with the left value and an open filter
         this.setState({
             content: facetDictionary[contentKey],
@@ -156,36 +177,42 @@ class Filters extends Component {
         });
     }
 
-    // updateVirtuals(refinements) {
-    //     const contentKey = this.state.contentKey;
-    //     const virtual = this.virtualRefs[contentKey].current;
-    //     // console.log(virtual.state.props);
-    //     // Run a refine
-    //     // console.log(refinements);
-    //     console.log(refinements);
-    //     virtual.refine(refinements);
-    //     // console.log('update virtual exit');
-    //     // const newRefinedVirtual = this.virtualRefs[contentKey].current;
-    //     // console.log(newRefinedVirtual);
-    //     // this.setState({
-    //     //     [contentKey]: refinements,
-    //     //     contentItems: newRefinedVirtual.state.props.items
-    //     // });
-    // }
-
     apply(refinements, close = true) {
+        let hasValue;
         const state = this.state;
         const contentKey = state.contentKey;
-        // Refine the virtuals
-        const virtual = this.virtualRefs[contentKey].current;
-        virtual.refine(refinements);
+        // If this is the extras then you need to refine multiple virtuals
+        if (contentKey === FACET_EXTRAS) {
+            // The extras come in as an object with keys for each extra facet
+            // e.g. {IS_BAR: []}
+            // Loop over the keys of extras
+            this.extraKeys.forEach(key => {
+                const virtual = this.virtualRefs[key].current;
+                // If you have a value then refine the virtual
+                if (refinements[key]) {
+                    virtual.refine(refinements[key]);
+                }
+            });
+            // Check if all the refined facets then .some it to check if we have a value
+            hasValue = Object.entries(refinements).some(([k, v]) =>
+                v.some(n => n)
+            );
+        } else {
+            // For anything that isn't the Extras it's pretty simple
+            // Get the ref for the virtual for this key
+            const virtual = this.virtualRefs[contentKey].current;
+            // Run a refine function
+            virtual.refine(refinements);
+            // If there are any truthy values in the refinements then it has a value
+            hasValue = refinements.some(n => n);
+        }
         // Update the state
         this.setState({
             [contentKey]: refinements,
             open: !close,
             hasValue: {
                 ...state.hasValue,
-                [contentKey]: refinements.some(n => n)
+                [contentKey]: hasValue
             }
         });
     }
@@ -213,7 +240,6 @@ class Filters extends Component {
         const virtualsDict = this.virtuals;
         const virtuals = Object.entries(virtualsDict);
         const openItems = this.getCurrentOpenItems();
-        // console.log('rerender');
 
         return (
             <div ref={this.containerRef}>
@@ -228,7 +254,6 @@ class Filters extends Component {
                             />
                         ))}
                     </ButtonList>
-                    {/* <StatusArea>{statuses}</StatusArea> */}
                 </Container>
                 <div id="FilterCanvasWrap">
                     <Modal
@@ -239,20 +264,7 @@ class Filters extends Component {
                     >
                         {Content && (
                             <Content {...contentProps} initial={openItems} />
-                        )
-                        // <Content
-                        //     onRequestClose={this.onRequestClose}
-                        //     updateVirtuals={this.updateVirtuals}
-                        //     onMount={rendered => (this.rendered = rendered)}
-                        //     clearFacet={() =>
-                        //         this.clearFacet(this.state.contentKey)
-                        //     }
-                        //     refinement={this.state[this.state.contentKey]}
-                        //     defaultRefinement={
-                        //         this.state[this.state.contentKey]
-                        //     }
-                        // />
-                        }
+                        )}
                     </Modal>
                 </div>
 
@@ -262,7 +274,6 @@ class Filters extends Component {
                         key={`virtual_${z}`}
                         attribute={facet}
                         limit={20}
-                        // defaultRefinement={current}
                     />
                 ))}
             </div>

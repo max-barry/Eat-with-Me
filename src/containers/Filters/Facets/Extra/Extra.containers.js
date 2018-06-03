@@ -1,39 +1,13 @@
 import React, { Component } from 'react';
-import {
-    compose,
-    withProps,
-    withHandlers,
-    setDisplayName,
-    hoistStatics,
-    withStateHandlers
-} from 'recompose';
-import { connectRefinementList } from 'react-instantsearch/connectors';
+import { compose, withHandlers, withStateHandlers } from 'recompose';
 import { FacetActions as Actions } from '../Facets.components';
-import { FACET_IS_BAR, FACET_EXTRAS } from '../../Filters.shared';
+import { FACET_IS_BAR } from '../../Filters.shared';
 import { FacetBars as Bars } from './Extra.components';
 import {
     ExtrasContainer as Container,
     ExtrasFilterWrap as Wrap
 } from './Extra.styles';
-import {
-    withFacetSave,
-    withFacetLifecycle,
-    withFacetPropTypes,
-    withCondenseFacetActions
-} from '../Facets.shared';
-
-const enhanceBars = compose(
-    setDisplayName('EnhancedBars'),
-    withProps(props => ({
-        attribute: FACET_IS_BAR
-    })),
-    connectRefinementList,
-    withHandlers({
-        onChange: props => _ => props.onChange(props.refine)
-    })
-);
-
-const EnhancedBars = enhanceBars(Bars);
+import { withFacetShared } from '../Facets.shared';
 
 class ExtraFilters extends Component {
     constructor(props) {
@@ -42,25 +16,31 @@ class ExtraFilters extends Component {
     }
 
     get barRefinements() {
-        return this.props.refinement[FACET_IS_BAR].map(r => r.toString());
+        // The bar refinement will come in as an array with two items (false and true)
+        // it will have a isRefined and label etc. but I'm ignoring that junk
+        // Grab the first of these two array elements (it doesn't matter which)
+        const firstRefinement = this.props.refinement[FACET_IS_BAR][0];
+        // Now get the "value" key from this first refinement. This will be an array
+        // of either [false] or [true, false]. Map these to strings.
+        return firstRefinement.value.map(r => r.toString());
     }
 
-    onBarChange(refine) {
-        const includeBars =
-            this.barRefinements.length === 1 ? [true, false] : [false];
+    onBarChange(result) {
+        const items = this.props.refinement[FACET_IS_BAR].map(item => {
+            item.value = result ? [true, false] : [false];
+            return item;
+        });
 
-        refine(includeBars);
-
-        this.props.updateFacetComponents(FACET_IS_BAR, includeBars);
+        this.props.update(FACET_IS_BAR, items);
     }
 
     render() {
         return (
             <Container>
                 <Wrap>
-                    <EnhancedBars
-                        defaultRefinement={this.barRefinements}
-                        onChange={this.onBarChange}
+                    <Bars
+                        refinement={this.barRefinements}
+                        update={this.onBarChange}
                     />
                 </Wrap>
                 <Actions {...this.props.actions} />
@@ -70,23 +50,30 @@ class ExtraFilters extends Component {
 }
 
 const enhance = compose(
-    withFacetPropTypes,
     withStateHandlers(
-        ({ defaultRefinement }) => ({
-            refinement: { ...defaultRefinement }
+        ({ initial }) => ({
+            lastUpdate: null,
+            refinement: { ...initial }
         }),
         {
-            updateFacetComponents: ({ refinement }) => (key, value) => ({
+            update: ({ refinement }) => (key, value) => ({
                 refinement: { ...refinement, [key]: value }
             })
         }
     ),
     withHandlers({
-        save: ({ apply, refinement }) => (force = false) =>
-            apply(refinement, !force)
+        save: ({ apply, refinement }) => (force = false) => {
+            apply(
+                Object.entries(refinement).reduce((acc, [k, v]) => {
+                    // TODO : Temporary. Will only really work on the <Bar />
+                    acc[k] = v[0].value;
+                    return acc;
+                }, {}),
+                !force
+            );
+        }
     }),
-    withFacetLifecycle,
-    withCondenseFacetActions
+    withFacetShared
 );
 
 export default enhance(ExtraFilters);

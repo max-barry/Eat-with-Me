@@ -52,7 +52,8 @@ export const withFacetPropTypes = setPropTypes({
     // save: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
-    initial: PropTypes.array.isRequired,
+    initial: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+        .isRequired,
     clear: PropTypes.func
     // defaultRefinement: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
     // .isRequired
