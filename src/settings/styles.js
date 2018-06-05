@@ -69,7 +69,9 @@ export const fontWeights = {
 export const transitionTimes = {
     weak: 65,
     minimal: 110,
-    short: 300
+    short: 300,
+    ink: 500,
+    pageMovement: 700
 };
 
 export const easings = {

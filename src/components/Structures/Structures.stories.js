@@ -1,30 +1,44 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
 import faker from 'faker';
-import { Card, CardCompact } from './Card';
-import { tick, add } from '../SVGs/paths';
-import {
+import { css } from 'emotion';
+import { Card } from './Card';
+import Drawer from './Drawer';
+import { tick } from '../SVGs/paths';
+import ButtonSimple, {
     ButtonSimpleIcon,
     ButtonAddToCollection
 } from '../Buttons/ButtonSimple';
+import { bs, colors } from '../../settings/styles';
 
 const action = _ => console.log('Clicked');
-const makeCompact = _ => ({
-    title: faker.company.catchPhrase(),
-    deck: faker.company.catchPhrase(),
-    id: faker.lorem.word() + (Math.random() * 10).toFixed(2),
-    strap: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()].join(
-        ' • '
-    )
-});
-const randomCompacts = _ =>
-    Array(Math.floor(Math.random() * 6) + 2)
-        .fill()
-        .map(_ => makeCompact());
 
 storiesOf('Structures', module)
+    .add(
+        'Drawer',
+        withState({ isOpen: false })(({ store }) => (
+            <div>
+                <ButtonSimple onClick={() => store.set({ isOpen: true })}>
+                    Open
+                </ButtonSimple>
+                <Drawer
+                    isOpen={store.state.isOpen}
+                    overlayClass={css({ backgroundColor: colors.grey1 })}
+                    contentClass={css({ backgroundColor: colors.grey2 })}
+                >
+                    <div style={{ padding: bs() }}>
+                        <ButtonSimple
+                            onClick={() => store.set({ isOpen: false })}
+                        >
+                            Close
+                        </ButtonSimple>
+                    </div>
+                </Drawer>
+            </div>
+        ))
+    )
     .addDecorator(centered)
     .add('Card', () => (
         <Card
@@ -62,13 +76,3 @@ storiesOf('Structures', module)
             />
         ))
     );
-// .add(
-//     'Card.Compact',
-//     withState({ expanded: false, props: makeCompact() })(({ store }) => (
-//         <CardCompact
-//             {...store.state.props}
-//             isExpanded={store.state.expanded}
-//             onClick={() => store.set({ expanded: !store.state.expanded })}
-//         />
-//     ))
-// );

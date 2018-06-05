@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
+import { connectCurrentRefinements } from 'react-instantsearch/connectors';
+import { orderBy } from 'lodash';
+// import Dock from 'react-dock';
 import { Modal } from '../../hocs/Modal/Modal';
 import { dimensions, mediaQueries } from '../../settings/styles';
 import { facetDictionary } from './Facets';
@@ -21,8 +24,7 @@ import {
     FILTER_NAV_SPACING
 } from './Filters.styles';
 import { cuisineActions } from '../../redux/ducks/cuisine';
-import { connectCurrentRefinements } from 'react-instantsearch/connectors';
-import { orderBy } from 'lodash';
+import { Drawer } from '../../components/Structures';
 
 // TODO : You connect to the redux store and use that to populate the ITEMS key on the content
 // OR can you use the context API like the VirtualRefinement does? Just pull in the context and wrap the content
@@ -242,6 +244,7 @@ class Filters extends Component {
             contentProps,
             contentKey,
             contentItems,
+            isMobile,
             style: styleProps,
             content: Content,
             ...state
@@ -271,18 +274,31 @@ class Filters extends Component {
                     </ButtonList>
                 </Container>
                 <div id="FilterCanvasWrap">
-                    <Modal
-                        isOpen={state.open}
-                        contentLabel="Filter tools modal"
-                        onRequestClose={this.onRequestClose}
-                        closeTimeoutMS={150}
-                        className={contentClass}
-                        overlayClassName={overlayClass}
-                    >
-                        {Content && (
-                            <Content {...contentProps} initial={openItems} />
+                    {!isMobile &&
+                        Content && (
+                            <Modal
+                                isOpen={state.open}
+                                contentLabel="Filter tools modal"
+                                onRequestClose={this.onRequestClose}
+                                closeTimeoutMS={150}
+                                className={contentClass}
+                                overlayClassName={overlayClass}
+                            >
+                                <Content
+                                    {...contentProps}
+                                    initial={openItems}
+                                />
+                            </Modal>
                         )}
-                    </Modal>
+                    {isMobile &&
+                        Content && (
+                            <Drawer isOpen={state.open}>
+                                <Content
+                                    {...contentProps}
+                                    initial={openItems}
+                                />
+                            </Drawer>
+                        )}
                 </div>
 
                 {virtuals.map(([facet, current], z) => (
