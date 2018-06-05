@@ -12,6 +12,7 @@
         "apollo-link": "^1.2.2",
         "apollo-link-http": "^1.5.4",
         "apollo-link-state": "^0.4.1",
+        "delay": "^3.0.0",
         "emotion": "^9.1.0",
         "emotion-theming": "^9.1.2",
         "facepaint": "^1.2.1",
@@ -111,6 +112,7 @@
         "prettier": "^1.11.1",
         "pretty-quick": "^1.4.1",
         "react-icons": "^2.2.7",
-        "source-map-explorer": "^1.5.0"
+        "source-map-explorer": "^1.5.0",
+        "svgo": "^1.0.5"
     }
 }

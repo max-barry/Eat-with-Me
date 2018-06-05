@@ -37,7 +37,7 @@ storiesOf('Forms', module)
         ))
     )
     .add(
-        'Toggle with label',
+        'Toggle (with label)',
         withState({ checked: false })(({ store }) => (
             <ToggleWithLabel
                 title={() => 'Title for component'}
@@ -73,7 +73,7 @@ storiesOf('Forms', module)
         ))
     )
     .add(
-        'ChipLite',
+        'Chip.Lite',
         withState({ checked: false })(({ store }) => (
             <ChipLite
                 label="Mexican"
@@ -85,14 +85,14 @@ storiesOf('Forms', module)
             />
         ))
     )
-    .add('ChipDismissible', () => (
+    .add('Chip.Dismissible', () => (
         <ChipDismissible
             actionLabel={faker.lorem.words(5)}
             action={() => console.log('Action')}
             dismiss={() => console.log('Dismissed')}
         />
     ))
-    .add('ChipDismissible (with label + color)', () => (
+    .add('Chip.Dismissible (with label + color)', () => (
         <ChipDismissible
             label={faker.lorem.words(2)}
             actionLabel={faker.lorem.words(5)}

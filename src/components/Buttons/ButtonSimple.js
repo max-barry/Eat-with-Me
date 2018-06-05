@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { Spring, animated, config, interpolate } from 'react-spring';
 import posed, { PoseGroup } from 'react-pose';
 import Ink from 'react-ink';
-import { bs, colors } from '../../settings/styles';
+import { bs, colors, transitionTimes } from '../../settings/styles';
 import {
     buttonSimpleClass,
     atcClass,
@@ -29,7 +29,7 @@ const enhanceButtonSimple = compose(
 const ButtonSimple = ({ children, className, hasInk = true, ...props }) => (
     <button className={cx(buttonSimpleClass, className)} {...props}>
         {children}
-        {hasInk && <Ink duration={500} />}
+        {hasInk && <Ink duration={transitionTimes.ink} />}
     </button>
 );
 

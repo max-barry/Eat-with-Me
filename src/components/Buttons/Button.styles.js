@@ -14,7 +14,7 @@ import {
 } from '../../settings/styles';
 import { darken } from 'polished';
 
-export const ButtonBase = css(sInteractive, sFlexed, {
+export const buttonBaseClass = css(sInteractive, sFlexed, {
     fontFamily,
     fontWeight: fontWeights.medium,
     paddingTop: bs(0.5),
@@ -32,7 +32,7 @@ export const ButtonBase = css(sInteractive, sFlexed, {
 
 export const buttonSimpleClass = css(
     shevy.h6,
-    ButtonBase,
+    buttonBaseClass,
     {
         marginBottom: 0,
         height: dimensions.simpleButton,

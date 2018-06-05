@@ -8,7 +8,9 @@ import ButtonSimple, {
     ButtonAddToCollection
 } from './ButtonSimple';
 import ButtonLink from './ButtonLink';
-import { tick, cross, add } from '../SVGs/paths';
+import ButtonIcon from './ButtonIcon';
+import { tick, add } from '../SVGs/paths';
+import MapLocationSvg from '../SVGs/images/flaticons/map-location.svg';
 
 const action = _ => console.log('Clicked');
 const randomName = _ => `${faker.name.firstName()} ${faker.name.lastName()}`;
@@ -40,4 +42,9 @@ storiesOf('Buttons', module)
             />
         ))
     )
+    .add('Icon', () => (
+        <ButtonIcon icon={MapLocationSvg} onClick={action}>
+            Map it
+        </ButtonIcon>
+    ))
     .add('Link', () => <ButtonLink onClick={action}>Click me</ButtonLink>);

@@ -1,10 +1,10 @@
 import styled, { css } from 'react-emotion';
 import { bs, shevy, colors, dimensions } from '../../settings/styles';
 import { darken } from 'polished';
-import { ButtonBase } from './Button.styles';
+import { buttonBaseClass as base } from './Button.styles';
 
 export default styled('button')(
-    ButtonBase,
+    base,
     {
         ...shevy.h6,
         marginBottom: 0,
