@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
+import centered from '@storybook/addon-centered';
 import faker from 'faker';
 import Checkbox from './Checkbox';
 import Toggle, { ToggleWithLabel } from './Toggle';
@@ -12,6 +13,7 @@ import Badge from './Badge';
 import { colors } from '../../settings/styles';
 
 storiesOf('Forms', module)
+    .addDecorator(centered)
     .add(
         'Checkbox',
         withState({ checked: false })(({ store }) => (

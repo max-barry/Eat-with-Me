@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
+import centered from '@storybook/addon-centered';
 import faker from 'faker';
 import { Card, CardCompact } from './Card';
 import { tick, add } from '../SVGs/paths';
@@ -24,6 +25,7 @@ const randomCompacts = _ =>
         .map(_ => makeCompact());
 
 storiesOf('Structures', module)
+    .addDecorator(centered)
     .add('Card', () => (
         <Card
             title={faker.company.catchPhrase()}

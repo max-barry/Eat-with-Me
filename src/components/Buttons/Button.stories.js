@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import faker from 'faker';
+import centered from '@storybook/addon-centered';
 import ButtonSimple, {
     ButtonSimpleIcon,
     ButtonAddToCollection
@@ -13,6 +14,7 @@ const action = _ => console.log('Clicked');
 const randomName = _ => `${faker.name.firstName()} ${faker.name.lastName()}`;
 
 storiesOf('Buttons', module)
+    .addDecorator(centered)
     .add('Simple', () => <ButtonSimple onClick={action}>Click me</ButtonSimple>)
     .add(
         'Simple.Icon',

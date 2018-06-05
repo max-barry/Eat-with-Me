@@ -4,6 +4,7 @@ import { Hits } from 'react-instantsearch/dom';
 import faker from 'faker';
 import { compose, setDisplayName } from 'recompose';
 import { withState } from '@dump247/storybook-state';
+import centered from '@storybook/addon-centered';
 import { Provider } from '../../stories/decorators';
 import Filters from './Filters.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
@@ -53,11 +54,13 @@ storiesOf('Filters', module)
         )(() => <Filters />);
         return <Enhanced />;
     })
+    .addDecorator(centered)
     .add(
         'Quarter',
         withState({ items: makeRefinements(8) })(({ store }) => (
             <QuarterList
-                onChange={value => {
+                items={store.state.items}
+                update={value => {
                     store.set({
                         items: store.state.items.map(refinemnet => {
                             if (refinemnet.value === value)
@@ -66,7 +69,6 @@ storiesOf('Filters', module)
                         })
                     });
                 }}
-                items={store.state.items}
             />
         ))
     )
@@ -76,11 +78,11 @@ storiesOf('Filters', module)
             <CuisineTabs
                 items={store.state.items}
                 // onChange={onChange}
-                onChange={value => {
+                update={value => {
                     store.set({
                         items: store.state.items.map(panel => {
                             panel.items = panel.items.map(cuisine => {
-                                if (cuisine.value === value)
+                                if (cuisine.label === value)
                                     cuisine.isRefined = !cuisine.isRefined;
                                 return cuisine;
                             });
@@ -93,7 +95,7 @@ storiesOf('Filters', module)
     )
     .add('Price', () => (
         <PriceOptions
-            onChange={onChange}
+            update={onChange}
             items={[-1, 1, 2, 3, 4].map(v => ({
                 label: v.toString(),
                 value: v,
@@ -102,6 +104,6 @@ storiesOf('Filters', module)
         />
     ))
     .add('Extras.Bars', () => (
-        <FacetBars currentRefinement={[false]} onChange={onChange} />
+        <FacetBars refinement={[false]} update={onChange} />
     ))
     .add('Card List', () => <AddedList />);
