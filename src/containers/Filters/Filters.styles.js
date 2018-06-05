@@ -9,23 +9,33 @@ import {
     mq
 } from '../../settings/styles';
 
+const buttonAreaBorder = `1px solid ${colors.grey2}`;
+
 export const FILTER_NAV_SPACING = bsint(0.75);
 
-export const FiltersContainer = styled('nav')({
-    maxWidth: dimensions.container,
-    width: '100%',
-    borderBottom: `1px solid ${colors.grey2}`,
-    marginBottom: FILTER_NAV_SPACING,
-    paddingTop: FILTER_NAV_SPACING
-});
+export const FiltersContainer = styled('nav')(
+    mq({
+        maxWidth: dimensions.container,
+        width: '100%',
+        backgroundColor: ['transparent', 'white'],
+        position: ['relative', 'fixed'],
+        bottom: ['auto', 0],
+        // bottom: ['auto', 0],
+        borderTop: [0, buttonAreaBorder],
+        borderBottom: [buttonAreaBorder, 0],
+        marginBottom: [FILTER_NAV_SPACING, 0],
+        paddingTop: [FILTER_NAV_SPACING, 0]
+    })
+);
 
-const filtersNavBar = css(sFlexed, {
-    alignItems: 'center',
-    paddingBottom: FILTER_NAV_SPACING
-});
+export const FiltersButtonList = styled('ul')(
+    sFlexed,
+    mq({
+        alignItems: 'center',
+        paddingBottom: [FILTER_NAV_SPACING, 0]
+    })
+);
 
-export const FiltersButtonList = styled('ul')(filtersNavBar, {});
-// export const FiltersStatusArea = styled('div')(filtersNavBar, {});
 export const filtersModalSimple = ({ top, left }) => ({
     overlay: css({
         top,
