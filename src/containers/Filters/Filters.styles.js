@@ -5,7 +5,8 @@ import {
     bs,
     colors,
     shadows,
-    bsint
+    bsint,
+    mq
 } from '../../settings/styles';
 
 export const FILTER_NAV_SPACING = bsint(0.75);
@@ -25,9 +26,8 @@ const filtersNavBar = css(sFlexed, {
 
 export const FiltersButtonList = styled('ul')(filtersNavBar, {});
 // export const FiltersStatusArea = styled('div')(filtersNavBar, {});
-
 export const filtersModalSimple = ({ top, left }) => ({
-    overlay: {
+    overlay: css({
         top,
         position: 'absolute',
         left: 0,
@@ -35,8 +35,8 @@ export const filtersModalSimple = ({ top, left }) => ({
         bottom: 0,
         height: '100%',
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
-    },
-    content: {
+    }),
+    content: css({
         left,
         position: 'absolute',
         top: 0,
@@ -51,7 +51,7 @@ export const filtersModalSimple = ({ top, left }) => ({
         outline: 'none',
         boxShadow: shadows.overlay,
         padding: bs()
-    }
+    })
 });
 
 export const filtersModalAdvanced = ({ top, left }) => ({

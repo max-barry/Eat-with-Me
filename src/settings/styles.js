@@ -1,5 +1,6 @@
 import { css } from 'react-emotion';
 import Shevy from 'shevyjs';
+import facepaint from 'facepaint';
 
 export const sInteractive = css({
     cursor: 'pointer',
@@ -83,6 +84,16 @@ export const shadows = {
 };
 
 export const fontFamily = `"HK Nova", Helvetica Neue, sans-serif`;
+
+export const mediaQueries = {
+    mobile: 480,
+    tablet: 980,
+    desktop: 1280
+};
+
+export const mq = facepaint(
+    Object.entries(mediaQueries).map(([n, s]) => `@media(max-width: ${s}px)`)
+);
 
 const shevyConf = new Shevy({
     baseFontSize: '17px',
