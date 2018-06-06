@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Spring, animated } from 'react-spring';
-import { interpolate } from 'flubber'; // Polymorph is a small alternative
+import { interpolate } from 'flubber'; // TODO : Polymorph is a small alternative
+import ReactSVG from 'react-svg';
+import { cx, css } from 'emotion';
 
 // TODO : Remove all the silly state stuff and just add a "from" "to" on the parent
 
@@ -58,3 +60,15 @@ class Svg extends Component {
 }
 
 export default Svg;
+
+export const SvgImg = ({ className, color, ...props }) => (
+    <ReactSVG
+        svgClassName={cx(
+            className,
+            css({
+                [`& path, & circle, & rect`]: { color, fill: color }
+            })
+        )}
+        {...props}
+    />
+);

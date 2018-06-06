@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { pick } from 'ramda';
 import { connectCurrentRefinements } from 'react-instantsearch/connectors';
 import { orderBy } from 'lodash';
-// import Dock from 'react-dock';
+import MediaQuery from 'react-responsive';
 import { Modal } from '../../hocs/Modal/Modal';
-import { dimensions, mediaQueries } from '../../settings/styles';
+import { dimensions, breakpoints } from '../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
 import {
@@ -25,9 +25,25 @@ import {
 } from './Filters.styles';
 import { cuisineActions } from '../../redux/ducks/cuisine';
 import { Drawer } from '../../components/Structures';
+import { BottomBar } from '../../components/Navigation';
+import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
+import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
+import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
 
-// TODO : You connect to the redux store and use that to populate the ITEMS key on the content
-// OR can you use the context API like the VirtualRefinement does? Just pull in the context and wrap the content
+const SHARED_NAVIGATION = {
+    [FACET_QUARTER]: 'Region',
+    [FACET_CUISINE]: 'Cuisine'
+    // [null]: 'Neighborhood',
+};
+const DESKTOP_NAVIGATION = {
+    ...SHARED_NAVIGATION,
+    [FACET_PRICE]: 'Price',
+    [FACET_EXTRAS]: 'More...'
+};
+const MOBILE_NAVIGATION = {
+    ...SHARED_NAVIGATION,
+    [FACET_EXTRAS]: 'More filters'
+};
 
 class Filters extends Component {
     state = {
@@ -44,13 +60,6 @@ class Filters extends Component {
             left: 0,
             top: 0
         }
-    };
-    navigation = {
-        [FACET_QUARTER]: 'Region',
-        [FACET_CUISINE]: 'Cuisine',
-        [FACET_PRICE]: 'Price',
-        // [null]: 'Neighborhood',
-        [FACET_EXTRAS]: 'More...'
     };
     containerRef = React.createRef();
     virtualRefs = {
@@ -131,7 +140,7 @@ class Filters extends Component {
             width: containerWidth
         } = this.container.getBoundingClientRect();
         // Are we on mobile?
-        const isMobile = containerWidth <= mediaQueries.mobile;
+        const isMobile = containerWidth <= breakpoints.mobile;
 
         if (!isMobile) {
             // Okay so this is tablet / desktop
@@ -250,7 +259,6 @@ class Filters extends Component {
             ...state
         } = this.state;
 
-        const navigation = Object.entries(this.navigation);
         const virtualsDict = this.virtuals;
         const virtuals = Object.entries(virtualsDict);
         const openItems = this.getCurrentOpenItems();
@@ -262,16 +270,35 @@ class Filters extends Component {
         return (
             <div ref={this.containerRef}>
                 <Container>
-                    <ButtonList>
-                        {navigation.map(([facet, label], i) => (
-                            <FilterButton
-                                key={`filter_button_${i}`}
-                                onClick={e => this.openFilter(e, facet)}
-                                children={label}
-                                hasValue={!!hasValue[facet]}
-                            />
-                        ))}
-                    </ButtonList>
+                    <MediaQuery maxWidth={breakpoints.mobile}>
+                        <BottomBar
+                            items={Object.entries(MOBILE_NAVIGATION).map(
+                                ([facet, label]) => ({
+                                    label,
+                                    icon: {
+                                        [FACET_CUISINE]: worldwideSvg,
+                                        [FACET_QUARTER]: mapLocationSvg,
+                                        [FACET_EXTRAS]: moreSvg
+                                    }[facet],
+                                    onClick: e => this.openFilter(e, facet)
+                                })
+                            )}
+                        />
+                    </MediaQuery>
+                    <MediaQuery minWidth={breakpoints.mobile + 1}>
+                        <ButtonList>
+                            {Object.entries(DESKTOP_NAVIGATION).map(
+                                ([facet, label], i) => (
+                                    <FilterButton
+                                        key={`filter_button_${i}`}
+                                        onClick={e => this.openFilter(e, facet)}
+                                        children={label}
+                                        hasValue={!!hasValue[facet]}
+                                    />
+                                )
+                            )}
+                        </ButtonList>
+                    </MediaQuery>
                 </Container>
                 <div id="FilterCanvasWrap">
                     {!isMobile &&

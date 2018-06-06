@@ -17,7 +17,6 @@ export const FilterButton = onlyUpdateForKeys(['hasValue'])(
         <li {...props} className={filterButtonClass}>
             <ButtonSimple
                 onClick={onClick}
-                hasInk={false}
                 className={
                     hasValue
                         ? css`

@@ -41,7 +41,6 @@ const ChipDismissible = ({
                 )}
             >
                 {actionLabel}
-                <Ink duration={500} />
             </ActionButton>
             <DismissButton onClick={() => dismiss()}>
                 <Svg
@@ -50,7 +49,6 @@ const ChipDismissible = ({
                     height={11}
                     width={11}
                 />
-                <Ink duration={500} />
             </DismissButton>
         </Wrap>
         {label && <Label id="dismissable-chip-label">{label}</Label>}

@@ -26,10 +26,9 @@ const enhanceButtonSimple = compose(
     setPropTypes({ onClick: PropTypes.func.isRequired })
 );
 
-const ButtonSimple = ({ children, className, hasInk = true, ...props }) => (
+const ButtonSimple = ({ children, className, ...props }) => (
     <button className={cx(buttonSimpleClass, className)} {...props}>
         {children}
-        {hasInk && <Ink duration={transitionTimes.ink} />}
     </button>
 );
 
@@ -70,7 +69,6 @@ export const ButtonAddToCollection = enhanceButtonAddToCollection(
             icon={added ? cross : add}
             fill={added ? colors.white : colors.black}
             className={cx(atcClass, added ? atcActiveClass : null)}
-            hasInk={false}
             {...props}
         >
             <Spring

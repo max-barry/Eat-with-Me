@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import faker from 'faker';
 import centered from '@storybook/addon-centered';
+import { css } from 'emotion';
 import ButtonSimple, {
     ButtonSimpleIcon,
     ButtonAddToCollection
@@ -10,7 +11,8 @@ import ButtonSimple, {
 import ButtonLink from './ButtonLink';
 import ButtonIcon from './ButtonIcon';
 import { tick, add } from '../SVGs/paths';
-import MapLocationSvg from '../SVGs/images/flaticons/map-location.svg';
+import { sFlexed, colors } from '../../settings/styles';
+import { randomIcon } from '../../stories/shared';
 
 const action = _ => console.log('Clicked');
 const randomName = _ => `${faker.name.firstName()} ${faker.name.lastName()}`;
@@ -43,8 +45,17 @@ storiesOf('Buttons', module)
         ))
     )
     .add('Icon', () => (
-        <ButtonIcon icon={MapLocationSvg} onClick={action}>
-            Map it
-        </ButtonIcon>
+        <div className={css(sFlexed)}>
+            {[colors.black, colors.secondary, colors.primary].map((c, i) => (
+                <ButtonIcon
+                    icon={randomIcon()}
+                    onClick={action}
+                    color={c}
+                    key={i}
+                >
+                    {faker.commerce.productMaterial()}
+                </ButtonIcon>
+            ))}
+        </div>
     ))
     .add('Link', () => <ButtonLink onClick={action}>Click me</ButtonLink>);

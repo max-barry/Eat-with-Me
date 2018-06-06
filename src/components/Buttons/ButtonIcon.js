@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { cx } from 'react-emotion';
+import styled, { cx, css } from 'react-emotion';
 import { setPropTypes, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { buttonBaseClass as base } from './Button.styles';
@@ -10,22 +10,26 @@ import {
     colors,
     shevy
 } from '../../settings/styles';
-import Svg from '../SVGs';
+import Svg, { SvgImg } from '../SVGs';
 import Ink from 'react-ink';
 
-const ICON_DIMENSION = 32;
+const ICON_DIMENSION = 28;
+const BUTTON_DIMENSION = 56;
 
 const Button = styled('button')(base, {
     flexDirection: 'column',
     padding: bs(0.25),
     fontSize: 10,
+    border: '1px dashed transparent',
+    minWidth: BUTTON_DIMENSION,
+    minHeight: BUTTON_DIMENSION,
     // width: BUTTON_DIMENSION,
     // height: BUTTON_DIMENSION,
     [`&:focus`]: {
         outline: 0
     },
     [`&:focus:not(:active)`]: {
-        border: `1px dashed ${colors.greyDark}`
+        borderColor: colors.greyDark
     }
 });
 
@@ -50,16 +54,17 @@ const ButtonIcon = ({
             />
         )}
         {icon && (
-            <img
-                alt={alt}
+            <SvgImg
+                path={icon}
                 role="presentation"
-                height={ICON_DIMENSION}
-                width={ICON_DIMENSION}
-                style={{ marginBottom: bs(0.25) }}
-                src={icon}
+                color={color}
+                className={css({
+                    marginBottom: bs(0.25),
+                    height: ICON_DIMENSION,
+                    width: ICON_DIMENSION
+                })}
             />
         )}
-        <Ink duration={transitionTimes.ink} />
         {children}
     </Button>
 );
@@ -69,7 +74,6 @@ const enhance = compose(
         onClick: PropTypes.func.isRequired,
         path: PropTypes.string,
         icon: PropTypes.string,
-        alt: PropTypes.string,
         color: PropTypes.string,
         className: PropTypes.string
     })

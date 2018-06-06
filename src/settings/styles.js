@@ -44,8 +44,8 @@ export const colors = {
 export const dimensions = {
     container: 1024,
     badge: 18,
-    navigation: 80,
-    navigation__logo: 52,
+    mast: 80,
+    mastLogo: 52,
     filtersBar: 60,
     card: 270,
     cardCompact: 60,
@@ -87,14 +87,25 @@ export const shadows = {
 
 export const fontFamily = `"HK Nova", Helvetica Neue, sans-serif`;
 
-export const mediaQueries = {
+export const breakpoints = {
     mobile: 480,
     tablet: 980,
     desktop: 1280
 };
 
+export const mediaqueries = Object.entries(breakpoints).map(
+    ([_, s]) => `@media(max-width: ${s}px)`
+);
+
+export const pointerqueries = ['coarse', 'fine'].map(
+    pointer => `@media (pointer: ${pointer})`
+);
+
+export const isTouch = pointerqueries[0];
+export const isCursor = pointerqueries[1];
+
 export const mq = facepaint(
-    Object.entries(mediaQueries).map(([n, s]) => `@media(max-width: ${s}px)`)
+    Object.entries(breakpoints).map(([n, s]) => `@media(max-width: ${s}px)`)
 );
 
 const shevyConf = new Shevy({
