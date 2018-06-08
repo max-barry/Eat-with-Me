@@ -1,29 +1,29 @@
-import styled, { css } from 'react-emotion';
+import styled from 'react-emotion';
+import { onlyUpdateForKeys } from 'recompose';
 import { bs, shevy, colors, dimensions } from '../../settings/styles';
-import { darken } from 'polished';
 import { buttonBaseClass as base } from './Button.styles';
+import { isCursor } from '../../settings/styles';
 
-export default styled('button')(
-    base,
-    {
+export default onlyUpdateForKeys([])(
+    styled('button')(base, {
         ...shevy.h6,
         marginBottom: 0,
         padding: `${bs(0.25)} ${bs(0.5)}`,
         textDecoration: 'none',
         border: '1px dashed transparent',
-        borderRadius: dimensions.borderRadius
-    },
-    css`
-        &:hover {
-            text-decoration: underline;
-            background-color: ${colors.grey1};
+        borderRadius: dimensions.borderRadius,
+        [isCursor]: {
+            '&:hover': {
+                textDecoration: 'underline',
+                backgroundColor: colors.grey1
+            },
+            '&:focus': {
+                outline: 'none',
+                backgroundColor: colors.grey1
+            },
+            '&:active': {
+                backgroundColor: colors.grey2
+            }
         }
-        &:focus {
-            outline: none;
-            background-color: ${colors.grey1};
-        }
-        &:active {
-            background-color: ${colors.grey2};
-        }
-    `
+    })
 );

@@ -63,7 +63,7 @@ storiesOf('Filters', module)
                 update={value => {
                     store.set({
                         items: store.state.items.map(refinemnet => {
-                            if (refinemnet.value === value)
+                            if (refinemnet.label === value)
                                 refinemnet.isRefined = !refinemnet.isRefined;
                             return refinemnet;
                         })

@@ -31,3 +31,6 @@ export const calcWindowWidth = () =>
         document.documentElement.offsetWidth,
         document.documentElement.clientWidth
     );
+
+// export const pure = () => onlyUpdateForKeys([]);
+// export const pureChildren = () => onlyUpdateForKeys(['children']);

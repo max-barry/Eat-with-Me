@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose, setPropTypes } from 'recompose';
+import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import { css, cx } from 'emotion';
 import {
     checkboxBoxWrapClass as boxWrapClass,
@@ -66,6 +66,7 @@ const enhance = compose(
         tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
         ...requiredPropTypes
     }),
+    onlyUpdateForKeys(['checked']),
     withAriaProps(true)
 );
 

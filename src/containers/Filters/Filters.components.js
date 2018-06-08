@@ -1,10 +1,11 @@
 import React from 'react';
 import { css } from 'emotion';
-import { onlyUpdateForKeys } from 'recompose';
+import { onlyUpdateForKeys, compose } from 'recompose';
 import { connectRefinementList } from 'react-instantsearch/connectors';
 import { bs, colors } from '../../settings/styles';
 import { ButtonSimple } from '../../components/Buttons';
 import { darken } from 'polished';
+import { withPropsChecker } from '../../hocs/Debug/debug';
 
 const filterButtonClass = css(
     { marginLeft: bs(0.25), marginRight: bs(0.25) },
@@ -35,4 +36,10 @@ export const FilterButton = onlyUpdateForKeys(['hasValue'])(
     )
 );
 
-export const VirtualRefinement = connectRefinementList(() => null);
+export const VirtualRefinement = compose(
+    connectRefinementList
+    // onlyUpdateForKeys(['currentRefinement', 'items', 'canRefine'])
+    // withPropsChecker
+)(() => null);
+
+// TODO : Avoid constant rerendering of virtuals by adding a "lastFiltered" and check in a shouldUpdate if lastFiltered matches this virtuals facet

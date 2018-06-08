@@ -3,6 +3,7 @@ import { Spring, animated } from 'react-spring';
 import { interpolate } from 'flubber'; // TODO : Polymorph is a small alternative
 import ReactSVG from 'react-svg';
 import { cx, css } from 'emotion';
+import { compose, onlyUpdateForKeys } from 'recompose';
 
 // TODO : Remove all the silly state stuff and just add a "from" "to" on the parent
 
@@ -59,7 +60,9 @@ class Svg extends Component {
     }
 }
 
-export default Svg;
+const enhance = compose(onlyUpdateForKeys(['path']));
+
+export default enhance(Svg);
 
 export const SvgImg = ({ className, color, ...props }) => (
     <ReactSVG

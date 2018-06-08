@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { animated, Spring, config } from 'react-spring';
-import { compose, setPropTypes, lifecycle } from 'recompose';
-import { colors, sInteractive } from '../../../settings/styles';
-import { cx } from 'emotion';
+import { compose, setPropTypes, lifecycle, onlyUpdateForKeys } from 'recompose';
+import { sInteractive } from '../../../settings/styles';
 import {
     addedItemContainerClass as itemContainerClass,
     addedItemTitleClass as itemTitleClass,
@@ -20,6 +19,7 @@ const enhanceCompactCard = compose(
         strap: PropTypes.string,
         isExpanded: PropTypes.bool
     }),
+    onlyUpdateForKeys(['isExpanded', 'style']),
     lifecycle({
         componentDidUpdate() {
             if (this.props.onDidUpdate) this.props.onDidUpdate();
@@ -29,6 +29,8 @@ const enhanceCompactCard = compose(
 
 export const AddedItem = enhanceCompactCard(
     ({
+        id,
+        atRest,
         title,
         deck,
         strap,
@@ -40,7 +42,10 @@ export const AddedItem = enhanceCompactCard(
     }) => {
         return (
             <animated.div className={itemContainerClass} {...props}>
-                <div className={sInteractive} onClick={() => onClick()}>
+                <div
+                    className={sInteractive}
+                    onClick={() => onClick(atRest, id)}
+                >
                     <h3 className={itemTitleClass(props)}>{title}</h3>
                     {strap && <h4 className={itemStrapClass}>{strap}</h4>}
                     {deck && <p className={itemDeckClass}>{deck}</p>}
@@ -54,8 +59,8 @@ export const AddedItem = enhanceCompactCard(
                     {actionStyles => (
                         <animated.button
                             className={itemButtonClass}
-                            style={{ ...actionStyles }}
-                            onClick={() => onExpandedAction()}
+                            style={actionStyles}
+                            onClick={() => onExpandedAction(id)}
                         >
                             Button
                         </animated.button>

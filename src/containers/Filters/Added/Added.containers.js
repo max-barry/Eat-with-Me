@@ -7,6 +7,8 @@ import { AddedItem } from './Added.components';
 import { dimensions, bsint } from '../../../settings/styles';
 import { AddedList as List } from './Added.styles';
 import { calcWindowWidth } from '../../../shared';
+import { compose, onlyUpdateForKeys } from 'recompose';
+import { withPropsChecker } from '../../../hocs/Debug';
 
 const makeCompact = _ => ({
     title: faker.company.catchPhrase(),
@@ -17,7 +19,7 @@ const makeCompact = _ => ({
     )
 });
 
-export default class extends Component {
+class Added extends Component {
     state = {
         order: [
             makeCompact(),
@@ -36,21 +38,13 @@ export default class extends Component {
         this.cardCompactW = dimensions.cardCompact;
         this.halfDismissW = dimensions.swipeDismiss / 2;
 
-        this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.onItemClick = this.onItemClick.bind(this);
+        this.remove = this.remove.bind(this);
         this.computeStyles = this.computeStyles.bind(this);
     }
 
     componentDidMount() {
         this.windowWidth = calcWindowWidth();
-    }
-
-    toggleExpanded(id) {
-        const shouldRemove = this.state.expanded.includes(id);
-        this.setState({
-            expanded: shouldRemove
-                ? this.state.expanded.filter(n => n !== id)
-                : [...this.state.expanded, id]
-        });
     }
 
     remove(id) {
@@ -82,6 +76,17 @@ export default class extends Component {
             fade,
             calculatedX: down ? clampedDelta : shouldDismiss ? 500 : 0
         };
+    }
+
+    onItemClick(atRest, id) {
+        if (!atRest) return;
+
+        const shouldExpand = this.state.expanded.includes(id);
+        this.setState({
+            expanded: shouldExpand
+                ? this.state.expanded.filter(n => n !== id)
+                : [...this.state.expanded, id]
+        });
     }
 
     render() {
@@ -150,9 +155,8 @@ export default class extends Component {
                                                         <AddedItem
                                                             {...item}
                                                             key={item.id}
-                                                            onDidUpdate={
-                                                                onDidUpdate
-                                                            }
+                                                            id={item.id}
+                                                            atRest={atRest}
                                                             isExpanded={
                                                                 isExpanded
                                                             }
@@ -160,18 +164,15 @@ export default class extends Component {
                                                                 opacity,
                                                                 transform: `translate3d(${x}px, 0px, 0)`
                                                             }}
-                                                            onExpandedAction={() =>
-                                                                this.remove(
-                                                                    item.id
-                                                                )
+                                                            onDidUpdate={
+                                                                onDidUpdate
                                                             }
-                                                            onClick={() => {
-                                                                if (atRest) {
-                                                                    this.toggleExpanded(
-                                                                        item.id
-                                                                    );
-                                                                }
-                                                            }}
+                                                            onExpandedAction={
+                                                                this.remove
+                                                            }
+                                                            onClick={
+                                                                this.onItemClick
+                                                            }
                                                         />
                                                     )}
                                                 </Spring>
@@ -187,3 +188,7 @@ export default class extends Component {
         );
     }
 }
+
+const enhance = compose(onlyUpdateForKeys([]), withPropsChecker);
+
+export default enhance(Added);

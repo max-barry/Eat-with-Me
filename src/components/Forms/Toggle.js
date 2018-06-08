@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Switch from 'react-switch';
 import PropTypes from 'prop-types';
 import { onlyUpdateForKeys, compose, setPropTypes } from 'recompose';
@@ -8,7 +8,6 @@ import {
     ToggleLabelText,
     ToggleTitle,
     ToggleTag
-    // toggleSwitchClass
 } from './Toggle.styles';
 import { requiredPropTypes } from './Forms.shared';
 import { colors } from '../../settings/styles';
@@ -16,38 +15,21 @@ import { colors } from '../../settings/styles';
 // TODO : Make this totally controlled by the parent
 
 const enhanceToggle = compose(
-    onlyUpdateForKeys(['checked']),
-    setPropTypes(requiredPropTypes)
+    setPropTypes(requiredPropTypes),
+    onlyUpdateForKeys(['checked'])
 );
 
-const Toggle = enhanceToggle(
-    class extends Component {
-        state = { checked: this.props.checked };
-
-        update() {
-            const checked = !this.state.checked;
-            this.setState({ checked });
-            this.props.onChange(checked);
-        }
-
-        render() {
-            return (
-                <Switch
-                    // className={toggleSwitchClass}
-                    checked={this.state.checked}
-                    onChange={() => this.update()}
-                    id={this.props.name}
-                    offColor={colors.greyDark}
-                    onColor={colors.secondary}
-                    activeBoxShadow={`0px 0px 2px 3px ${transparentize(
-                        0.7,
-                        colors.black
-                    )}`}
-                />
-            );
-        }
-    }
-);
+const Toggle = enhanceToggle(({ checked, onChange, name }) => (
+    <Switch
+        // className={toggleSwitchClass}
+        checked={checked}
+        onChange={onChange}
+        id={name}
+        offColor={colors.greyDark}
+        onColor={colors.secondary}
+        activeBoxShadow={`0px 0px 2px 3px ${transparentize(0.7, colors.black)}`}
+    />
+));
 
 export default Toggle;
 

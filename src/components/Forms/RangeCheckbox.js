@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, setPropTypes } from 'recompose';
+import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { cx } from 'emotion';
 import {
@@ -54,6 +54,7 @@ const enhance = compose(
             })
         ).isRequired
     })
+    // onlyUpdateForKeys(['items'])
 );
 
 export default enhance(RangeCheckbox);

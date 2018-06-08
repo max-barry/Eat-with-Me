@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
-import { connectCurrentRefinements } from 'react-instantsearch/connectors';
+// import { connectCurrentRefinements } from 'react-instantsearch/connectors';
 import { orderBy } from 'lodash';
 import MediaQuery from 'react-responsive';
 import { Modal } from '../../hocs/Modal/Modal';
@@ -29,6 +29,7 @@ import { BottomBar } from '../../components/Navigation';
 import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
 import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
 import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
+import { withPropsChecker } from '../../hocs/Debug/debug';
 
 const SHARED_NAVIGATION = {
     [FACET_QUARTER]: 'Region',
@@ -44,6 +45,20 @@ const MOBILE_NAVIGATION = {
     ...SHARED_NAVIGATION,
     [FACET_EXTRAS]: 'More filters'
 };
+
+// const virtuals = [
+//     [FACET_QUARTER],
+//     [FACET_CUISINE],
+//     [FACET_PRICE],
+//     [FACET_IS_BAR]
+// ].map((facet, z) => (
+//     <VirtualRefinement
+//         ref={this.virtualRefs[facet]}
+//         key={`virtual_${z}`}
+//         attribute={facet}
+//         limit={20}
+//     />
+// ));
 
 class Filters extends Component {
     state = {
@@ -81,16 +96,16 @@ class Filters extends Component {
         return this.containerRef.current;
     }
 
-    get virtuals() {
-        const state = this.state;
-        return {
-            [FACET_QUARTER]: state[FACET_QUARTER],
-            [FACET_CUISINE]: state[FACET_CUISINE],
-            [FACET_PRICE]: state[FACET_PRICE],
-            // [null, null,
-            [FACET_IS_BAR]: state[FACET_EXTRAS][FACET_IS_BAR]
-        };
-    }
+    // get virtuals() {
+    //     const state = this.state;
+    //     return {
+    //         [FACET_QUARTER]: state[FACET_QUARTER],
+    //         [FACET_CUISINE]: state[FACET_CUISINE],
+    //         [FACET_PRICE]: state[FACET_PRICE],
+    //         // [null, null,
+    //         [FACET_IS_BAR]: state[FACET_EXTRAS][FACET_IS_BAR]
+    //     };
+    // }
 
     get extraKeys() {
         return Object.keys(this.state[FACET_EXTRAS]);
@@ -259,8 +274,8 @@ class Filters extends Component {
             ...state
         } = this.state;
 
-        const virtualsDict = this.virtuals;
-        const virtuals = Object.entries(virtualsDict);
+        // const virtualsDict = this.virtuals;
+        // const virtuals = Object.entries(virtualsDict);
         const openItems = this.getCurrentOpenItems();
         const {
             overlay: overlayClass,
@@ -301,48 +316,70 @@ class Filters extends Component {
                     </MediaQuery>
                 </Container>
                 <div id="FilterCanvasWrap">
-                    {!isMobile &&
-                        Content && (
-                            <Modal
-                                isOpen={state.open}
-                                contentLabel="Filter tools modal"
-                                onRequestClose={this.onRequestClose}
-                                closeTimeoutMS={150}
-                                className={contentClass}
-                                overlayClassName={overlayClass}
-                            >
+                    {!isMobile && (
+                        <Modal
+                            isOpen={state.open}
+                            contentLabel="Filter tools modal"
+                            onRequestClose={this.onRequestClose}
+                            closeTimeoutMS={150}
+                            className={contentClass}
+                            overlayClassName={overlayClass}
+                        >
+                            {Content && (
                                 <Content
                                     {...contentProps}
                                     initial={openItems}
                                 />
-                            </Modal>
-                        )}
-                    {isMobile &&
-                        Content && (
-                            <Drawer isOpen={state.open}>
+                            )}
+                        </Modal>
+                    )}
+                    {isMobile && (
+                        <Drawer isOpen={state.open}>
+                            {Content && (
                                 <Content
                                     {...contentProps}
                                     initial={openItems}
                                 />
-                            </Drawer>
-                        )}
+                            )}
+                        </Drawer>
+                    )}
                 </div>
 
-                {virtuals.map(([facet, current], z) => (
-                    <VirtualRefinement
-                        ref={this.virtualRefs[facet]}
-                        key={`virtual_${z}`}
-                        attribute={facet}
-                        limit={20}
-                    />
-                ))}
+                <VirtualRefinement
+                    ref={this.virtualRefs[FACET_QUARTER]}
+                    key={`virtual_${FACET_QUARTER}`}
+                    attribute={FACET_QUARTER}
+                    limit={20}
+                />
+
+                <VirtualRefinement
+                    ref={this.virtualRefs[FACET_CUISINE]}
+                    key={`virtual_${FACET_CUISINE}`}
+                    attribute={FACET_CUISINE}
+                    limit={20}
+                />
+
+                <VirtualRefinement
+                    ref={this.virtualRefs[FACET_PRICE]}
+                    key={`virtual_${FACET_PRICE}`}
+                    attribute={FACET_PRICE}
+                    limit={20}
+                />
+
+                <VirtualRefinement
+                    ref={this.virtualRefs[FACET_IS_BAR]}
+                    key={`virtual_${FACET_IS_BAR}`}
+                    attribute={FACET_IS_BAR}
+                    limit={20}
+                />
             </div>
         );
     }
 }
 
 const enhance = compose(
-    connectCurrentRefinements,
+    // connectCurrentRefinements,
+    // withPropsChecker,
     connect(pick(['cuisine']), cuisineActions)
 );
 

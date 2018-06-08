@@ -1,10 +1,7 @@
-import React, { Fragment, createFactory } from 'react';
-import { setPropTypes, compose, defaultProps, lifecycle } from 'recompose';
+import React from 'react';
+import { setPropTypes, compose, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
-import { cx } from 'emotion';
-import { Spring, Transition, animated, config } from 'react-spring';
 import { Img } from '../Performance';
-import { ButtonSimple } from '../Buttons';
 import {
     cardImgClass as imgClass,
     CardContainer as Container,
@@ -12,12 +9,8 @@ import {
     CardBadge as Badge,
     CardDeck as Deck,
     CardActionRow as ActionRow,
-    CardTitle,
-    CardCompactTitle as CompactTitle,
-    cardCompactContainerClass as compactContainerClass
+    CardTitle
 } from './Card.styles';
-import { bs, sInteractive, colors, sElipsify } from '../../settings/styles';
-import { buttonSimpleClass } from '../Buttons/Button.styles';
 
 // https://github.com/drcmda/react-spring/tree/master/examples
 

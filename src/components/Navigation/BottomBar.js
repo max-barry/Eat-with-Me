@@ -4,8 +4,7 @@ import Headroom from 'react-headroom';
 import PropTypes from 'prop-types';
 import {
     BottomBarList as List,
-    BottomBarInterior as Interior,
-    headroomClass
+    BottomBarInterior as Interior
 } from './BottomBar.styles';
 import { ButtonIcon } from '../Buttons';
 
