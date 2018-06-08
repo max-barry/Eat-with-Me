@@ -9,7 +9,8 @@ export const drawerOverlayClass = css({
     right: 0,
     left: 0,
     overflow: 'auto',
-    zIndex: 999
+    zIndex: 999,
+    willChange: 'transform'
 });
 
 export const drawerContentClass = css({

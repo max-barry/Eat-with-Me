@@ -68,7 +68,8 @@ export const chipLabelTextClass = css({
     display: 'block',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    willChange: 'transform'
 });
 
 export const chipDotClass = css`

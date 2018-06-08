@@ -1,62 +1,31 @@
 import React from 'react';
-import { compose, setPropTypes, lifecycle, withStateHandlers } from 'recompose';
+import {
+    compose,
+    setPropTypes,
+    lifecycle,
+    withStateHandlers,
+    onlyUpdateForKeys
+} from 'recompose';
 import PropTypes from 'prop-types';
 import { cx } from 'emotion';
-import delay from 'delay';
-import { Keyframes, config, animated, Spring } from 'react-spring';
+import { config, animated, Spring } from 'react-spring';
 import {
     drawerOverlayClass as overlayClass,
     drawerContentClass as contentClass
 } from './Drawer.styles';
-import { transitionTimes } from '../../settings/styles';
+import { withPropsChecker } from '../../hocs/Debug/debug';
 
-// const TRANSITION_DELAY = transitionTimes.short;
-// const OPEN_STATE = 'open';
-// const PRE_STATE = 'pre';
-// const CLOSED_STATE = 'closed';
-
-// const ExteriorAnimation = Keyframes.Spring({
-//     [PRE_STATE]: {
-//         from: { yout: 100 },
-//         to: { yout: 100 }
-//     },
-//     [OPEN_STATE]: {
-//         from: { yout: 100 },
-//         to: { yout: 0 },
-//         config: config.stiff
-//     },
-//     [CLOSED_STATE]: async call => {
-//         await delay(TRANSITION_DELAY);
-//         await call({ to: { yout: 100 }, config: config.stiff });
-//     }
-// });
-
-// const InteriorAnimation = Keyframes.Spring({
-//     [PRE_STATE]: {
-//         from: { yin: 100 },
-//         to: { yout: 100 }
-//     },
-//     [OPEN_STATE]: async call => {
-//         await delay(TRANSITION_DELAY);
-//         await call({
-//             from: { yin: 100 },
-//             to: { yin: 0 },
-//             config: config.stiff
-//         });
-//     },
-//     [CLOSED_STATE]: { to: { yin: 100 }, config: config.stiff }
-// });
-
-const Drawer = ({ isOpen, mounted, children, ...props }) => {
-    // const animationState = !mounted
-    //     ? PRE_STATE
-    //     : isOpen ? OPEN_STATE : CLOSED_STATE;
+const Drawer = ({ isOpen, mounted, children, onClose, ...props }) => {
     return (
         <Spring
             native
             from={{ progress: 100 }}
             to={{ progress: isOpen && mounted ? 0 : 100 }}
             config={config.gentle}
+            onRest={() => {
+                // Function to call onClose
+                if (onClose && mounted && !isOpen) onClose();
+            }}
         >
             {({ progress }) => (
                 <animated.div
@@ -87,14 +56,22 @@ const enhance = compose(
         overlayClass: PropTypes.string,
         contentClass: PropTypes.string
     }),
+    onlyUpdateForKeys(['isOpen', 'children']),
     withStateHandlers(
         {
             mounted: false
+            // animationCompleted: false
         },
         {
             setMounted: _ => _ => ({
                 mounted: true
             })
+            // setAnimationComplete: _ => isComplete => {
+            //     console.log('yoman');
+            //     return {
+            //         animationCompleted: isComplete
+            //     };
+            // }
         }
     ),
     lifecycle({
