@@ -48,7 +48,7 @@ const MOBILE_NAVIGATION = {
 class Filters extends Component {
     state = {
         open: false,
-        content: null,
+        FacetContent: null,
         contentKey: null,
         [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
         [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
@@ -60,6 +60,7 @@ class Filters extends Component {
             top: 0
         }
     };
+    rendered = null;
     containerRef = React.createRef();
     virtualRefs = {
         [FACET_QUARTER]: React.createRef(),
@@ -72,8 +73,8 @@ class Filters extends Component {
     constructor(props) {
         super(props);
         this.clear = this.clear.bind(this);
-        this.onRequestClose = this.onRequestClose.bind(this);
         this.apply = this.apply.bind(this);
+        this.onRequestClose = this.onRequestClose.bind(this);
         this.onContentMount = this.onContentMount.bind(this);
     }
 
@@ -155,43 +156,31 @@ class Filters extends Component {
             position.top = bottom + FILTER_NAV_SPACING;
         }
 
-        // Some useful variables
-        const { open, rendered, ...state } = this.state;
         // We need to check if the filters are already open
         // and save them down if they are
-        if (open && rendered) {
-            rendered.props.save(true);
+        if (this.state.open && this.rendered) {
+            this.apply(true);
         }
-        // Now get the ref of the virtual representing this facet
-        // const items = virtual.state.props.items;
-        // const contentProps = {
-        //     // items,
-        //     // refine: this.updateVirtuals,
-        //     onMount: rendered => (this.rendered = rendered),
-        //     close: this.onRequestClose,
-        //     apply: this.apply,
-        //     clear: () => this.clear(contentKey)
-        // };
-        // Get the virtual (and it's current items) from the dict of refs
-        // const virtual = this.virtualRefs[contentKey].current;
         // Set the new state with the left value and an open filter
         this.setState({
             contentKey,
             // contentProps,
             isMobile,
-            content: facetDictionary[contentKey],
+            FacetContent: facetDictionary[contentKey],
             open: true,
             style: {
-                ...state.style,
+                ...this.state.style,
                 ...position
             }
         });
     }
 
-    apply(refinements, close = true) {
+    apply(close = true) {
         let hasValue;
         const state = this.state;
         const contentKey = state.contentKey;
+        // As the current rendered component to process itself
+        const refinements = this.rendered.props.process();
         // If this is the extras then you need to refine multiple virtuals
         if (contentKey === FACET_EXTRAS) {
             // The extras come in as an object with keys for each extra facet
@@ -248,8 +237,8 @@ class Filters extends Component {
             contentKey,
             contentItems,
             isMobile,
+            FacetContent = null,
             style: styleProps,
-            content: FacetContent = null,
             ...state
         } = this.state;
 
@@ -261,7 +250,7 @@ class Filters extends Component {
 
         const Content = FacetContent && (
             <ContentFrame
-                save={this.apply}
+                apply={this.apply}
                 close={this.onRequestClose}
                 clear={this.clear}
             >

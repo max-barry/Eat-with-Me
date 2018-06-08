@@ -1,17 +1,10 @@
 import React from 'react';
-import styled, { cx, css } from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import { setPropTypes, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { buttonBaseClass as base } from './Button.styles';
-import {
-    sFlexed,
-    transitionTimes,
-    bs,
-    colors,
-    shevy
-} from '../../settings/styles';
-import Svg, { SvgImg } from '../SVGs';
-import Ink from 'react-ink';
+import { bs, colors, isCursor } from '../../settings/styles';
+import { SvgFromFile, Svg } from '../SVGs';
 
 const ICON_DIMENSION = 28;
 const BUTTON_DIMENSION = 56;
@@ -23,13 +16,13 @@ const Button = styled('button')(base, {
     border: '1px dashed transparent',
     minWidth: BUTTON_DIMENSION,
     minHeight: BUTTON_DIMENSION,
-    // width: BUTTON_DIMENSION,
-    // height: BUTTON_DIMENSION,
-    [`&:focus`]: {
-        outline: 0
-    },
-    [`&:focus:not(:active)`]: {
-        borderColor: colors.greyDark
+    [isCursor]: {
+        [`&:focus`]: {
+            outline: 0
+        },
+        [`&:focus:not(:active)`]: {
+            borderColor: colors.greyDark
+        }
     }
 });
 
@@ -54,7 +47,7 @@ const ButtonIcon = ({
             />
         )}
         {icon && (
-            <SvgImg
+            <SvgFromFile
                 path={icon}
                 role="presentation"
                 color={color}

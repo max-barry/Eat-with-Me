@@ -1,25 +1,24 @@
 import styled from 'react-emotion';
 import { onlyUpdateForKeys } from 'recompose';
+import { tint } from 'polished';
 import { colors, dimensions } from '../../settings/styles';
 import { buttonBaseClass as base } from './Button.styles';
 import { isCursor } from '../../settings/styles';
 
 export default onlyUpdateForKeys([])(
-    styled('button')(base, {
+    styled('button')(base, ({ color }) => ({
         border: '1px dashed transparent',
         borderRadius: dimensions.borderRadius,
+        color: color || colors.black,
         [isCursor]: {
-            '&:hover': {
+            '&:hover, &:focus': {
                 textDecoration: 'underline',
-                backgroundColor: colors.grey1
-            },
-            '&:focus': {
                 outline: 'none',
-                backgroundColor: colors.grey1
+                backgroundColor: color ? tint(0.1, color) : colors.grey1
             },
             '&:active': {
-                backgroundColor: colors.grey2
+                backgroundColor: color ? tint(0.2, color) : colors.grey2
             }
         }
-    })
+    }))
 );

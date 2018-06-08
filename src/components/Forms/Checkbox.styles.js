@@ -15,13 +15,10 @@ import {
 
 export const checkboxCheckedClass = 'CheckboxBox--checked';
 
-export const CheckboxContainer = styled('div')(
-    sFlexed,
-    mq({
-        alignItems: 'center',
-        maxWidth: ['none', 320]
-    })
-);
+export const CheckboxContainer = styled('div')(sFlexed, {
+    alignItems: 'center',
+    maxWidth: 320
+});
 
 export const CheckboxLabel = styled('label')(
     sFlexed,
@@ -42,15 +39,14 @@ export const checkboxBoxWrapClass = css(sFlexedCenter, sInteractive, {
 const unchecked = `.${checkboxBoxWrapClass}:not(.${checkboxCheckedClass})`;
 const checked = `.${checkboxBoxWrapClass}.${checkboxCheckedClass}`;
 
-export const checkboxBoxInnerClass = css({
+export const CheckboxBoxInner = styled('span')({
     display: 'block',
     borderRadius: dimensions.borderRadius,
     height: dimensions.icon,
     width: dimensions.icon,
-    padding: '6px',
-    backgroundColor: 'white',
+    padding: 6,
+    backgroundColor: colors.white,
     border: `1px solid ${colors.greyDark}`,
-    transition: `background-color ${transitionTimes.weak}ms`,
     [`${unchecked} & svg`]: {
         opacity: 0
     },
@@ -59,27 +55,28 @@ export const checkboxBoxInnerClass = css({
         borderColor: colors.secondary
     },
     [isCursor]: {
+        transition: `background-color ${transitionTimes.weak}ms`,
         [`${unchecked}:focus &`]: {
             outline: 0,
             backgroundColor: colors.grey1
         },
-        [`${unchecked}:focus & svg, ${unchecked}:hover & svg`]: {
-            opacity: 0.2
-        },
         [`${checked}:focus &`]: {
             backgroundColor: colors.secondaryDark,
             boxShadow: shadows.focused
+        },
+        [`${unchecked}:focus & svg, ${unchecked}:hover & svg`]: {
+            opacity: 0.2
         }
     }
 });
 
-export const checkboxTitleClass = css(shevy.h6, {
+export const CheckboxTitle = styled('span')(shevy.h6, {
     em: {
         color: colors.greyDark
     }
 });
 
-export const checkboxTagClass = css(shevy.h6, {
+export const CheckboxTag = styled('span')(shevy.h6, {
     color: colors.greyDark,
     fontWeight: shevy.content.fontWeight
 });

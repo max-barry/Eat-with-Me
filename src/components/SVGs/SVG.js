@@ -3,11 +3,32 @@ import { Spring, animated } from 'react-spring';
 import { interpolate } from 'flubber'; // TODO : Polymorph is a small alternative
 import ReactSVG from 'react-svg';
 import { cx, css } from 'emotion';
-import { compose, onlyUpdateForKeys } from 'recompose';
+import { onlyUpdateForKeys } from 'recompose';
+import { omit } from 'ramda';
+import { colors } from '../../settings/styles';
+
+const SvgBase = ({ height, width, children, ...props }) => (
+    <svg
+        height={height || 16}
+        width={width || 16}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        {...props}
+    >
+        {children}
+    </svg>
+);
+
+export const Svg = onlyUpdateForKeys(['path', 'fill'])(
+    ({ path, fill = colors.black, ...props }) => (
+        <SvgBase {...props}>
+            <path d={path} fill={fill} />
+        </SvgBase>
+    )
+);
 
 // TODO : Remove all the silly state stuff and just add a "from" "to" on the parent
-
-class Svg extends Component {
+class SvgMorphComponent extends Component {
     state = {
         previousPath: this.props.path,
         path: this.props.path,
@@ -15,6 +36,7 @@ class Svg extends Component {
         fill: this.props.fill
     };
 
+    // TODO : Remove the getDerivedState. You can use the props next and previous
     static getDerivedStateFromProps(nextProps, prevState) {
         return prevState.path !== nextProps.path
             ? {
@@ -28,8 +50,7 @@ class Svg extends Component {
     }
 
     render() {
-        const { height = 16, width = 16, ...props } = this.props;
-
+        const props = omit(['fill', 'path'], this.props);
         const { previousFill, fill, previousPath, path } = this.state;
 
         const interpolator = interpolate(previousPath, path, {
@@ -37,13 +58,7 @@ class Svg extends Component {
         });
 
         return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                height={height}
-                width={width}
-                {...props}
-            >
+            <SvgBase {...props}>
                 <Spring reset native from={{ t: 0 }} to={{ t: 1 }}>
                     {({ t }) => (
                         <animated.path
@@ -55,16 +70,14 @@ class Svg extends Component {
                         />
                     )}
                 </Spring>
-            </svg>
+            </SvgBase>
         );
     }
 }
 
-const enhance = compose(onlyUpdateForKeys(['path']));
+export const SvgMorph = onlyUpdateForKeys(['path'])(SvgMorphComponent);
 
-export default enhance(Svg);
-
-export const SvgImg = ({ className, color, ...props }) => (
+export const SvgFromFile = ({ className, color, ...props }) => (
     <ReactSVG
         svgClassName={cx(
             className,

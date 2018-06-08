@@ -18,6 +18,7 @@ import {
 } from './Chip.styles';
 import { requiredPropTypes, withAriaProps } from './Forms.shared';
 import { colors, bsint } from '../../settings/styles';
+import { readableColor } from 'polished';
 
 // Move these basic update and state handlers to an abstract
 
@@ -25,30 +26,28 @@ const Chip = ({
     aria,
     ariaLabel,
     label,
-    className,
     onChange,
     checked,
-    name,
+    color = colors.secondary,
     ...props
 }) => (
     <Label
         {...ariaLabel}
-        // tabIndex={props.tabIndex || 0}
-        className={cx(
-            className,
-            checked
-                ? css(
-                      activeClass,
-                      `&::before {color: ${props.color}; background-color: ${
-                          props.textColor
-                      }; transform: scale(1);}; `
-                  )
-                : null
-        )}
-        style={{
-            borderColor: checked ? props.color : colors.grey1,
-            color: checked ? props.textColor : null
-        }}
+        {...props}
+        color={color}
+        checked={checked}
+        textColor={readableColor(color)}
+        // className={cx(className, {
+        //     [activeClass]: checked,
+        //     [css({
+        //         color: textColor,
+        //         borderColor: color,
+        //         '&::before': {
+        //             color,
+        //             backgroundColor: textColor
+        //         }
+        //     })]: checked
+        // })}
     >
         <Spring
             native
@@ -57,50 +56,43 @@ const Chip = ({
             }}
             config={config.stiff}
         >
-            {({ x }) => {
-                return (
-                    <Fragment>
-                        <animated.span
-                            id={props.name}
-                            className={textClass}
-                            style={{
-                                transform: x.interpolate(
-                                    x => `translate3d(${x}px, 0px, 0)`
-                                )
-                            }}
-                        >
-                            {label}
-                        </animated.span>
-                        <animated.span
-                            {...aria}
-                            className={cx(
-                                dotClass,
-                                checked ? dotActiveClass : null
-                            )}
-                            style={{
-                                backgroundColor: props.color
-                            }}
-                        />
-                    </Fragment>
-                );
-            }}
+            {({ x }) => (
+                <Fragment>
+                    <animated.span
+                        className={textClass}
+                        style={{
+                            transform: x.interpolate(
+                                x => `translate3d(${x}px, 0px, 0)`
+                            )
+                        }}
+                    >
+                        {label}
+                    </animated.span>
+                    <animated.span
+                        {...aria}
+                        className={cx(
+                            dotClass,
+                            css({
+                                backgroundColor: color
+                            }),
+                            {
+                                [dotActiveClass]: checked
+                            }
+                        )}
+                    />
+                </Fragment>
+            )}
         </Spring>
     </Label>
 );
 
-const enhance = compose(
-    defaultProps({
-        color: colors.secondary,
-        textColor: colors.white
-    }),
-    setPropTypes({
-        ...requiredPropTypes,
-        label: PropTypes.string.isRequired,
-        color: PropTypes.string,
-        textColor: PropTypes.string
-    }),
-    withAriaProps(),
-    onlyUpdateForKeys(['checked'])
-);
+Chip.propTypes = {
+    ...requiredPropTypes,
+    label: PropTypes.string.isRequired,
+    color: PropTypes.string,
+    textColor: PropTypes.string
+};
+
+const enhance = compose(withAriaProps(), onlyUpdateForKeys(['checked']));
 
 export default enhance(Chip);

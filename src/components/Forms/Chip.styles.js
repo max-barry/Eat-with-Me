@@ -10,6 +10,8 @@ import {
     easings,
     dimensions
 } from '../../settings/styles';
+import { ellipsis } from 'polished';
+import { onlyUpdateForKeys } from 'recompose';
 
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
@@ -21,54 +23,58 @@ export const CHIP_DOT_DIMENSION = 16;
 //     boxShadow: shadows.focused
 // });
 
-export const ChipLabel = styled('label')(
-    sInteractive,
-    {
+// cx(className, {
+//     [activeClass]: checked,
+//     [css({
+//         '&::before': {
+//             color,
+//             backgroundColor: textColor
+//         }
+//     })]: checked
+// })
+
+export const ChipLabel = onlyUpdateForKeys(['checked', 'color', 'textColor'])(
+    styled('label')(sInteractive, ({ checked, color, textColor }) => ({
+        backgroundColor: checked ? color : colors.white,
+        color: checked ? textColor : colors.black,
         fontSize: shevy.h6.fontSize,
         fontWeight: fontWeights.medium,
         position: 'relative',
-        border: `1px solid`,
+        border: `1px solid ${colors.grey1}`,
         height: CHIP_HEIGHT,
         borderRadius: dimensions.borderRadius * 2,
         zIndex: 0,
         overflow: 'hidden',
         display: 'inline-block',
-        backgroundColor: 'white',
         maxWidth: CHIP_MAX_WIDTH,
         paddingTop: CHIP_VERTICAL_DOT_PADDING,
         paddingBottom: CHIP_VERTICAL_DOT_PADDING,
-        paddingLeft: `${bsint(2)}px`,
-        paddingRight: `${bsint(0.5)}px`
-    },
-    `
-    &::before {
-        content: "×";
-        width: ${CHIP_DOT_DIMENSION}px;
-        height: ${CHIP_DOT_DIMENSION}px;
-        font-size: ${CHIP_DOT_DIMENSION + 4}px;
-        line-height: ${CHIP_DOT_DIMENSION + 2}px;
-        text-align: center;
-        display: block;
-        position: absolute;
-        right: ${CHIP_EDGE_PADDING};
-        border-radius: 50%;
-        transform: scale(0);
-    }
-
-    &:focus-within {
-        outline: 1px dashed ${colors.greyDark};
-        outline-offset: 3px;
-    }
-    `
+        paddingLeft: bs(2),
+        paddingRight: bs(0.5),
+        '&:before': {
+            content: '"×"',
+            width: CHIP_DOT_DIMENSION,
+            height: CHIP_DOT_DIMENSION,
+            fontSize: CHIP_DOT_DIMENSION + 4,
+            lineHeight: `${CHIP_DOT_DIMENSION + 2}px`,
+            textAlign: 'center',
+            display: 'block',
+            position: 'absolute',
+            right: CHIP_EDGE_PADDING,
+            borderRadius: '50%',
+            transform: checked ? 'none' : 'scale(1)',
+            color: checked ? color : 'transparent',
+            backgroundColor: checked ? textColor : 'transparent'
+        },
+        '&:focus-within': {
+            outline: `1px dashed ${colors.greyDark}`,
+            outlineOffset: 3
+        }
+    }))
 );
 
-export const chipActiveClass = css``;
-
-export const chipLabelTextClass = css({
+export const chipLabelTextClass = css(ellipsis('100%'), {
     display: 'block',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
     willChange: 'transform'
 });
 

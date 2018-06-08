@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
@@ -10,16 +10,20 @@ import ChipLite from './ChipLite';
 import RangeCheckbox from './RangeCheckbox';
 import ChipDismissible from './ChipDismissible';
 import Badge from './Badge';
-import { colors } from '../../settings/styles';
+import { colors, sFlexed } from '../../settings/styles';
 
 storiesOf('Forms', module)
     .addDecorator(centered)
     .add(
         'Checkbox',
-        withState({ checked: false })(({ store }) => (
+        withState({
+            checked: false,
+            title: faker.lorem.words(3),
+            tag: faker.lorem.words(12)
+        })(({ store }) => (
             <Checkbox
-                title={() => faker.lorem.words(3)}
-                tag={() => faker.lorem.words(12)}
+                title={store.state.title}
+                tag={store.state.tag}
                 name="somename"
                 checked={store.state.checked}
                 onChange={() => store.set({ checked: !store.state.checked })}
@@ -50,26 +54,33 @@ storiesOf('Forms', module)
     )
     .add(
         'Chip',
-        withState({ checked: false })(({ store }) => (
-            <Chip
-                checked={store.state.checked}
-                onChange={() => store.set({ checked: !store.state.checked })}
-                name="mexican"
-                label="Mexican"
-            />
-        ))
-    )
-    .add(
-        'Chip (green)',
-        withState({ checked: false })(({ store }) => (
-            <Chip
-                checked={store.state.checked}
-                onChange={() => store.set({ checked: !store.state.checked })}
-                name="mexican"
-                label="Mexican"
-                color="#B5FED9"
-                textColor="white"
-            />
+        withState({ checked1: false, checked2: false })(({ store }) => (
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: 300
+                }}
+            >
+                <Chip
+                    checked={store.state.checked1}
+                    name="mexican"
+                    label="Mexican"
+                    onChange={() =>
+                        store.set({ checked1: !store.state.checked1 })
+                    }
+                />
+                <Chip
+                    checked={store.state.checked2}
+                    name="american"
+                    label="American"
+                    color="#B5FED9"
+                    onChange={() =>
+                        store.set({ checked2: !store.state.checked2 })
+                    }
+                />
+            </div>
         ))
     )
     .add(
@@ -86,21 +97,28 @@ storiesOf('Forms', module)
         ))
     )
     .add('Chip.Dismissible', () => (
-        <ChipDismissible
-            actionLabel={faker.lorem.words(5)}
-            action={() => console.log('Action')}
-            dismiss={() => console.log('Dismissed')}
-        />
-    ))
-    .add('Chip.Dismissible (with label + color)', () => (
-        <ChipDismissible
-            label={faker.lorem.words(2)}
-            actionLabel={faker.lorem.words(5)}
-            action={() => console.log('Action')}
-            dismiss={() => console.log('Dismissed')}
-            backgroundColor={colors.primaryLight}
-            color={colors.black}
-        />
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: 400
+            }}
+        >
+            <ChipDismissible
+                actionLabel={faker.lorem.words(5)}
+                action={() => console.log('Action')}
+                dismiss={() => console.log('Dismissed')}
+            />
+            <ChipDismissible
+                label={faker.lorem.words(2)}
+                actionLabel={faker.lorem.words(5)}
+                action={() => console.log('Action')}
+                dismiss={() => console.log('Dismissed')}
+                backgroundColor={colors.primaryLight}
+                color={colors.black}
+            />
+        </div>
     ))
     .add('Badge', () => <Badge count={faker.random.number(12)} />)
     .add(

@@ -18,12 +18,12 @@ import { colors } from '../../../settings/styles.js';
 const enhanceActions = compose(
     setPropTypes({
         apply: PropTypes.func.isRequired,
-        cancel: PropTypes.func.isRequired,
+        close: PropTypes.func.isRequired,
         clear: PropTypes.func
     })
 );
 
-const Actions = enhanceActions(({ save, close, clear }) => (
+const Actions = enhanceActions(({ apply, close, clear }) => (
     <List>
         {clear && (
             <ListItem>
@@ -36,23 +36,23 @@ const Actions = enhanceActions(({ save, close, clear }) => (
             <ButtonLink onClick={close}>Cancel</ButtonLink>
         </ListItem>
         <ListItem>
-            <ButtonLink onClick={save} style={{ color: colors.primaryDark }}>
+            <ButtonLink onClick={apply} color={colors.primaryDark}>
                 Apply
             </ButtonLink>
         </ListItem>
     </List>
 ));
 
-const ContentFrame = ({ children, save, close, clear, ...props }) => (
+const ContentFrame = ({ children, apply, close, clear, ...props }) => (
     <Exterior>
         <Interior>{children}</Interior>
-        <Actions save={save} close={close} clear={clear} />
+        <Actions apply={apply} close={close} clear={clear} />
     </Exterior>
 );
 
 const enhance = compose(
     setPropTypes({
-        save: PropTypes.func.isRequired,
+        apply: PropTypes.func.isRequired,
         close: PropTypes.func.isRequired,
         clear: PropTypes.func.isRequired
     })

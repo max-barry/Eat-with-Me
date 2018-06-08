@@ -1,7 +1,10 @@
 import { injectGlobal } from 'emotion';
 import { shevy, fontFamily, fontWeights } from './settings/styles';
+import { fontFace } from 'polished';
 
 const { content, ...headings } = shevy;
+
+// TODO : Implement : fontFace
 
 const hs = [1, 2, 3, 4, 5, 6]
     .map(

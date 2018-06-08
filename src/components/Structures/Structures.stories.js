@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
@@ -7,10 +7,11 @@ import { css } from 'emotion';
 import { Card } from './Card';
 import Drawer from './Drawer';
 import { tick } from '../SVGs/paths';
-import ButtonSimple, {
-    ButtonSimpleIcon,
-    ButtonAddToCollection
-} from '../Buttons/ButtonSimple';
+import {
+    ButtonSimple,
+    ButtonAddToCollection,
+    ButtonSimpleIcon
+} from '../Buttons';
 import { bs, colors } from '../../settings/styles';
 
 const action = _ => console.log('Clicked');

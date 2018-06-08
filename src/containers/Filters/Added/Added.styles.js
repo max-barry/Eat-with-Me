@@ -1,18 +1,12 @@
 import { css } from 'emotion';
 import styled from 'react-emotion';
-import {
-    bs,
-    bsint,
-    dimensions,
-    shevy,
-    sElipsify,
-    colors
-} from '../../../settings/styles';
+import { bs, bsint, dimensions, shevy, colors } from '../../../settings/styles';
 import {
     cardDeckClass,
     cardStrapClass
 } from '../../../components/Structures/Card.styles';
 import { buttonSimpleClass } from '../../../components/Buttons/Button.styles';
+import { ellipsis } from 'polished';
 
 export const AddedList = styled('ul')({
     height: '500px',
@@ -29,24 +23,10 @@ export const addedItemContainerClass = css({
 });
 
 export const addedItemTitleClass = props =>
-    css({
-        ...shevy.h6,
-        ...sElipsify,
+    css(shevy.h6, ellipsis('100%'), {
         lineHeight: 1.3,
         color: props.color || colors.secondaryDark
     });
-
-// const tmp = css({
-//     ...shevy.h6,
-//     ...sElipsify,
-//     lineHeight: 1.3
-// });
-
-// const propped = css(
-//     props => `
-//     color: ${props.color || colors.secondaryDark};
-// `
-// );
 
 export const addedItemStrapClass = css(cardStrapClass, {
     marginTop: bs(0.25),
@@ -54,7 +34,7 @@ export const addedItemStrapClass = css(cardStrapClass, {
     lineHeight: 1
 });
 
-export const addedItemDeckClass = css(cardDeckClass, sElipsify, {
+export const addedItemDeckClass = css(cardDeckClass, ellipsis('100%'), {
     lineHeight: 1.3
 });
 

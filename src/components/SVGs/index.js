@@ -1,1 +1,1 @@
-export { default, SvgImg } from './SVG';
+export { SvgMorph, SvgFromFile, Svg } from './SVG';

@@ -7,13 +7,6 @@ export const sInteractive = css({
     userSelect: 'none'
 });
 
-export const sElipsify = css({
-    maxWidth: '100%',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis'
-});
-
 export const sFlexed = css({
     display: 'flex',
     flexDirection: 'row'

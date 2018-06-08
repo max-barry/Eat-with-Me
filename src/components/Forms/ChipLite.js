@@ -11,7 +11,7 @@ import {
     CHIP_LITE_COLOR
 } from './ChipLite.styles';
 import { tick } from '../SVGs/paths';
-import Svg from '../SVGs';
+import { Svg } from '../SVGs';
 
 const ChipLite = ({
     aria,

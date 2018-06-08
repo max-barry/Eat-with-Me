@@ -81,7 +81,6 @@ storiesOf('Filters', module)
         withState({ items: randomGroupedRefinements })(({ store }) => (
             <CuisineTabs
                 items={store.state.items}
-                // onChange={onChange}
                 update={value => {
                     store.set({
                         items: store.state.items.map(panel => {

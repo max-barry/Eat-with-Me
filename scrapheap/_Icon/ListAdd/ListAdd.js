@@ -2,7 +2,7 @@ import React from 'react';
 
 import { css } from 'react-emotion';
 import { Spring, config as SpringConfig } from 'react-spring';
-import SvgBase from 'react-icon-base';
+import SvgBase from 'react-icon-base'; // TODO : Do you need this library?
 
 import iconEnhance from '../enhance';
 import { COLORS } from '../../../styles/constants.colors';

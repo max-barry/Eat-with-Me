@@ -11,7 +11,7 @@ import {
     ChipDismissibleDismissButton as DismissButton,
     ChipDismissibleActionButton as ActionButton
 } from './ChipDismissible.styles';
-import Svg from '../SVGs';
+import { Svg } from '../SVGs';
 import { cross } from '../SVGs/paths';
 import { colors } from '../../settings/styles';
 
@@ -28,21 +28,27 @@ const ChipDismissible = ({
         <Wrap aria-describedby="dismissable-chip-label">
             <ActionButton
                 onClick={() => action()}
-                className={css(
-                    { backgroundColor, color },
-                    `&:focus, &:hover { background-color: ${darken(
-                        0.02,
-                        backgroundColor
-                    )}; }
-                    &:focus:not(:active) { border-color: ${darken(
-                        0.3,
-                        backgroundColor
-                    )}; }`
-                )}
+                backgroundColor={backgroundColor}
+                color={color}
+                // className={css(
+                //     { backgroundColor, color },
+                //     `&:focus, &:hover { background-color: ${darken(
+                //         0.02,
+                //         backgroundColor
+                //     )}; }
+                //     &:focus:not(:active) { border-color: ${darken(
+                //         0.3,
+                //         backgroundColor
+                //     )}; }`
+                // )}
             >
                 {actionLabel}
             </ActionButton>
-            <DismissButton onClick={() => dismiss()}>
+            <DismissButton
+                backgroundColor={backgroundColor}
+                color={color}
+                onClick={() => dismiss()}
+            >
                 <Svg
                     fill={colors.greyDark}
                     path={cross}
@@ -55,19 +61,13 @@ const ChipDismissible = ({
     </Container>
 );
 
-const enhance = compose(
-    defaultProps({
-        backgroundColor: colors.grey1,
-        color: colors.greyDark
-    }),
-    setPropTypes({
-        action: PropTypes.func.isRequired,
-        actionLabel: PropTypes.string.isRequired,
-        dismiss: PropTypes.func.isRequired,
-        label: PropTypes.string,
-        backgroundColor: PropTypes.string,
-        color: PropTypes.string
-    })
-);
+ChipDismissible.propTypes = {
+    action: PropTypes.func.isRequired,
+    actionLabel: PropTypes.string.isRequired,
+    dismiss: PropTypes.func.isRequired,
+    label: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    color: PropTypes.string
+};
 
-export default enhance(ChipDismissible);
+export default ChipDismissible;

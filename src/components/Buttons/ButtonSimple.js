@@ -1,27 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { cx } from 'react-emotion';
-import {
-    compose,
-    setPropTypes,
-    onlyUpdateForKeys,
-    withState,
-    lifecycle
-} from 'recompose';
 import PropTypes from 'prop-types';
-import { Spring, animated, config } from 'react-spring';
-import { bs, colors } from '../../settings/styles';
-import {
-    buttonSimpleClass,
-    atcClass,
-    atcSecondTextClass,
-    atcActiveClass
-} from './Button.styles';
-import { cross, add } from '../SVGs/paths';
-import Svg from '../SVGs';
-
-const enhanceButtonSimple = compose(
-    setPropTypes({ onClick: PropTypes.func.isRequired })
-);
+import { bs } from '../../settings/styles';
+import { buttonSimpleClass } from './Button.styles';
+import { SvgMorph } from '../SVGs';
 
 const ButtonSimple = ({ children, className, ...props }) => (
     <button className={cx(buttonSimpleClass, className)} {...props}>
@@ -29,82 +11,25 @@ const ButtonSimple = ({ children, className, ...props }) => (
     </button>
 );
 
-export default enhanceButtonSimple(ButtonSimple);
+ButtonSimple.propTypes = { onClick: PropTypes.func.isRequired };
 
-const enhanceButtonSimpleIcon = compose(
-    setPropTypes({ icon: PropTypes.string.isRequired })
+export default ButtonSimple;
+
+const buttonSimpleIcon = ({ icon, children, fill, ...props }) => (
+    <ButtonSimple {...props}>
+        <SvgMorph
+            aria-hidden={true}
+            path={icon}
+            fill={fill}
+            style={{ marginRight: bs(0.25) }}
+        />
+        {children}
+    </ButtonSimple>
 );
 
-export const ButtonSimpleIcon = enhanceButtonSimpleIcon(
-    ({ icon, children, fill, ...props }) => (
-        <ButtonSimple {...props}>
-            <Svg
-                aria-hidden={true}
-                path={icon}
-                fill={fill}
-                style={{ marginRight: bs(0.25) }}
-            />
-            {children}
-        </ButtonSimple>
-    )
-);
+buttonSimpleIcon.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    icon: PropTypes.string.isRequired
+};
 
-const enhanceButtonAddToCollection = compose(
-    setPropTypes({ added: PropTypes.bool.isRequired }),
-    onlyUpdateForKeys(['added']),
-    withState('isInitial', 'setInitial', true),
-    lifecycle({
-        componentDidMount() {
-            this.props.setInitial(n => false);
-        }
-    })
-);
-
-export const ButtonAddToCollection = enhanceButtonAddToCollection(
-    ({ added, isInitial, setInitial, ...props }) => (
-        <ButtonSimpleIcon
-            icon={added ? cross : add}
-            fill={added ? colors.white : colors.black}
-            className={cx(atcClass, added ? atcActiveClass : null)}
-            {...props}
-        >
-            <Spring
-                native
-                immediate={isInitial}
-                from={{ y: 0, opacity: 1 }}
-                to={{ y: added ? 0 : 35, opacity: added ? 1 : 0 }}
-                config={config.gentle}
-            >
-                {({ y, opacity }) => (
-                    <Fragment>
-                        <animated.span
-                            role="presentation"
-                            aria-hidden={added ? true : false}
-                            style={{
-                                opacity: opacity.interpolate(o => 1 - o),
-                                transform: y.interpolate(
-                                    t => `translate3d(0px, ${35 - t}px, 0)`
-                                )
-                            }}
-                        >
-                            Add to collection
-                        </animated.span>
-                        <animated.span
-                            className={atcSecondTextClass}
-                            role="presentation"
-                            aria-hidden={added ? false : true}
-                            style={{
-                                opacity: opacity,
-                                transform: y.interpolate(
-                                    t => `translate3d(0px, ${-1 * t}px, 0)`
-                                )
-                            }}
-                        >
-                            Remove
-                        </animated.span>
-                    </Fragment>
-                )}
-            </Spring>
-        </ButtonSimpleIcon>
-    )
-);
+export const ButtonSimpleIcon = buttonSimpleIcon;

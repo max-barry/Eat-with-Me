@@ -6,7 +6,7 @@ import {
     ExtrasContainer as Container,
     ExtrasFilterWrap as Wrap
 } from './Extra.styles';
-import { withFacetShared } from '../Facets.shared';
+import { withShared } from '../Facets.shared';
 
 class ExtraFilters extends Component {
     constructor(props) {
@@ -60,18 +60,14 @@ const enhance = compose(
         }
     ),
     withHandlers({
-        save: ({ apply, refinement }) => (force = false) => {
-            apply(
-                Object.entries(refinement).reduce((acc, [k, v]) => {
-                    // TODO : Temporary. Will only really work on the <Bar />
-                    acc[k] = v[0].value;
-                    return acc;
-                }, {}),
-                !force
-            );
-        }
+        process: ({ refinement }) => _ =>
+            Object.entries(refinement).reduce((acc, [k, v]) => {
+                // TODO : Temporary. Will only really work on the <Bar />
+                acc[k] = v[0].value;
+                return acc;
+            }, {})
     }),
-    withFacetShared
+    withShared
 );
 
 export default enhance(ExtraFilters);

@@ -14,12 +14,12 @@ export const withFacetLifecycle = lifecycle({
     }
 });
 
-export const withFacetListSave = withHandlers({
-    save: ({ apply, items }) => (force = false) =>
-        apply(items.filter(prop('isRefined')).map(prop('label')), !force)
+export const withListProcess = withHandlers({
+    process: ({ items }) => _ =>
+        items.filter(prop('isRefined')).map(prop('label'))
 });
 
-export const withFacetListUpdate = withStateHandlers(
+export const withListUpdate = withStateHandlers(
     ({ initial }) => ({
         lastUpdate: null,
         items: initial
@@ -43,20 +43,11 @@ export const withFacetListUpdate = withStateHandlers(
 );
 
 export const withFacetPropTypes = setPropTypes({
-    close: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
-    apply: PropTypes.func.isRequired,
-    initial: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
-        .isRequired,
-    clear: PropTypes.func
+    initial: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired
 });
 
-export const withFacetShared = compose(withFacetPropTypes, withFacetLifecycle);
+export const withShared = compose(withFacetPropTypes, withFacetLifecycle);
 
-export const asFacetList = compose(
-    withFacetListUpdate,
-    withFacetListSave,
-    withFacetShared
-);
+export const asFacetList = compose(withListUpdate, withListProcess, withShared);
 
 export const priceIntToSymbol = int => '£'.repeat(parseFloat(int), 10);

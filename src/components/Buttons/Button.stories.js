@@ -4,10 +4,8 @@ import { withState } from '@dump247/storybook-state';
 import faker from 'faker';
 import centered from '@storybook/addon-centered';
 import { css } from 'emotion';
-import ButtonSimple, {
-    ButtonSimpleIcon,
-    ButtonAddToCollection
-} from './ButtonSimple';
+import ButtonSimple, { ButtonSimpleIcon } from './ButtonSimple';
+import ButtonAddToCollection from './ButtonAddToCollection';
 import ButtonLink from './ButtonLink';
 import ButtonIcon from './ButtonIcon';
 import { tick, add } from '../SVGs/paths';
@@ -58,4 +56,12 @@ storiesOf('Buttons', module)
             ))}
         </div>
     ))
-    .add('Link', () => <ButtonLink onClick={action}>Click me</ButtonLink>);
+    .add('Link', () => (
+        <div className={css(sFlexed)}>
+            {[null, colors.secondary, colors.primaryDark].map((color, i) => (
+                <ButtonLink key={i} onClick={action} color={color}>
+                    Click me
+                </ButtonLink>
+            ))}
+        </div>
+    ));

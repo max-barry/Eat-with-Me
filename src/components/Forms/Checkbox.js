@@ -4,15 +4,16 @@ import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import { css, cx } from 'emotion';
 import {
     checkboxBoxWrapClass as boxWrapClass,
-    checkboxTitleClass as titleClass,
-    checkboxTagClass as tagClass,
+    CheckboxTitle,
+    CheckboxTag as Tag,
     CheckboxContainer as Container,
     CheckboxLabel as Label,
     checkboxCheckedClass as checkedClass,
-    checkboxBoxInnerClass as boxInnerClass
+    CheckboxBoxInner as BoxInner
 } from './Checkbox.styles';
 import { tick as svgtick } from '../SVGs/paths';
 import { requiredPropTypes, withAriaProps } from './Forms.shared';
+import { Svg } from '../SVGs';
 
 const Checkbox = ({
     checked,
@@ -24,46 +25,25 @@ const Checkbox = ({
 }) => (
     <Container>
         <span
-            // ref={this.checkboxRef}
             {...aria}
-            className={cx(boxWrapClass, checked ? checkedClass : null)}
+            className={cx(boxWrapClass, { [checkedClass]: checked })}
         >
-            <span className={css(boxInnerClass)}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                    <path
-                        fill={checked ? 'white' : 'black'}
-                        fillRule="evenodd"
-                        d={svgtick}
-                    />
-                </svg>
-            </span>
+            <BoxInner>
+                <Svg fill={checked ? 'white' : 'black'} path={svgtick} />
+            </BoxInner>
         </span>
         <Label {...ariaLabel}>
-            <span className={titleClass}>
-                {typeof TitleComponent === 'string' ? (
-                    TitleComponent
-                ) : (
-                    <TitleComponent />
-                )}
-            </span>
-            {TagComponent && (
-                <span className={tagClass}>
-                    {typeof TagComponent === 'string' ? (
-                        TagComponent
-                    ) : (
-                        <TagComponent />
-                    )}
-                </span>
-            )}
+            <CheckboxTitle>{TitleComponent}</CheckboxTitle>
+            <Tag>{TagComponent}</Tag>
         </Label>
     </Container>
 );
 
 const enhance = compose(
     setPropTypes({
-        title: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+        title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
             .isRequired,
-        tag: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+        tag: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
         ...requiredPropTypes
     }),
     onlyUpdateForKeys(['checked']),
