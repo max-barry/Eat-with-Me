@@ -18,7 +18,7 @@ const Actions = ({ apply, close, clear }) => (
         {clear && (
             <ListItem>
                 <ButtonSimpleIcon onClick={clear} icon={cross}>
-                    Clear all
+                    Reset
                 </ButtonSimpleIcon>
             </ListItem>
         )}
