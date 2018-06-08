@@ -1,7 +1,5 @@
 import React from 'react';
-import { compose, setPropTypes } from 'recompose';
 import PropTypes from 'prop-types';
-import { css } from 'react-emotion';
 import {
     ContentFrameExterior as Exterior,
     ContentFrameInterior as Interior,
@@ -15,15 +13,7 @@ import {
 import { cross } from '../../../components/SVGs/paths.js';
 import { colors } from '../../../settings/styles.js';
 
-const enhanceActions = compose(
-    setPropTypes({
-        apply: PropTypes.func.isRequired,
-        close: PropTypes.func.isRequired,
-        clear: PropTypes.func
-    })
-);
-
-const Actions = enhanceActions(({ apply, close, clear }) => (
+const Actions = ({ apply, close, clear }) => (
     <List>
         {clear && (
             <ListItem>
@@ -41,7 +31,13 @@ const Actions = enhanceActions(({ apply, close, clear }) => (
             </ButtonLink>
         </ListItem>
     </List>
-));
+);
+
+Actions.propTypes = {
+    apply: PropTypes.func.isRequired,
+    close: PropTypes.func.isRequired,
+    clear: PropTypes.func
+};
 
 const ContentFrame = ({ children, apply, close, clear, ...props }) => (
     <Exterior>
@@ -50,12 +46,10 @@ const ContentFrame = ({ children, apply, close, clear, ...props }) => (
     </Exterior>
 );
 
-const enhance = compose(
-    setPropTypes({
-        apply: PropTypes.func.isRequired,
-        close: PropTypes.func.isRequired,
-        clear: PropTypes.func.isRequired
-    })
-);
+ContentFrame.propTypes = {
+    apply: PropTypes.func.isRequired,
+    close: PropTypes.func.isRequired,
+    clear: PropTypes.func.isRequired
+};
 
-export default enhance(ContentFrame);
+export default ContentFrame;

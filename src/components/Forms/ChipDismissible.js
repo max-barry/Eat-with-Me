@@ -1,9 +1,5 @@
 import React from 'react';
-import { compose, setPropTypes, defaultProps } from 'recompose';
 import PropTypes from 'prop-types';
-import { css } from 'emotion';
-import { darken } from 'polished';
-import Ink from 'react-ink';
 import {
     ChipDismissibleContainer as Container,
     ChipDismissibleWrap as Wrap,

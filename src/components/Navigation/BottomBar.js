@@ -1,6 +1,4 @@
 import React from 'react';
-import { compose, setPropTypes } from 'recompose';
-import Headroom from 'react-headroom';
 import PropTypes from 'prop-types';
 import {
     BottomBarList as List,
@@ -24,16 +22,14 @@ const BottomBar = ({ items, ...props }) => (
     </List>
 );
 
-const enhance = compose(
-    setPropTypes({
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                label: PropTypes.string.isRequired,
-                icon: PropTypes.string.isRequired,
-                onClick: PropTypes.func.isRequired
-            })
-        ).isRequired
-    })
-);
+BottomBar.propTypes = {
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            label: PropTypes.string.isRequired,
+            icon: PropTypes.string.isRequired,
+            onClick: PropTypes.func.isRequired
+        })
+    ).isRequired
+};
 
-export default enhance(BottomBar);
+export default BottomBar;

@@ -4,7 +4,7 @@ import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
 import faker from 'faker';
 import { css } from 'emotion';
-import { Card } from './Card';
+import Card from './Card';
 import Drawer from './Drawer';
 import { tick } from '../SVGs/paths';
 import {

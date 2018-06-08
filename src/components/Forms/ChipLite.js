@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
+import { compose, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { cx } from 'emotion';
 import { requiredPropTypes, withAriaProps } from './Forms.shared';
@@ -40,13 +40,11 @@ const ChipLite = ({
     </Label>
 );
 
-const enhance = compose(
-    setPropTypes({
-        ...requiredPropTypes,
-        label: PropTypes.string.isRequired
-    }),
-    withAriaProps(),
-    onlyUpdateForKeys(['checked'])
-);
+ChipLite.propTypes = {
+    ...requiredPropTypes,
+    label: PropTypes.string.isRequired
+};
+
+const enhance = compose(withAriaProps(), onlyUpdateForKeys(['checked']));
 
 export default enhance(ChipLite);

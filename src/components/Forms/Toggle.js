@@ -1,7 +1,7 @@
 import React from 'react';
 import Switch from 'react-switch';
 import PropTypes from 'prop-types';
-import { onlyUpdateForKeys, compose, setPropTypes } from 'recompose';
+import { onlyUpdateForKeys } from 'recompose';
 import { transparentize } from 'polished';
 import {
     ToggleLabel,
@@ -14,12 +14,7 @@ import { colors } from '../../settings/styles';
 
 // TODO : Make this totally controlled by the parent
 
-const enhanceToggle = compose(
-    setPropTypes(requiredPropTypes),
-    onlyUpdateForKeys(['checked'])
-);
-
-const Toggle = enhanceToggle(({ checked, onChange, name }) => (
+const Toggle = ({ checked, onChange, name }) => (
     <Switch
         // className={toggleSwitchClass}
         checked={checked}
@@ -29,11 +24,41 @@ const Toggle = enhanceToggle(({ checked, onChange, name }) => (
         onColor={colors.secondary}
         activeBoxShadow={`0px 0px 2px 3px ${transparentize(0.7, colors.black)}`}
     />
-));
+);
 
-export default Toggle;
+Toggle.propTypes = requiredPropTypes;
 
-const propsRequiredWithLabel = {
+export default onlyUpdateForKeys(['checked'])(Toggle);
+
+const toggleWithLabel = ({
+    title: TitleComponent,
+    tag: TagComponent,
+    ...props
+}) => (
+    <ToggleLabel for={props.id}>
+        <ToggleLabelText>
+            <ToggleTitle>
+                {typeof TitleComponent === 'string' ? (
+                    TitleComponent
+                ) : (
+                    <TitleComponent />
+                )}
+            </ToggleTitle>
+            {TagComponent && (
+                <ToggleTag>
+                    {typeof TagComponent === 'string' ? (
+                        TagComponent
+                    ) : (
+                        <TagComponent />
+                    )}
+                </ToggleTag>
+            )}
+        </ToggleLabelText>
+        <Toggle {...props} />
+    </ToggleLabel>
+);
+
+toggleWithLabel.propTypes = {
     title: PropTypes.oneOfType([
         PropTypes.element,
         PropTypes.func,
@@ -47,33 +72,4 @@ const propsRequiredWithLabel = {
     ...requiredPropTypes
 };
 
-const enhanceToggleLabel = compose(
-    onlyUpdateForKeys(['checked']),
-    setPropTypes(propsRequiredWithLabel)
-);
-
-export const ToggleWithLabel = enhanceToggleLabel(
-    ({ title: TitleComponent, tag: TagComponent, ...props }) => (
-        <ToggleLabel for={props.id}>
-            <ToggleLabelText>
-                <ToggleTitle>
-                    {typeof TitleComponent === 'string' ? (
-                        TitleComponent
-                    ) : (
-                        <TitleComponent />
-                    )}
-                </ToggleTitle>
-                {TagComponent && (
-                    <ToggleTag>
-                        {typeof TagComponent === 'string' ? (
-                            TagComponent
-                        ) : (
-                            <TagComponent />
-                        )}
-                    </ToggleTag>
-                )}
-            </ToggleLabelText>
-            <Toggle {...props} />
-        </ToggleLabel>
-    )
-);
+export const ToggleWithLabel = onlyUpdateForKeys(['checked'])(toggleWithLabel);

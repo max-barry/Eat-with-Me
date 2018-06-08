@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'react-emotion';
-import { setPropTypes, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { buttonBaseClass as base } from './Button.styles';
 import { bs, colors, isCursor } from '../../settings/styles';
@@ -62,14 +61,12 @@ const ButtonIcon = ({
     </Button>
 );
 
-const enhance = compose(
-    setPropTypes({
-        onClick: PropTypes.func.isRequired,
-        path: PropTypes.string,
-        icon: PropTypes.string,
-        color: PropTypes.string,
-        className: PropTypes.string
-    })
-);
+ButtonIcon.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    path: PropTypes.string,
+    icon: PropTypes.string,
+    color: PropTypes.string,
+    className: PropTypes.string
+};
 
-export default enhance(ButtonIcon);
+export default ButtonIcon;

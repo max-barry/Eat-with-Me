@@ -1,17 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import {
-    compose,
-    setPropTypes,
-    defaultProps,
-    onlyUpdateForKeys
-} from 'recompose';
+import React, { Fragment } from 'react';
+import { compose, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { Spring, animated, config } from 'react-spring';
 import { cx, css } from 'emotion';
 import {
     ChipLabel as Label,
     chipDotClass as dotClass,
-    chipActiveClass as activeClass,
     chipDotActiveClass as dotActiveClass,
     chipLabelTextClass as textClass,
     CHIP_DOT_DIMENSION
@@ -37,17 +31,6 @@ const Chip = ({
         color={color}
         checked={checked}
         textColor={readableColor(color)}
-        // className={cx(className, {
-        //     [activeClass]: checked,
-        //     [css({
-        //         color: textColor,
-        //         borderColor: color,
-        //         '&::before': {
-        //             color,
-        //             backgroundColor: textColor
-        //         }
-        //     })]: checked
-        // })}
     >
         <Spring
             native

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
-import { css, cx } from 'emotion';
+import { compose, onlyUpdateForKeys } from 'recompose';
+import { cx } from 'emotion';
 import {
     checkboxBoxWrapClass as boxWrapClass,
     CheckboxTitle,
@@ -39,15 +39,13 @@ const Checkbox = ({
     </Container>
 );
 
-const enhance = compose(
-    setPropTypes({
-        title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-            .isRequired,
-        tag: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-        ...requiredPropTypes
-    }),
-    onlyUpdateForKeys(['checked']),
-    withAriaProps(true)
-);
+Checkbox.propTypes = {
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+        .isRequired,
+    tag: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    ...requiredPropTypes
+};
+
+const enhance = compose(onlyUpdateForKeys(['checked']), withAriaProps(true));
 
 export default enhance(Checkbox);

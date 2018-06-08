@@ -1,5 +1,4 @@
 import React from 'react';
-import { compose, setPropTypes, onlyUpdateForKeys } from 'recompose';
 import PropTypes from 'prop-types';
 import { cx } from 'emotion';
 import {
@@ -34,27 +33,24 @@ const RangeCheckbox = ({ items, onChange, ...props }) => (
     </List>
 );
 
-const enhance = compose(
-    setPropTypes({
-        onChange: PropTypes.func.isRequired,
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                checked: PropTypes.bool.isRequired,
-                label: PropTypes.oneOfType([
-                    PropTypes.string,
-                    PropTypes.number,
-                    PropTypes.func,
-                    PropTypes.element
-                ]).isRequired,
-                id: PropTypes.oneOfType([
-                    PropTypes.string,
-                    PropTypes.array,
-                    PropTypes.number
-                ]).isRequired
-            })
-        ).isRequired
-    })
-    // onlyUpdateForKeys(['items'])
-);
+RangeCheckbox.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            checked: PropTypes.bool.isRequired,
+            label: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number,
+                PropTypes.func,
+                PropTypes.element
+            ]).isRequired,
+            id: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.array,
+                PropTypes.number
+            ]).isRequired
+        })
+    ).isRequired
+};
 
-export default enhance(RangeCheckbox);
+export default RangeCheckbox;
