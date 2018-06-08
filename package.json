@@ -66,6 +66,7 @@
         "reselect": "^3.0.1",
         "shevyjs": "^1.1.0",
         "type-to-reducer": "^1.1.0",
+        "why-did-you-update": "^0.1.1",
         "yup": "^0.24.1"
     },
     "scripts": {
