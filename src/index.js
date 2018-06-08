@@ -1,7 +1,3 @@
-// import { createStore } from 'redux';
-// import * as reducers from './redux/ducks';
-// import middlewares from './redux/middlewares';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
