@@ -18,8 +18,8 @@ storiesOf('Forms', module)
         'Checkbox',
         withState({ checked: false })(({ store }) => (
             <Checkbox
-                title={() => 'Title for component'}
-                tag={() => 'Tag underneath the title'}
+                title={() => faker.lorem.words(3)}
+                tag={() => faker.lorem.words(12)}
                 name="somename"
                 checked={store.state.checked}
                 onChange={() => store.set({ checked: !store.state.checked })}

@@ -25,16 +25,15 @@ import {
 } from './Filters.styles';
 import { cuisineActions } from '../../redux/ducks/cuisine';
 import { Drawer } from '../../components/Structures';
+import ContentFrame from './ContentFrame';
 import { BottomBar } from '../../components/Navigation';
 import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
 import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
 import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
-import { withPropsChecker } from '../../hocs/Debug/debug';
 
 const SHARED_NAVIGATION = {
     [FACET_QUARTER]: 'Region',
     [FACET_CUISINE]: 'Cuisine'
-    // [null]: 'Neighborhood',
 };
 const DESKTOP_NAVIGATION = {
     ...SHARED_NAVIGATION,
@@ -46,26 +45,11 @@ const MOBILE_NAVIGATION = {
     [FACET_EXTRAS]: 'More filters'
 };
 
-// const virtuals = [
-//     [FACET_QUARTER],
-//     [FACET_CUISINE],
-//     [FACET_PRICE],
-//     [FACET_IS_BAR]
-// ].map((facet, z) => (
-//     <VirtualRefinement
-//         ref={this.virtualRefs[facet]}
-//         key={`virtual_${z}`}
-//         attribute={facet}
-//         limit={20}
-//     />
-// ));
-
 class Filters extends Component {
     state = {
         open: false,
         content: null,
         contentKey: null,
-        // contentItems: [],
         [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
         [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
         [FACET_CUISINE]: initialRefinements[FACET_CUISINE],
@@ -90,22 +74,12 @@ class Filters extends Component {
         this.clear = this.clear.bind(this);
         this.onRequestClose = this.onRequestClose.bind(this);
         this.apply = this.apply.bind(this);
+        this.onContentMount = this.onContentMount.bind(this);
     }
 
     get container() {
         return this.containerRef.current;
     }
-
-    // get virtuals() {
-    //     const state = this.state;
-    //     return {
-    //         [FACET_QUARTER]: state[FACET_QUARTER],
-    //         [FACET_CUISINE]: state[FACET_CUISINE],
-    //         [FACET_PRICE]: state[FACET_PRICE],
-    //         // [null, null,
-    //         [FACET_IS_BAR]: state[FACET_EXTRAS][FACET_IS_BAR]
-    //     };
-    // }
 
     get extraKeys() {
         return Object.keys(this.state[FACET_EXTRAS]);
@@ -190,20 +164,20 @@ class Filters extends Component {
         }
         // Now get the ref of the virtual representing this facet
         // const items = virtual.state.props.items;
-        const contentProps = {
-            // items,
-            close: this.onRequestClose,
-            apply: this.apply,
-            // refine: this.updateVirtuals,
-            onMount: rendered => (this.rendered = rendered),
-            clear: () => this.clear(contentKey)
-        };
+        // const contentProps = {
+        //     // items,
+        //     // refine: this.updateVirtuals,
+        //     onMount: rendered => (this.rendered = rendered),
+        //     close: this.onRequestClose,
+        //     apply: this.apply,
+        //     clear: () => this.clear(contentKey)
+        // };
         // Get the virtual (and it's current items) from the dict of refs
         // const virtual = this.virtualRefs[contentKey].current;
         // Set the new state with the left value and an open filter
         this.setState({
             contentKey,
-            contentProps,
+            // contentProps,
             isMobile,
             content: facetDictionary[contentKey],
             open: true,
@@ -254,8 +228,13 @@ class Filters extends Component {
         });
     }
 
-    clear(facet) {
+    clear() {
+        const facet = this.state.contentKey;
         console.log('Clear it: ' + facet);
+    }
+
+    onContentMount(rendered) {
+        this.rendered = rendered;
     }
 
     onRequestClose() {
@@ -265,22 +244,33 @@ class Filters extends Component {
     render() {
         const {
             hasValue,
-            contentProps,
+            // contentProps,
             contentKey,
             contentItems,
             isMobile,
             style: styleProps,
-            content: Content,
+            content: FacetContent = null,
             ...state
         } = this.state;
 
-        // const virtualsDict = this.virtuals;
-        // const virtuals = Object.entries(virtualsDict);
         const openItems = this.getCurrentOpenItems();
         const {
             overlay: overlayClass,
             content: contentClass
         } = filtersModalSimple(styleProps);
+
+        const Content = FacetContent && (
+            <ContentFrame
+                save={this.apply}
+                close={this.onRequestClose}
+                clear={this.clear}
+            >
+                <FacetContent
+                    onMount={this.onContentMount}
+                    initial={openItems}
+                />
+            </ContentFrame>
+        );
 
         return (
             <div ref={this.containerRef}>
@@ -325,24 +315,10 @@ class Filters extends Component {
                             className={contentClass}
                             overlayClassName={overlayClass}
                         >
-                            {Content && (
-                                <Content
-                                    {...contentProps}
-                                    initial={openItems}
-                                />
-                            )}
+                            {Content}
                         </Modal>
                     )}
-                    {isMobile && (
-                        <Drawer isOpen={state.open}>
-                            {Content && (
-                                <Content
-                                    {...contentProps}
-                                    initial={openItems}
-                                />
-                            )}
-                        </Drawer>
-                    )}
+                    {isMobile && <Drawer isOpen={state.open}>{Content}</Drawer>}
                 </div>
 
                 <VirtualRefinement

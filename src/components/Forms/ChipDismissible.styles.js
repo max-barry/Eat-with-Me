@@ -16,7 +16,7 @@ import {
 export const ChipDismissibleContainer = styled('div')({});
 
 export const ChipDismissibleWrap = styled('div')(sFlexed, {
-    maxWidth: dimensions.simpleButton * 5
+    maxWidth: dimensions.button * 5
 });
 
 export const ChipDismissibleLabel = styled('span')(shevy.overline, {
@@ -33,7 +33,7 @@ const chipDismissibleButton = css(
         backgroundColor: 'transparent',
         position: 'relative',
         border: `1px dashed transparent`,
-        // height: dimensions.simpleButton,
+        // height: dimensions.button,
         lineHeight: 1,
         padding: `${bs(0.25)} ${bs(0.5)}`,
         transition: `background-color ${transitionTimes.weak}ms`

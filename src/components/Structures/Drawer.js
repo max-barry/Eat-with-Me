@@ -13,29 +13,28 @@ import {
     drawerOverlayClass as overlayClass,
     drawerContentClass as contentClass
 } from './Drawer.styles';
-import { withPropsChecker } from '../../hocs/Debug/debug';
 
 const Drawer = ({ isOpen, mounted, children, onClose, ...props }) => {
     return (
         <Spring
             native
-            from={{ progress: 100 }}
-            to={{ progress: isOpen && mounted ? 0 : 100 }}
+            from={{ y: 100 }}
+            to={{ y: isOpen && mounted ? 0 : 100 }}
             config={config.gentle}
             onRest={() => {
                 // Function to call onClose
                 if (onClose && mounted && !isOpen) onClose();
             }}
         >
-            {({ progress }) => (
+            {({ y }) => (
                 <animated.div
                     className={cx(overlayClass, props.overlayClass)}
                     aria-label="TODO"
                     tabIndex={-1}
                     style={{
                         pointerEvents: isOpen ? 'auto' : 'none',
-                        transform: progress.interpolate(
-                            progress => `translate3d(0%, ${progress}%, 0)`
+                        transform: y.interpolate(
+                            y => `translate3d(0%, ${y}%, 0)`
                         )
                     }}
                 >
@@ -54,24 +53,18 @@ const enhance = compose(
     setPropTypes({
         isOpen: PropTypes.bool.isRequired,
         overlayClass: PropTypes.string,
-        contentClass: PropTypes.string
+        contentClass: PropTypes.string,
+        onClose: PropTypes.func
     }),
     onlyUpdateForKeys(['isOpen', 'children']),
     withStateHandlers(
         {
             mounted: false
-            // animationCompleted: false
         },
         {
             setMounted: _ => _ => ({
                 mounted: true
             })
-            // setAnimationComplete: _ => isComplete => {
-            //     console.log('yoman');
-            //     return {
-            //         animationCompleted: isComplete
-            //     };
-            // }
         }
     ),
     lifecycle({

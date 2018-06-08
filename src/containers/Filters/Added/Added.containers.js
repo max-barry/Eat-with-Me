@@ -110,7 +110,7 @@ class Added extends Component {
                             i * cardCompactW +
                             i * bsint(1) +
                             expandedBeforeThis.length *
-                                (dimensions.simpleButton + bsint(0.5))
+                                (dimensions.button + bsint(0.5))
                     };
 
                     return (

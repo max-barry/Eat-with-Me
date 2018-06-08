@@ -13,6 +13,8 @@ import { PriceOptions } from './Facets/Price/Price.components';
 import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
 import AddedList from './Added';
+import { css } from 'emotion';
+import { mq } from '../../settings/styles';
 
 const onChange = () => console.log('Change');
 
@@ -58,18 +60,20 @@ storiesOf('Filters', module)
     .add(
         'Quarter',
         withState({ items: makeRefinements(8) })(({ store }) => (
-            <QuarterList
-                items={store.state.items}
-                update={value => {
-                    store.set({
-                        items: store.state.items.map(refinemnet => {
-                            if (refinemnet.label === value)
-                                refinemnet.isRefined = !refinemnet.isRefined;
-                            return refinemnet;
-                        })
-                    });
-                }}
-            />
+            <div className={css(mq({ minHeight: [0, '100vh'] }))}>
+                <QuarterList
+                    items={store.state.items}
+                    update={value => {
+                        store.set({
+                            items: store.state.items.map(refinemnet => {
+                                if (refinemnet.label === value)
+                                    refinemnet.isRefined = !refinemnet.isRefined;
+                                return refinemnet;
+                            })
+                        });
+                    }}
+                />
+            </div>
         ))
     )
     .add(

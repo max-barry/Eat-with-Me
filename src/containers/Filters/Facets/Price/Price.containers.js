@@ -1,29 +1,10 @@
-import React, { Fragment } from 'react';
-import { setPropTypes, compose, withPropsOnChange } from 'recompose';
-import PropTypes from 'prop-types';
-import { connectRefinementList } from 'react-instantsearch/connectors';
-import { FacetActions as Actions } from '../Facets.components';
-import { FACET_PRICE } from '../../Filters.shared';
+import React from 'react';
+import { compose } from 'recompose';
 import { PriceOptions as Options } from './Price.components';
-import { withFacetAll, asFacetList } from '../Facets.shared';
-import { withPropsChecker } from '../../../../hocs/Debug/debug';
+import { asFacetList } from '../Facets.shared';
 
-const Price = ({ items, update, actions }) => (
-    <Fragment>
-        <Options items={items} update={update} />
-        <Actions {...actions} />
-    </Fragment>
-);
+const Price = ({ items, update }) => <Options items={items} update={update} />;
 
-const enhance = compose(
-    asFacetList
-    // withPropsOnChange(['defaultRefinement'], ({ defaultRefinement }) => ({
-    //     defaultRefinement,
-    //     attribute: FACET_PRICE
-    // })),
-    // connectRefinementList,
-    // withFacetAll,
-    // withPropsChecker
-);
+const enhance = compose(asFacetList);
 
 export default enhance(Price);

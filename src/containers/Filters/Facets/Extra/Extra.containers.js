@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { compose, withHandlers, withStateHandlers } from 'recompose';
-import { FacetActions as Actions } from '../Facets.components';
 import { FACET_IS_BAR } from '../../Filters.shared';
 import { FacetBars as Bars } from './Extra.components';
 import {
@@ -43,7 +42,6 @@ class ExtraFilters extends Component {
                         update={this.onBarChange}
                     />
                 </Wrap>
-                <Actions {...this.props.actions} />
             </Container>
         );
     }

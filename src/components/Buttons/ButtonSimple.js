@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import styled, { css, cx } from 'react-emotion';
-import { darken } from 'polished';
+import React, { Fragment } from 'react';
+import { cx } from 'react-emotion';
 import {
     compose,
     setPropTypes,
@@ -9,10 +8,8 @@ import {
     lifecycle
 } from 'recompose';
 import PropTypes from 'prop-types';
-import { Spring, animated, config, interpolate } from 'react-spring';
-import posed, { PoseGroup } from 'react-pose';
-import Ink from 'react-ink';
-import { bs, colors, transitionTimes } from '../../settings/styles';
+import { Spring, animated, config } from 'react-spring';
+import { bs, colors } from '../../settings/styles';
 import {
     buttonSimpleClass,
     atcClass,

@@ -1,80 +1,77 @@
 import styled, { css } from 'react-emotion';
-import { darken } from 'polished';
 import {
     bs,
     sInteractive,
-    fontWeights,
     sFlexedCenter,
     sFlexed,
     dimensions,
     shevy,
     colors,
     transitionTimes,
-    shadows
+    shadows,
+    isCursor,
+    mq
 } from '../../settings/styles';
 
 export const checkboxCheckedClass = 'CheckboxBox--checked';
 
-export const CheckboxContainer = styled('div')(sFlexed, {
-    alignItems: 'center'
-});
+export const CheckboxContainer = styled('div')(
+    sFlexed,
+    mq({
+        alignItems: 'center',
+        maxWidth: ['none', 320]
+    })
+);
 
 export const CheckboxLabel = styled('label')(
     sFlexed,
     sInteractive,
-    {
-        marginBottom: bs(1),
+    mq({
         flexDirection: 'column',
-        paddingLeft: bs(0.5)
-    },
-    `&:last-child { margin-bottom: 0; }`
+        paddingRight: (dimensions.tap - dimensions.icon) / 2,
+        paddingLeft: [bs(0.5), 0]
+    })
 );
 
-export const checkboxBoxWrapClass = css(
-    sFlexedCenter,
-    sInteractive,
-    {
-        minWidth: dimensions.tap,
-        minHeight: dimensions.tap
-    },
-    `&:focus {outline: 0}`
-);
+export const checkboxBoxWrapClass = css(sFlexedCenter, sInteractive, {
+    minWidth: dimensions.tap,
+    minHeight: dimensions.tap,
+    '&:focus': { outline: 0 }
+});
 
-export const checkboxBoxInnerClass = css(
-    {
-        display: 'block',
-        borderRadius: dimensions.borderRadius,
-        height: dimensions.icon,
-        width: dimensions.icon,
-        padding: '6px',
-        backgroundColor: 'white',
-        border: `1px solid ${colors.greyDark}`,
-        transition: `background-color ${transitionTimes.weak}ms`
+const unchecked = `.${checkboxBoxWrapClass}:not(.${checkboxCheckedClass})`;
+const checked = `.${checkboxBoxWrapClass}.${checkboxCheckedClass}`;
+
+export const checkboxBoxInnerClass = css({
+    display: 'block',
+    borderRadius: dimensions.borderRadius,
+    height: dimensions.icon,
+    width: dimensions.icon,
+    padding: '6px',
+    backgroundColor: 'white',
+    border: `1px solid ${colors.greyDark}`,
+    transition: `background-color ${transitionTimes.weak}ms`,
+    [`${unchecked} & svg`]: {
+        opacity: 0
     },
-    `
-    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}) & svg {
-        opacity: 0;
-    } 
-    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):focus & {
-        outline: 0;
-        background-color: ${colors.grey1};
+    [`${checked} &`]: {
+        backgroundColor: colors.secondary,
+        borderColor: colors.secondary
+    },
+    [isCursor]: {
+        [`${unchecked}:focus &`]: {
+            outline: 0,
+            backgroundColor: colors.grey1
+        },
+        [`${unchecked}:focus & svg, ${unchecked}:hover & svg`]: {
+            opacity: 0.2
+        },
+        [`${checked}:focus &`]: {
+            backgroundColor: colors.secondaryDark,
+            boxShadow: shadows.focused
+        }
     }
-    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):focus & svg {
-        opacity: 0.2;
-    }
-    .${checkboxBoxWrapClass}:not(.${checkboxCheckedClass}):hover & svg {
-        opacity: 0.1;
-    }
-    .${checkboxBoxWrapClass}.${checkboxCheckedClass} & {
-        background-color: ${colors.secondary};
-        border-color: ${colors.secondary};
-    }
-    .${checkboxBoxWrapClass}.${checkboxCheckedClass}:focus & {
-        background-color: ${colors.secondaryDark};
-        box-shadow: ${shadows.focused};
-    }
-`
-);
+});
 
 export const checkboxTitleClass = css(shevy.h6, {
     em: {

@@ -2,7 +2,6 @@ import {
     withHandlers,
     compose,
     lifecycle,
-    withPropsOnChange,
     setPropTypes,
     withStateHandlers
 } from 'recompose';
@@ -43,69 +42,21 @@ export const withFacetListUpdate = withStateHandlers(
     }
 );
 
-// export const withFacetUpdate = withHandlers({
-//     update: ({ refine }) => value => refine(value)
-// });
-
 export const withFacetPropTypes = setPropTypes({
     close: PropTypes.func.isRequired,
-    // save: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     initial: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
         .isRequired,
     clear: PropTypes.func
-    // defaultRefinement: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
-    // .isRequired
 });
 
-export const withCondenseFacetActions = withPropsOnChange(
-    ['save', 'close', 'clear'],
-    ({ save, close, clear }) => ({
-        actions: {
-            clear,
-            cancel: close,
-            apply: save
-        }
-    })
-);
-
-export const withFacetShared = compose(
-    withFacetPropTypes,
-    withFacetLifecycle,
-    withCondenseFacetActions
-);
-
-// export const withFacetAll = compose();
-// withFacetSave,
-// withInternalState,
-// withFacetUpdate,
-
-// export
+export const withFacetShared = compose(withFacetPropTypes, withFacetLifecycle);
 
 export const asFacetList = compose(
     withFacetListUpdate,
     withFacetListSave,
     withFacetShared
 );
-
-// export const withItemsOrdered = (
-//     attributes,
-//     direction,
-//     postprocess = items => items
-// ) =>
-//     withPropsOnChange(['items'], props => ({
-//         items: postprocess(orderBy(props.items, attributes, direction))
-//     }));
-
-// export const withPanelledUpdate = withHandlers({
-//     update: ({ items, onChange }) => (panelLabel, itemLabel) => {
-//         // Find the value associated with this label
-//         // (kind of assumes all labels and panel names are unique)
-//         const panel = items.find(({ name }) => name === panelLabel);
-//         const item = panel.items.find(({ label }) => label === itemLabel);
-//         onChange(item.value);
-//     }
-// });
 
 export const priceIntToSymbol = int => '£'.repeat(parseFloat(int), 10);

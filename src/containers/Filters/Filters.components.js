@@ -1,38 +1,41 @@
 import React from 'react';
-import { css } from 'emotion';
+import styled, { css, cx } from 'react-emotion';
+import { darken } from 'polished';
 import { onlyUpdateForKeys, compose } from 'recompose';
 import { connectRefinementList } from 'react-instantsearch/connectors';
-import { bs, colors } from '../../settings/styles';
+import { bs, colors, isCursor } from '../../settings/styles';
 import { ButtonSimple } from '../../components/Buttons';
-import { darken } from 'polished';
-import { withPropsChecker } from '../../hocs/Debug/debug';
 
-const filterButtonClass = css(
-    { marginLeft: bs(0.25), marginRight: bs(0.25) },
-    `&:first-child {margin-left: 0}
-    &:last-child  {margin-right: 0}`
+const FilterButtonLi = styled('li')(
+    css({
+        marginLeft: bs(0.25),
+        marginRight: bs(0.25),
+        '&:first-child': { marginLeft: 0 },
+        '&:last-child': { marginRight: 0 }
+    })
 );
+
+const filterButtonActiveClass = css({
+    backgroundColor: colors.primary,
+    [isCursor]: {
+        '&:hover, &:focus': {
+            backgroundColor: darken(0.03, colors.primary)
+        }
+    }
+});
 
 export const FilterButton = onlyUpdateForKeys(['hasValue'])(
     ({ children, onClick, hasValue, ...props }) => (
-        <li {...props} className={filterButtonClass}>
+        <FilterButtonLi {...props}>
             <ButtonSimple
                 onClick={onClick}
-                className={
-                    hasValue
-                        ? css`
-                              background-color: ${colors.primary};
-                              &:hover, &:focus {background-color: ${darken(
-                                  0.03,
-                                  colors.primary
-                              )}};
-                          `
-                        : null
-                }
+                className={cx({
+                    [filterButtonActiveClass]: hasValue
+                })}
             >
                 {children}
             </ButtonSimple>
-        </li>
+        </FilterButtonLi>
     )
 );
 

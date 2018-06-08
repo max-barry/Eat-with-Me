@@ -63,5 +63,5 @@ export const addedItemButtonClass = css(buttonSimpleClass, {
 });
 
 // export const cardCompactActionsClass = css({
-//     height: dimensions.simpleButton
+//     height: dimensions.button
 // });

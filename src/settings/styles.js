@@ -49,7 +49,7 @@ export const dimensions = {
     filtersBar: 60,
     card: 270,
     cardCompact: 60,
-    simpleButton: 36,
+    button: 36,
     filtersComponentMinWidth: 400,
     borderRadius: 3,
     chip: 30,

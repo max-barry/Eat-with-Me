@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose, branch, renderComponent, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { pluck, pick } from 'ramda';
-import { FacetActions as Actions } from '../Facets.components';
 import { CuisineTabs as Tabs } from './Cuisine.components';
 import { asFacetList } from '../Facets.shared';
 import { cuisineActions } from '../../../../redux/ducks/cuisine';
@@ -13,11 +12,8 @@ import {
     cuisineGenreSelector
 } from '../../../../redux/ducks/cuisine/cuisine.selectors';
 
-const Cuisine = ({ items, update, actions, ...props }) => (
-    <Fragment>
-        <Tabs items={items} update={update} />
-        <Actions {...actions} />
-    </Fragment>
+const Cuisine = ({ items, update, ...props }) => (
+    <Tabs items={items} update={update} />
 );
 
 const enhance = compose(
