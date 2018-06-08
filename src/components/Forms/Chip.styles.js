@@ -19,20 +19,6 @@ export const CHIP_MAX_WIDTH = '230px';
 export const CHIP_HEIGHT = dimensions.chip;
 export const CHIP_DOT_DIMENSION = 16;
 
-// export const chipFocusClass = css({
-//     boxShadow: shadows.focused
-// });
-
-// cx(className, {
-//     [activeClass]: checked,
-//     [css({
-//         '&::before': {
-//             color,
-//             backgroundColor: textColor
-//         }
-//     })]: checked
-// })
-
 export const ChipLabel = onlyUpdateForKeys(['checked', 'color', 'textColor'])(
     styled('label')(sInteractive, ({ checked, color, textColor }) => ({
         backgroundColor: checked ? color : colors.white,
@@ -77,6 +63,8 @@ export const chipLabelTextClass = css(ellipsis('100%'), {
     display: 'block',
     willChange: 'transform'
 });
+
+// TODO : Make this an object
 
 export const chipDotClass = css`
     height: ${CHIP_DOT_DIMENSION}px;
