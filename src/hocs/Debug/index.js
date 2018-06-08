@@ -1,0 +1,1 @@
+export { withPropsChecker } from './debug';
