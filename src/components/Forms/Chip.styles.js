@@ -14,7 +14,7 @@ import { ellipsis } from 'polished';
 import { onlyUpdateForKeys } from 'recompose';
 
 export const CHIP_EDGE_PADDING = bs(0.75);
-export const CHIP_VERTICAL_DOT_PADDING = `${bsint(0.25)}px`;
+export const CHIP_VERTICAL_DOT_PADDING = bs(0.25);
 export const CHIP_MAX_WIDTH = '230px';
 export const CHIP_HEIGHT = dimensions.chip;
 export const CHIP_DOT_DIMENSION = 16;
@@ -41,12 +41,12 @@ export const ChipLabel = onlyUpdateForKeys(['checked', 'color', 'textColor'])(
             content: '"×"',
             width: CHIP_DOT_DIMENSION,
             height: CHIP_DOT_DIMENSION,
+            right: CHIP_EDGE_PADDING,
             fontSize: CHIP_DOT_DIMENSION + 4,
             lineHeight: `${CHIP_DOT_DIMENSION + 2}px`,
             textAlign: 'center',
             display: 'block',
             position: 'absolute',
-            right: CHIP_EDGE_PADDING,
             borderRadius: '50%',
             transform: checked ? 'none' : 'scale(1)',
             color: checked ? color : 'transparent',
@@ -64,28 +64,24 @@ export const chipLabelTextClass = css(ellipsis('100%'), {
     willChange: 'transform'
 });
 
-// TODO : Make this an object
-
-export const chipDotClass = css`
-    height: ${CHIP_DOT_DIMENSION}px;
-    width: ${CHIP_DOT_DIMENSION}px;
-    left: ${CHIP_EDGE_PADDING};
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    border-radius: 50%;
-    top: 22%;
-    z-index: -1;
-    will-change: transform;
-    transform-origin: center;
-    transition: transform ${transitionTimes.short}ms ${easings.standard};
-    &:focus {
-        outline: 0;
+export const chipDotClass = css({
+    height: CHIP_DOT_DIMENSION,
+    width: CHIP_DOT_DIMENSION,
+    left: CHIP_EDGE_PADDING,
+    lineHeight: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    borderRadius: '50%',
+    top: '22%',
+    zIndex: -1,
+    willChange: 'transform',
+    transformOrigin: 'center',
+    transition: `transform ${transitionTimes.short}ms ${easings.standard}`,
+    '&:focus': {
+        outline: 0
     }
-`;
+});
 
-export const chipDotActiveClass = css`
-    transform: scale(30);
-`;
+export const chipDotActiveClass = css({ transform: 'scale(30)' });
