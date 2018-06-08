@@ -26,6 +26,11 @@ const App = Loadable({
 const store = configureStore();
 // export default configureStore;
 
+// if (process.env.NODE_ENV !== 'production') {
+//     const { whyDidYouUpdate } = require('why-did-you-update');
+//     whyDidYouUpdate(React, { exclude: [/^StoryState/] });
+// }
+
 ReactDOM.render(
     <BrowserRouter>
         <Provider store={store}>
