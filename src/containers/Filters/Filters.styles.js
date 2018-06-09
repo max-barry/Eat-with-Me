@@ -27,7 +27,7 @@ export const FiltersButtonList = styled('ul')(sFlexed, {
 });
 
 export const filtersModalSimple = ({ top, left }) => ({
-    overlay: css({
+    overlayClass: css({
         top,
         position: 'absolute',
         left: 0,
@@ -36,7 +36,7 @@ export const filtersModalSimple = ({ top, left }) => ({
         height: '100%',
         backgroundColor: 'rgba(255, 255, 255, 0.8)'
     }),
-    content: css({
+    contentClass: css({
         left,
         position: 'absolute',
         top: 0,

@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
-// import { connectCurrentRefinements } from 'react-instantsearch/connectors';
-import { orderBy } from 'lodash';
 import MediaQuery from 'react-responsive';
+import { map, path, toPairs, flip, prop, flatten, values } from 'ramda';
 import { Modal } from '../../hocs/Modal/Modal';
 import { dimensions, breakpoints } from '../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
 import {
     FACET_CUISINE,
-    FACET_EXTRAS,
     FACET_IS_BAR,
     FACET_QUARTER,
     FACET_PRICE,
@@ -27,46 +25,42 @@ import { cuisineActions } from '../../redux/ducks/cuisine';
 import { Drawer } from '../../components/Structures';
 import ContentFrame from './ContentFrame';
 import { BottomBar } from '../../components/Navigation';
-import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
 import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
-import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
 
 const SHARED_NAVIGATION = {
-    [FACET_QUARTER]: 'Region',
-    [FACET_CUISINE]: 'Cuisine'
+    Region: [FACET_QUARTER],
+    Cuisine: [FACET_CUISINE]
 };
+
 const DESKTOP_NAVIGATION = {
     ...SHARED_NAVIGATION,
-    [FACET_PRICE]: 'Price',
-    [FACET_EXTRAS]: 'More...'
+    Price: [FACET_PRICE]
+    // 'More...': [FACET_EXTRAS]
+    // 'More...': [FACET_PRICE, FACET_EXTRAS]
 };
+
 const MOBILE_NAVIGATION = {
-    ...SHARED_NAVIGATION,
-    [FACET_EXTRAS]: 'More filters'
+    ...SHARED_NAVIGATION
+    // 'More filters': [FACET_EXTRAS]
 };
 
 class Filters extends Component {
     state = {
-        open: false,
-        FacetContent: null,
-        contentKey: null,
-        [FACET_QUARTER]: initialRefinements[FACET_QUARTER],
-        [FACET_EXTRAS]: initialRefinements[FACET_EXTRAS],
-        [FACET_CUISINE]: initialRefinements[FACET_CUISINE],
-        [FACET_PRICE]: initialRefinements[FACET_PRICE],
-        hasValue: {},
+        isOpen: false,
+        facetComponents: [],
+        menuItem: null,
+        menuItemWithValue: {},
         style: {
             left: 0,
             top: 0
         }
     };
-    rendered = null;
     containerRef = React.createRef();
+    frameRef = React.createRef();
     virtualRefs = {
         [FACET_QUARTER]: React.createRef(),
         [FACET_CUISINE]: React.createRef(),
         [FACET_PRICE]: React.createRef(),
-        // [null, null,
         [FACET_IS_BAR]: React.createRef()
     };
 
@@ -74,7 +68,7 @@ class Filters extends Component {
         super(props);
         this.clear = this.clear.bind(this);
         this.apply = this.apply.bind(this);
-        this.onRequestClose = this.onRequestClose.bind(this);
+        this.toggleOpen = this.toggleOpen.bind(this);
         this.onContentMount = this.onContentMount.bind(this);
     }
 
@@ -82,48 +76,22 @@ class Filters extends Component {
         return this.containerRef.current;
     }
 
-    get extraKeys() {
-        return Object.keys(this.state[FACET_EXTRAS]);
+    get currentRefinement() {
+        return map(
+            path(['current', 'state', 'props', 'items']),
+            this.virtualRefs
+        );
     }
 
     componentDidMount() {
         this.props.fetchCuisinesFromCacheFirst();
     }
 
-    orderItems(items) {
-        return orderBy(items, ['count', 'label'], ['desc', 'asc']);
-    }
+    openFilter(event, menuItem, facets) {
+        // Check we're not just reopening an already open menu item
+        if (menuItem === this.state.menuItem && this.state.isOpen) return;
 
-    getCurrentOpenItems(contentKey) {
-        let items = null;
-        const key = contentKey || this.state.contentKey;
-        // If it's the extras tab, we need to source from multiple virtuals
-        if (key === FACET_EXTRAS) {
-            // Reduce a list of the extras until you've built an object
-            // with a key per extra facet and the standard
-            // items array as the value of that key
-            items = this.extraKeys.reduce((acc, cur) => {
-                const virtual = this.virtualRefs[cur].current;
-                acc[cur] = this.orderItems(virtual.state.props.items);
-                return acc;
-            }, {});
-        } else if (key) {
-            // Otherwise just check we have a key (first render won't)
-            // and grab the virtual for that key
-            const virtual = this.virtualRefs[key].current;
-            // Now fish out the items for that virtual an order them
-            items = this.orderItems(virtual.state.props.items);
-        }
-        // Return the items
-        return items;
-    }
-
-    openFilter(event, contentKey) {
-        // Check we're not just reopening an already open facet
-        if (contentKey === this.state.contentKey && this.state.open) return;
-
-        // Create an empty object we will fill
-        // with position: fixed modal attrs
+        // Create an empty object we will fill with position: fixed modal attrs
         const position = {};
         // Find the width of the container of the element
         const {
@@ -158,67 +126,50 @@ class Filters extends Component {
 
         // We need to check if the filters are already open
         // and save them down if they are
-        if (this.state.open && this.rendered) {
+        if (this.state.isOpen && this.rendered) {
             this.apply(true);
         }
+
         // Set the new state with the left value and an open filter
         this.setState({
-            contentKey,
+            menuItem,
             // contentProps,
             isMobile,
-            FacetContent: facetDictionary[contentKey],
-            open: true,
+            facetComponents: facets.map(facet => ({
+                attribute: facet,
+                component: facetDictionary[facet]
+            })),
+            isOpen: true,
             style: {
-                ...this.state.style,
+                // ...this.state.style,
                 ...position
             }
         });
     }
 
     apply(close = true) {
-        let hasValue;
-        const state = this.state;
-        const contentKey = state.contentKey;
-        // As the current rendered component to process itself
-        const refinements = this.rendered.props.process();
-        // If this is the extras then you need to refine multiple virtuals
-        if (contentKey === FACET_EXTRAS) {
-            // The extras come in as an object with keys for each extra facet
-            // e.g. {IS_BAR: []}
-            // Loop over the keys of extras
-            this.extraKeys.forEach(key => {
-                const virtual = this.virtualRefs[key].current;
-                // If you have a value then refine the virtual
-                if (refinements[key]) {
-                    virtual.refine(refinements[key]);
-                }
-            });
-            // Check if all the refined facets then .some it to check if we have a value
-            hasValue = Object.entries(refinements).some(([k, v]) =>
-                v.some(n => n)
-            );
-        } else {
-            // For anything that isn't the Extras it's pretty simple
-            // Get the ref for the virtual for this key
-            const virtual = this.virtualRefs[contentKey].current;
-            // Run a refine function
-            virtual.refine(refinements);
-            // If there are any truthy values in the refinements then it has a value
-            hasValue = refinements.some(n => n);
-        }
-        // Update the state
+        const { menuItem, menuItemWithValue } = this.state;
+        // Request the content frame to process itself
+        const processed = this.frameRef.current.process();
+        // For each processed facet find the corresponding virtual and refine it
+        toPairs(processed).forEach(([attribute, refinement]) => {
+            const virtual = this.virtualRefs[attribute].current;
+            // If a value has been returned, snatch
+            // the refine fn from the virtual and refine, baby
+            if (refinement.length) virtual.refine(refinement);
+        });
+        // Close the opened element
         this.setState({
-            [contentKey]: refinements,
-            open: !close,
-            hasValue: {
-                ...state.hasValue,
-                [contentKey]: hasValue
+            isOpen: !close,
+            menuItemWithValue: {
+                ...menuItemWithValue,
+                [menuItem]: !!flatten(values(processed)).length
             }
         });
     }
 
     clear() {
-        const facet = this.state.contentKey;
+        const facet = this.state.menuItem;
         console.log('Clear it: ' + facet);
     }
 
@@ -226,39 +177,30 @@ class Filters extends Component {
         this.rendered = rendered;
     }
 
-    onRequestClose() {
-        this.setState({ open: false });
+    toggleOpen(isOpen = false) {
+        this.setState({ isOpen });
     }
 
     render() {
         const {
-            hasValue,
-            // contentProps,
-            contentKey,
-            contentItems,
+            menuItem,
+            menuItemWithValue,
             isMobile,
-            FacetContent = null,
+            isOpen,
+            facetComponents,
             style: styleProps,
             ...state
         } = this.state;
 
-        const openItems = this.getCurrentOpenItems();
-        const {
-            overlay: overlayClass,
-            content: contentClass
-        } = filtersModalSimple(styleProps);
-
-        const Content = FacetContent && (
+        const Content = isOpen && (
             <ContentFrame
+                ref={this.frameRef}
                 apply={this.apply}
-                close={this.onRequestClose}
+                close={this.toggleOpen}
                 clear={this.clear}
-            >
-                <FacetContent
-                    onMount={this.onContentMount}
-                    initial={openItems}
-                />
-            </ContentFrame>
+                children={facetComponents}
+                currentRefinement={this.currentRefinement}
+            />
         );
 
         return (
@@ -267,14 +209,16 @@ class Filters extends Component {
                     <MediaQuery maxWidth={breakpoints.mobile}>
                         <BottomBar
                             items={Object.entries(MOBILE_NAVIGATION).map(
-                                ([facet, label]) => ({
+                                ([label, facets]) => ({
                                     label,
-                                    icon: {
-                                        [FACET_CUISINE]: worldwideSvg,
-                                        [FACET_QUARTER]: mapLocationSvg,
-                                        [FACET_EXTRAS]: moreSvg
-                                    }[facet],
-                                    onClick: e => this.openFilter(e, facet)
+                                    // icon: {
+                                    //     [FACET_CUISINE]: worldwideSvg,
+                                    //     [FACET_QUARTER]: mapLocationSvg
+                                    //     // [FACET_EXTRAS]: moreSvg
+                                    // }[label],
+                                    icon: worldwideSvg,
+                                    onClick: e =>
+                                        this.openFilter(e, label, facets)
                                 })
                             )}
                         />
@@ -282,12 +226,15 @@ class Filters extends Component {
                     <MediaQuery minWidth={breakpoints.mobile + 1}>
                         <ButtonList>
                             {Object.entries(DESKTOP_NAVIGATION).map(
-                                ([facet, label], i) => (
+                                ([label, facets], i) => (
                                     <FilterButton
                                         key={`filter_button_${i}`}
-                                        onClick={e => this.openFilter(e, facet)}
+                                        onClick={e =>
+                                            this.openFilter(e, label, facets)
+                                        }
                                         children={label}
-                                        hasValue={!!hasValue[facet]}
+                                        // hasValue={!!hasValue[facet]}
+                                        hasValue={menuItemWithValue[label]}
                                     />
                                 )
                             )}
@@ -297,17 +244,15 @@ class Filters extends Component {
                 <div id="FilterCanvasWrap">
                     {!isMobile && (
                         <Modal
-                            isOpen={state.open}
+                            isOpen={isOpen}
                             contentLabel="Filter tools modal"
-                            onRequestClose={this.onRequestClose}
-                            closeTimeoutMS={150}
-                            className={contentClass}
-                            overlayClassName={overlayClass}
+                            onRequestClose={this.toggleOpen}
+                            {...filtersModalSimple(styleProps)}
                         >
                             {Content}
                         </Modal>
                     )}
-                    {isMobile && <Drawer isOpen={state.open}>{Content}</Drawer>}
+                    {isMobile && <Drawer isOpen={isOpen}>{Content}</Drawer>}
                 </div>
 
                 <VirtualRefinement
@@ -315,6 +260,7 @@ class Filters extends Component {
                     key={`virtual_${FACET_QUARTER}`}
                     attribute={FACET_QUARTER}
                     limit={20}
+                    defaultRefinement={initialRefinements[FACET_QUARTER]}
                 />
 
                 <VirtualRefinement
@@ -322,6 +268,7 @@ class Filters extends Component {
                     key={`virtual_${FACET_CUISINE}`}
                     attribute={FACET_CUISINE}
                     limit={20}
+                    defaultRefinement={initialRefinements[FACET_CUISINE]}
                 />
 
                 <VirtualRefinement
@@ -329,6 +276,7 @@ class Filters extends Component {
                     key={`virtual_${FACET_PRICE}`}
                     attribute={FACET_PRICE}
                     limit={20}
+                    defaultRefinement={initialRefinements[FACET_PRICE]}
                 />
 
                 <VirtualRefinement
@@ -336,6 +284,7 @@ class Filters extends Component {
                     key={`virtual_${FACET_IS_BAR}`}
                     attribute={FACET_IS_BAR}
                     limit={20}
+                    defaultRefinement={initialRefinements[FACET_IS_BAR]}
                 />
             </div>
         );

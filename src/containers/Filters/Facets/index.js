@@ -2,7 +2,7 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import {
     FACET_QUARTER,
-    FACET_EXTRAS,
+    // FACET_EXTRAS,
     FACET_CUISINE,
     FACET_PRICE
 } from '../Filters.shared';
@@ -19,7 +19,7 @@ const FilterExtras = Loadable({
 
 const FilterCuisine = Loadable({
     loader: _ => import('./Cuisine'),
-    loading: () => <p>Loading extra filter</p>
+    loading: () => <p>Loading cuisine filter</p>
 });
 
 const FilterPrice = Loadable({
@@ -29,7 +29,7 @@ const FilterPrice = Loadable({
 
 export const facetDictionary = {
     [FACET_QUARTER]: FilterQuarter,
-    [FACET_EXTRAS]: FilterExtras,
+    // [FACET_EXTRAS]: FilterExtras,
     [FACET_CUISINE]: FilterCuisine,
     [FACET_PRICE]: FilterPrice
 };
