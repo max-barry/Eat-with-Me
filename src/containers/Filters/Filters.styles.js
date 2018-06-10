@@ -54,29 +54,29 @@ export const filtersModalSimple = ({ top, left }) => ({
     })
 });
 
-export const filtersModalAdvanced = ({ top, left }) => ({
-    overlay: {
-        top,
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 'auto',
-        backgroundColor: 'transparent'
-    },
-    content: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minWidth: dimensions.filtersComponentMinWidth,
-        border: 0,
-        background: 'transparent',
-        overflow: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        borderRadius: dimensions.borderRadius,
-        outline: 'none',
-        padding: 0
-    }
-});
+// export const filtersModalAdvanced = ({ top, left }) => ({
+//     overlay: {
+//         top,
+//         position: 'absolute',
+//         left: 0,
+//         right: 0,
+//         bottom: 0,
+//         height: 'auto',
+//         backgroundColor: 'transparent'
+//     },
+//     content: {
+//         position: 'absolute',
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         bottom: 0,
+//         minWidth: dimensions.filtersComponentMinWidth,
+//         border: 0,
+//         background: 'transparent',
+//         overflow: 'auto',
+//         WebkitOverflowScrolling: 'touch',
+//         borderRadius: dimensions.borderRadius,
+//         outline: 'none',
+//         padding: 0
+//     }
+// });

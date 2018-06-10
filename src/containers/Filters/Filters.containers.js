@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
 import MediaQuery from 'react-responsive';
-import { map, path, toPairs, flip, prop, flatten, values } from 'ramda';
+import { map, path, toPairs, flatten, values } from 'ramda';
 import { Modal } from '../../hocs/Modal/Modal';
 import { dimensions, breakpoints } from '../../settings/styles';
 import { facetDictionary } from './Facets';
@@ -55,8 +55,11 @@ class Filters extends Component {
             top: 0
         }
     };
+
     containerRef = React.createRef();
+
     frameRef = React.createRef();
+
     virtualRefs = {
         [FACET_QUARTER]: React.createRef(),
         [FACET_CUISINE]: React.createRef(),
@@ -68,7 +71,7 @@ class Filters extends Component {
         super(props);
         this.clear = this.clear.bind(this);
         this.apply = this.apply.bind(this);
-        this.toggleOpen = this.toggleOpen.bind(this);
+        this.closeFilters = this.closeFilters.bind(this);
         this.onContentMount = this.onContentMount.bind(this);
     }
 
@@ -126,25 +129,23 @@ class Filters extends Component {
 
         // We need to check if the filters are already open
         // and save them down if they are
-        if (this.state.isOpen && this.rendered) {
-            this.apply(true);
-        }
+        if (this.state.isOpen) this.apply(false);
 
         // Set the new state with the left value and an open filter
         this.setState({
             menuItem,
-            // contentProps,
             isMobile,
             facetComponents: facets.map(facet => ({
                 attribute: facet,
                 component: facetDictionary[facet]
             })),
             isOpen: true,
-            style: {
-                // ...this.state.style,
-                ...position
-            }
+            style: { ...position }
         });
+    }
+
+    closeFilters() {
+        this.setState({ isOpen: false });
     }
 
     apply(close = true) {
@@ -154,9 +155,8 @@ class Filters extends Component {
         // For each processed facet find the corresponding virtual and refine it
         toPairs(processed).forEach(([attribute, refinement]) => {
             const virtual = this.virtualRefs[attribute].current;
-            // If a value has been returned, snatch
-            // the refine fn from the virtual and refine, baby
-            if (refinement.length) virtual.refine(refinement);
+            // Refine the virtual with the provided refinement
+            virtual.refine(refinement);
         });
         // Close the opened element
         this.setState({
@@ -177,26 +177,23 @@ class Filters extends Component {
         this.rendered = rendered;
     }
 
-    toggleOpen(isOpen = false) {
-        this.setState({ isOpen });
-    }
-
     render() {
         const {
-            menuItem,
             menuItemWithValue,
+            menuItem,
             isMobile,
             isOpen,
             facetComponents,
-            style: styleProps,
-            ...state
+            style: styleProps
         } = this.state;
+
+        const { overlayClass, contentClass } = filtersModalSimple(styleProps);
 
         const Content = isOpen && (
             <ContentFrame
                 ref={this.frameRef}
                 apply={this.apply}
-                close={this.toggleOpen}
+                close={this.closeFilters}
                 clear={this.clear}
                 children={facetComponents}
                 currentRefinement={this.currentRefinement}
@@ -229,12 +226,11 @@ class Filters extends Component {
                                 ([label, facets], i) => (
                                     <FilterButton
                                         key={`filter_button_${i}`}
+                                        children={label}
+                                        hasValue={menuItemWithValue[label]}
                                         onClick={e =>
                                             this.openFilter(e, label, facets)
                                         }
-                                        children={label}
-                                        // hasValue={!!hasValue[facet]}
-                                        hasValue={menuItemWithValue[label]}
                                     />
                                 )
                             )}
@@ -245,9 +241,10 @@ class Filters extends Component {
                     {!isMobile && (
                         <Modal
                             isOpen={isOpen}
-                            contentLabel="Filter tools modal"
-                            onRequestClose={this.toggleOpen}
-                            {...filtersModalSimple(styleProps)}
+                            contentLabel={`Filter by ${menuItem}`}
+                            onRequestClose={this.closeFilters}
+                            overlayClassName={overlayClass}
+                            className={contentClass}
                         >
                             {Content}
                         </Modal>
