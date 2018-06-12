@@ -82,7 +82,7 @@ export const withFacetPropTypes = setPropTypes({
 
 export const withShared = compose(withFacetPropTypes, withFacetLifecycle);
 
-export const asFacetList = compose(withListUpdate, withListProcess, withShared);
+// export const asFacetList = compose(withListUpdate, withListProcess, withShared);
 
 export const priceIntToSymbol = int => '£'.repeat(parseFloat(int), 10);
 

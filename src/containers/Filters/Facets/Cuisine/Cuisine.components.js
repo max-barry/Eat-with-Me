@@ -1,7 +1,5 @@
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { compose } from 'recompose';
-// import ChipLite from '../../../../components/Forms/ChipLite';
 import { Chip } from '../../../../components/Forms';
 import {
     cuisineTabsClass as tabsClass,
@@ -10,11 +8,8 @@ import {
     cuisinePanelClass as panelClass,
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
-import { withPanelledUpdate } from '../Facets.shared';
 import { Badge } from '../../../../components/Forms';
-import { bsint, dimensions } from '../../../../settings/styles';
-
-// const enhance = compose(withPanelledUpdate);
+import { dimensions } from '../../../../settings/styles';
 
 export const CuisineTabs = ({ items, update }) => (
     <Tabs className={tabsClass}>
