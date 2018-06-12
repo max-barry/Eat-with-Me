@@ -2,10 +2,8 @@ import { css } from 'react-emotion';
 import {
     bs,
     sInteractive,
-    fontFamily,
-    fontWeights,
     transitionTimes as time,
-    sFlexed,
+    sFlexedCenter,
     shevy,
     dimensions,
     colors,
@@ -15,7 +13,7 @@ import {
 } from '../../settings/styles';
 import { darken } from 'polished';
 
-export const buttonBaseClass = css(sInteractive, sFlexed, shevy.h6, {
+export const buttonBaseClass = css(sInteractive, sFlexedCenter, shevy.h6, {
     padding: bs(0.5),
     backgroundColor: 'transparent',
     textDecoration: 'none',
@@ -23,7 +21,6 @@ export const buttonBaseClass = css(sInteractive, sFlexed, shevy.h6, {
     margin: 0,
     lineHeight: 1,
     transition: `background-color ${time.weak}ms`,
-    alignItems: 'center',
     height: dimensions.button,
     position: 'relative'
 });

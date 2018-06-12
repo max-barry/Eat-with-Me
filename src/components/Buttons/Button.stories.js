@@ -4,13 +4,18 @@ import { withState } from '@dump247/storybook-state';
 import faker from 'faker';
 import centered from '@storybook/addon-centered';
 import { css } from 'emotion';
-import ButtonSimple, { ButtonSimpleIcon } from './ButtonSimple';
+import ButtonSimple, {
+    ButtonSimpleIcon,
+    ButtonSimpleIconMorph
+} from './ButtonSimple';
 import ButtonAddToCollection from './ButtonAddToCollection';
 import ButtonLink from './ButtonLink';
 import ButtonIcon from './ButtonIcon';
+import ButtonDominant from './ButtonDominant';
 import { tick, add } from '../SVGs/paths';
 import { sFlexed, colors } from '../../settings/styles';
 import { randomIcon } from '../../stories/shared';
+import garbageSvg from '../SVGs/images/flaticons/garbage.svg';
 
 const action = _ => console.log('Clicked');
 const randomName = _ => `${faker.name.firstName()} ${faker.name.lastName()}`;
@@ -20,17 +25,29 @@ storiesOf('Buttons', module)
     .add('Simple', () => <ButtonSimple onClick={action}>Click me</ButtonSimple>)
     .add(
         'Simple.Icon',
-        withState({ completed: false })(({ store }) => (
-            <ButtonSimpleIcon
-                icon={store.state.completed ? tick : add}
-                onClick={() =>
-                    store.set({
-                        completed: !store.state.completed
-                    })
-                }
-            >
-                {randomName()}
-            </ButtonSimpleIcon>
+        withState({
+            completed: false,
+            name1: randomName(),
+            name2: randomName()
+        })(({ store }) => (
+            <div>
+                <ButtonSimpleIcon
+                    icon={garbageSvg}
+                    onClick={() => console.log('clicked')}
+                >
+                    {store.state.name1}
+                </ButtonSimpleIcon>
+                <ButtonSimpleIconMorph
+                    icon={store.state.completed ? tick : add}
+                    onClick={() =>
+                        store.set({
+                            completed: !store.state.completed
+                        })
+                    }
+                >
+                    {store.state.name2}
+                </ButtonSimpleIconMorph>
+            </div>
         ))
     )
     .add(
@@ -50,6 +67,7 @@ storiesOf('Buttons', module)
                     onClick={action}
                     color={c}
                     key={i}
+                    hasValue={i === 1}
                 >
                     {faker.commerce.productMaterial()}
                 </ButtonIcon>
@@ -64,4 +82,9 @@ storiesOf('Buttons', module)
                 </ButtonLink>
             ))}
         </div>
+    ))
+    .add('Dominant', () => (
+        <ButtonDominant onClick={action} color={colors.primary}>
+            Click me
+        </ButtonDominant>
     ));
