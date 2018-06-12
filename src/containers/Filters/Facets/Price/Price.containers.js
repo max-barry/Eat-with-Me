@@ -1,10 +1,37 @@
-import React from 'react';
-import { compose } from 'recompose';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { PriceOptions as Options } from './Price.components';
-import { asFacetList } from '../Facets.shared';
+import { getRefinedItems, updateItem } from '../Facets.shared';
 
-const Price = ({ items, update }) => <Options items={items} update={update} />;
+class Price extends Component {
+    state = { items: this.props.initial };
 
-const enhance = compose(asFacetList);
+    constructor(props) {
+        super(props);
+        this.update = this.update.bind(this);
+    }
 
-export default enhance(Price);
+    get refined() {
+        return getRefinedItems(this.state.items);
+    }
+
+    componentDidMount() {
+        this.props.onMount(this);
+    }
+
+    update(label) {
+        this.setState({
+            items: updateItem(label, this.state.items)
+        });
+    }
+
+    render() {
+        return <Options items={this.state.items} update={this.update} />;
+    }
+}
+
+Price.propTypes = {
+    initial: PropTypes.array.isRequired
+};
+
+export default Price;
