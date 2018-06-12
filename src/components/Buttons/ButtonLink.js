@@ -1,9 +1,8 @@
 import styled from 'react-emotion';
 import { onlyUpdateForKeys } from 'recompose';
 import { tint } from 'polished';
-import { colors, dimensions } from '../../settings/styles';
+import { colors, dimensions, isCursor } from '../../settings/styles';
 import { buttonBaseClass as base } from './Button.styles';
-import { isCursor } from '../../settings/styles';
 
 export default onlyUpdateForKeys([])(
     styled('button')(base, ({ color }) => ({

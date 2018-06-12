@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-// import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import { prop } from 'ramda';
 import { QuarterList as List } from './Quarter.components';
 import { updateItem, getRefinedItems } from '../Facets.shared';
-// import { asFacetList, withListUpdate, withUpdate } from '../Facets.shared';
-// import { FACET_QUARTER } from '../../Filters.shared';
 
 class Quarter extends Component {
     state = { items: this.props.initial };
@@ -34,14 +30,8 @@ class Quarter extends Component {
     }
 }
 
-// Quarter.attribute = FACET_QUARTER;
-
 Quarter.propTypes = {
     initial: PropTypes.array.isRequired
 };
-
-// const Quarter = ({ items, update }) => ;
-
-// const enhance = compose(withUpdate);
 
 export default Quarter;

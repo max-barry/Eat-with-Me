@@ -6,7 +6,7 @@ import faker from 'faker';
 import { css } from 'emotion';
 import Card from './Card';
 import Drawer from './Drawer';
-import { tick } from '../SVGs/paths';
+import archiveSvg from '../SVGs/images/flaticons/archive.svg';
 import {
     ButtonSimple,
     ButtonAddToCollection,
@@ -53,7 +53,7 @@ storiesOf('Structures', module)
                 faker.lorem.word()
             ].join(' • ')}
             action={
-                <ButtonSimpleIcon icon={tick} onClick={action}>
+                <ButtonSimpleIcon icon={archiveSvg} onClick={action}>
                     Action
                 </ButtonSimpleIcon>
             }
