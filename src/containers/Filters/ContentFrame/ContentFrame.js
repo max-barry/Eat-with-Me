@@ -10,42 +10,64 @@ import {
     descend,
     ascend
 } from 'ramda';
+import MediaQuery from 'react-responsive';
 import {
     ContentFrameExterior as Exterior,
     ContentFrameInterior as Interior,
-    ActionsList as List,
-    ActionsListItem as ListItem
+    ActionsList as Ul,
+    ActionsListItem as Li
 } from './ContentFrame.styles.js';
 import {
     ButtonLink,
-    ButtonSimpleIcon
-} from '../../../components/Buttons/index.js';
-import { cross } from '../../../components/SVGs/paths.js';
-import { colors } from '../../../settings/styles.js';
+    ButtonSimpleIcon,
+    ButtonDominant
+} from '../../../components/Buttons';
+import { colors, breakpoints } from '../../../settings/styles.js';
+import garbageIcon from '../../../components/SVGs/images/flaticons/garbage.svg';
 
-const Actions = ({ apply, close, clear }) => (
-    <List>
-        {clear && (
-            <ListItem>
-                <ButtonSimpleIcon onClick={clear} icon={cross}>
-                    Reset
-                </ButtonSimpleIcon>
-            </ListItem>
-        )}
-        <ListItem>
-            <ButtonLink onClick={close}>Cancel</ButtonLink>
-        </ListItem>
-        <ListItem>
-            <ButtonLink onClick={apply} color={colors.primaryDark}>
-                Apply
-            </ButtonLink>
-        </ListItem>
-    </List>
-);
+const copy = {
+    clear: 'Reset',
+    close: 'Close',
+    apply: 'Apply'
+};
+
+const Actions = ({ apply, close, clear }) => {
+    const isJustApply = !close && !clear;
+    return (
+        <Ul fixed={isJustApply}>
+            {clear && (
+                <Li>
+                    <ButtonSimpleIcon onClick={clear} icon={garbageIcon}>
+                        {copy.clear}
+                    </ButtonSimpleIcon>
+                </Li>
+            )}
+            {close && (
+                <Li>
+                    <ButtonLink onClick={close}>{copy.close}</ButtonLink>
+                </Li>
+            )}
+            {apply && (
+                <Li style={{ width: isJustApply ? '100%' : 'auto' }}>
+                    {isJustApply && (
+                        <ButtonDominant onClick={apply}>
+                            {copy.apply}
+                        </ButtonDominant>
+                    )}
+                    {!isJustApply && (
+                        <ButtonLink onClick={apply} color={colors.primaryDark}>
+                            {copy.apply}
+                        </ButtonLink>
+                    )}
+                </Li>
+            )}
+        </Ul>
+    );
+};
 
 Actions.propTypes = {
-    apply: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired,
+    apply: PropTypes.func,
+    close: PropTypes.func,
     clear: PropTypes.func
 };
 
@@ -97,22 +119,27 @@ class ContentFrame extends Component {
         // TODO : Check if ...props actually has a value to it
         return (
             <Exterior>
+                <MediaQuery maxWidth={breakpoints.mobile}>
+                    <Actions close={close} clear={clear} />
+                </MediaQuery>
                 <Interior>
-                    {children.map(({ attribute, component: Child }, i) => {
-                        const initial = this.orderItems(
-                            currentRefinement[attribute]
-                        );
-                        return (
-                            <Child
-                                key={`facet_${attribute}`}
-                                initial={initial}
-                                onMount={r => this.onChildMount(attribute, r)}
-                                {...props}
-                            />
-                        );
-                    })}
+                    {children.map(({ attribute, component: Child }, i) => (
+                        <Child
+                            key={`facet_${attribute}`}
+                            initial={this.orderItems(
+                                currentRefinement[attribute]
+                            )}
+                            onMount={r => this.onChildMount(attribute, r)}
+                            {...props}
+                        />
+                    ))}
                 </Interior>
-                <Actions apply={apply} close={close} clear={clear} />
+                <MediaQuery maxWidth={breakpoints.mobile}>
+                    <Actions apply={apply} />
+                </MediaQuery>
+                <MediaQuery minWidth={breakpoints.mobile + 1}>
+                    <Actions apply={apply} close={close} clear={clear} />
+                </MediaQuery>
             </Exterior>
         );
     }
