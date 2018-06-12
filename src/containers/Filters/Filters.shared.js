@@ -8,7 +8,7 @@ export const initialRefinements = {
     [FACET_CUISINE]: [],
     [FACET_QUARTER]: [],
     [FACET_PRICE]: [],
-    [FACET_IS_BAR]: [false]
+    [FACET_IS_BAR]: ['false']
     // [FACET_EXTRAS]: {
     // }
 };

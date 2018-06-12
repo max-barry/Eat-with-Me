@@ -25,23 +25,28 @@ import { cuisineActions } from '../../redux/ducks/cuisine';
 import { Drawer } from '../../components/Structures';
 import ContentFrame from './ContentFrame';
 import { BottomBar } from '../../components/Navigation';
+import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
+import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
 import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
 
-const SHARED_NAVIGATION = {
-    Region: [FACET_QUARTER],
-    Cuisine: [FACET_CUISINE]
+const MENU_COPY = {
+    region: 'Region',
+    cuisine: 'Cuisine',
+    price: 'Price',
+    more: 'More filters'
 };
 
 const DESKTOP_NAVIGATION = {
-    ...SHARED_NAVIGATION,
-    Price: [FACET_PRICE]
-    // 'More...': [FACET_EXTRAS]
-    // 'More...': [FACET_PRICE, FACET_EXTRAS]
+    [MENU_COPY.region]: [FACET_QUARTER],
+    [MENU_COPY.cuisine]: [FACET_CUISINE],
+    [MENU_COPY.price]: [FACET_PRICE],
+    [MENU_COPY.more]: [FACET_IS_BAR]
 };
 
 const MOBILE_NAVIGATION = {
-    ...SHARED_NAVIGATION
-    // 'More filters': [FACET_EXTRAS]
+    [MENU_COPY.region]: [FACET_QUARTER],
+    [MENU_COPY.cuisine]: [FACET_CUISINE],
+    [MENU_COPY.more]: [FACET_IS_BAR, FACET_PRICE]
 };
 
 class Filters extends Component {
@@ -158,12 +163,16 @@ class Filters extends Component {
             // Refine the virtual with the provided refinement
             virtual.refine(refinement);
         });
+        // Flatten out the truthy values
+        const refinedValues = flatten(values(processed));
         // Close the opened element
         this.setState({
             isOpen: !close,
             menuItemWithValue: {
                 ...menuItemWithValue,
-                [menuItem]: !!flatten(values(processed)).length
+                [menuItem]:
+                    !!refinedValues.length &&
+                    refinedValues[0] !== false.toString() // Toggle facets give a ['false']
             }
         });
     }
@@ -208,12 +217,12 @@ class Filters extends Component {
                             items={Object.entries(MOBILE_NAVIGATION).map(
                                 ([label, facets]) => ({
                                     label,
-                                    // icon: {
-                                    //     [FACET_CUISINE]: worldwideSvg,
-                                    //     [FACET_QUARTER]: mapLocationSvg
-                                    //     // [FACET_EXTRAS]: moreSvg
-                                    // }[label],
-                                    icon: worldwideSvg,
+                                    icon: {
+                                        [MENU_COPY.region]: worldwideSvg,
+                                        [MENU_COPY.cuisine]: mapLocationSvg,
+                                        [MENU_COPY.more]: moreSvg
+                                    }[label],
+                                    hasValue: menuItemWithValue[label],
                                     onClick: e =>
                                         this.openFilter(e, label, facets)
                                 })
@@ -288,10 +297,6 @@ class Filters extends Component {
     }
 }
 
-const enhance = compose(
-    // connectCurrentRefinements,
-    // withPropsChecker,
-    connect(pick(['cuisine']), cuisineActions)
-);
+const enhance = compose(connect(pick(['cuisine']), cuisineActions));
 
 export default enhance(Filters);
