@@ -12,7 +12,7 @@ import { Spring, animated, config } from 'react-spring';
 import { colors } from '../../settings/styles';
 import { atcClass, atcSecondTextClass, atcActiveClass } from './Button.styles';
 import { cross, add } from '../SVGs/paths';
-import { ButtonSimpleIcon } from './ButtonSimple';
+import { ButtonSimpleIconMorph } from './ButtonSimple';
 
 const enhance = compose(
     setPropTypes({ added: PropTypes.bool.isRequired }),
@@ -26,7 +26,7 @@ const enhance = compose(
 );
 
 export default enhance(({ added, isInitial, setInitial, ...props }) => (
-    <ButtonSimpleIcon
+    <ButtonSimpleIconMorph
         icon={added ? cross : add}
         fill={added ? colors.white : colors.black}
         className={cx(atcClass, added ? atcActiveClass : null)}
@@ -69,5 +69,5 @@ export default enhance(({ added, isInitial, setInitial, ...props }) => (
                 </Fragment>
             )}
         </Spring>
-    </ButtonSimpleIcon>
+    </ButtonSimpleIconMorph>
 ));

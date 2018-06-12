@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { Spring, animated } from 'react-spring';
 import { interpolate } from 'flubber'; // TODO : Polymorph is a small alternative
 import ReactSVG from 'react-svg';
+import PropTypes from 'prop-types';
 import { cx, css } from 'emotion';
 import { onlyUpdateForKeys } from 'recompose';
 import { omit } from 'ramda';
-import { colors } from '../../settings/styles';
+import { colors, dimensions } from '../../settings/styles';
 
 const SvgBase = ({ height, width, children, ...props }) => (
     <svg
-        height={height || 16}
-        width={width || 16}
+        height={height || dimensions.svg}
+        width={width || dimensions.svg}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
         {...props}
@@ -75,16 +76,32 @@ class SvgMorphComponent extends Component {
     }
 }
 
+SvgMorphComponent.propTypes = {
+    path: PropTypes.string.isRequired,
+    fill: PropTypes.string
+};
+
 export const SvgMorph = onlyUpdateForKeys(['path'])(SvgMorphComponent);
 
-export const SvgFromFile = ({ className, color, ...props }) => (
+export const SvgFromFileComponent = ({ svgClassName, fill, ...props }) => (
     <ReactSVG
-        svgClassName={cx(
-            className,
-            css({
-                [`& path, & circle, & rect`]: { color, fill: color }
-            })
-        )}
         {...props}
+        svgClassName={cx(
+            css({
+                height: dimensions.svg,
+                width: dimensions.svg,
+                [`& path, & circle, & rect`]: { color: fill, fill }
+            }),
+            svgClassName
+        )}
     />
 );
+
+SvgFromFileComponent.propTypes = {
+    path: PropTypes.string.isRequired,
+    fill: PropTypes.string,
+    svgStyle: PropTypes.object,
+    svgClassName: PropTypes.string
+};
+
+export const SvgFromFile = onlyUpdateForKeys(['path'])(SvgFromFileComponent);
