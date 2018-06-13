@@ -3,7 +3,16 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
 import MediaQuery from 'react-responsive';
-import { map, path, toPairs, flatten, values } from 'ramda';
+import {
+    map,
+    path,
+    toPairs,
+    flatten,
+    values,
+    keys,
+    assoc,
+    mergeAll
+} from 'ramda';
 import { Modal } from '../../hocs/Modal/Modal';
 import { dimensions, breakpoints } from '../../settings/styles';
 import { facetDictionary } from './Facets';
@@ -28,6 +37,7 @@ import { BottomBar } from '../../components/Navigation';
 import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
 import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
 import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
+import moize from 'moize';
 
 const MENU_COPY = {
     region: 'Region',
@@ -36,18 +46,24 @@ const MENU_COPY = {
     more: 'More filters'
 };
 
-const DESKTOP_NAVIGATION = {
+const DESKTOP_NAVIGATION = Object.entries({
     [MENU_COPY.region]: [FACET_QUARTER],
     [MENU_COPY.cuisine]: [FACET_CUISINE],
     [MENU_COPY.price]: [FACET_PRICE],
     [MENU_COPY.more]: [FACET_IS_BAR]
-};
+});
 
-const MOBILE_NAVIGATION = {
+const MOBILE_NAVIGATION = Object.entries({
     [MENU_COPY.region]: [FACET_QUARTER],
     [MENU_COPY.cuisine]: [FACET_CUISINE],
     [MENU_COPY.more]: [FACET_IS_BAR, FACET_PRICE]
-};
+});
+
+const resetFacet = moize.deep(data =>
+    mergeAll(
+        map(facet => assoc(facet, initialRefinements[facet], data), keys(data))
+    )
+);
 
 class Filters extends Component {
     state = {
@@ -76,6 +92,7 @@ class Filters extends Component {
         super(props);
         this.clear = this.clear.bind(this);
         this.apply = this.apply.bind(this);
+        this._refine = this._refine.bind(this);
         this.closeFilters = this.closeFilters.bind(this);
         this.onContentMount = this.onContentMount.bind(this);
     }
@@ -140,12 +157,12 @@ class Filters extends Component {
         this.setState({
             menuItem,
             isMobile,
+            isOpen: true,
+            style: { ...position },
             facetComponents: facets.map(facet => ({
                 attribute: facet,
                 component: facetDictionary[facet]
-            })),
-            isOpen: true,
-            style: { ...position }
+            }))
         });
     }
 
@@ -153,16 +170,21 @@ class Filters extends Component {
         this.setState({ isOpen: false });
     }
 
-    apply(close = true) {
-        const { menuItem, menuItemWithValue } = this.state;
-        // Request the content frame to process itself
-        const processed = this.frameRef.current.process();
+    _refine(data) {
         // For each processed facet find the corresponding virtual and refine it
-        toPairs(processed).forEach(([attribute, refinement]) => {
+        toPairs(data).forEach(([attribute, refinement]) => {
             const virtual = this.virtualRefs[attribute].current;
             // Refine the virtual with the provided refinement
             virtual.refine(refinement);
         });
+    }
+
+    apply(close = true) {
+        const { menuItem, menuItemWithValue } = this.state;
+        // Request the content frame to process itself
+        const processed = this.frameRef.current.process();
+        // Refine each virtual with this processed data
+        this._refine(processed);
         // Flatten out the truthy values
         const refinedValues = flatten(values(processed));
         // Close the opened element
@@ -178,8 +200,21 @@ class Filters extends Component {
     }
 
     clear() {
-        const facet = this.state.menuItem;
-        console.log('Clear it: ' + facet);
+        const { menuItem, menuItemWithValue } = this.state;
+        // Get the processed data of the current open tab
+        const processed = this.frameRef.current.process();
+        // Reset all the processed values to their defaults
+        const cleared = resetFacet(processed);
+        // Call the shared refine fn on this to submit our new cleaned refinements
+        this._refine(cleared);
+        // Close the overlay
+        this.setState({
+            isOpen: false,
+            menuItemWithValue: {
+                ...menuItemWithValue,
+                [menuItem]: false
+            }
+        });
     }
 
     onContentMount(rendered) {
@@ -201,10 +236,12 @@ class Filters extends Component {
         const Content = isOpen && (
             <ContentFrame
                 ref={this.frameRef}
+                children={facetComponents}
+                menuItem={menuItem}
                 apply={this.apply}
                 close={this.closeFilters}
                 clear={this.clear}
-                children={facetComponents}
+                clearEnabled={menuItemWithValue[menuItem]}
                 currentRefinement={this.currentRefinement}
             />
         );
@@ -214,35 +251,30 @@ class Filters extends Component {
                 <Container>
                     <MediaQuery maxWidth={breakpoints.mobile}>
                         <BottomBar
-                            items={Object.entries(MOBILE_NAVIGATION).map(
-                                ([label, facets]) => ({
-                                    label,
-                                    icon: {
-                                        [MENU_COPY.region]: worldwideSvg,
-                                        [MENU_COPY.cuisine]: mapLocationSvg,
-                                        [MENU_COPY.more]: moreSvg
-                                    }[label],
-                                    hasValue: menuItemWithValue[label],
-                                    onClick: e =>
-                                        this.openFilter(e, label, facets)
-                                })
-                            )}
+                            items={MOBILE_NAVIGATION.map(([label, facets]) => ({
+                                label,
+                                icon: {
+                                    [MENU_COPY.region]: worldwideSvg,
+                                    [MENU_COPY.cuisine]: mapLocationSvg,
+                                    [MENU_COPY.more]: moreSvg
+                                }[label],
+                                hasValue: menuItemWithValue[label],
+                                onClick: e => this.openFilter(e, label, facets)
+                            }))}
                         />
                     </MediaQuery>
                     <MediaQuery minWidth={breakpoints.mobile + 1}>
                         <ButtonList>
-                            {Object.entries(DESKTOP_NAVIGATION).map(
-                                ([label, facets], i) => (
-                                    <FilterButton
-                                        key={`filter_button_${i}`}
-                                        children={label}
-                                        hasValue={menuItemWithValue[label]}
-                                        onClick={e =>
-                                            this.openFilter(e, label, facets)
-                                        }
-                                    />
-                                )
-                            )}
+                            {DESKTOP_NAVIGATION.map(([label, facets], i) => (
+                                <FilterButton
+                                    key={`filter_button_${i}`}
+                                    children={label}
+                                    hasValue={menuItemWithValue[label]}
+                                    onClick={e =>
+                                        this.openFilter(e, label, facets)
+                                    }
+                                />
+                            ))}
                         </ButtonList>
                     </MediaQuery>
                 </Container>

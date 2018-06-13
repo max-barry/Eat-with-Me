@@ -25,6 +25,7 @@
         "instantsearch.css": "^7.1.0",
         "lazysizes": "^4.0.2",
         "lodash": "^4.17.5",
+        "moize": "^5.3.1",
         "polished": "^1.9.2",
         "polymorph-js": "^0.2.1",
         "popmotion": "^8.1.24",
