@@ -48,7 +48,7 @@ export const dimensions = {
     chip: 30,
     tap: 48,
     icon: 32,
-    svg: 16,
+    svg: 14,
     outlineOffset: 3,
     swipeDismiss: 165
 };
