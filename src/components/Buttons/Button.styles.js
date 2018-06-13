@@ -22,7 +22,11 @@ export const buttonBaseClass = css(sInteractive, sFlexedCenter, shevy.h6, {
     lineHeight: 1,
     transition: `background-color ${time.weak}ms`,
     height: dimensions.button,
-    position: 'relative'
+    position: 'relative',
+    [`&[disabled]`]: {
+        pointerEvents: 'none',
+        opacity: 0.5
+    }
 });
 
 export const buttonSimpleClass = css(shevy.h6, buttonBaseClass, {
