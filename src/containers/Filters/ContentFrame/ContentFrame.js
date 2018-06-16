@@ -24,6 +24,7 @@ import {
 } from '../../../components/Buttons';
 import { colors, breakpoints } from '../../../settings/styles.js';
 import garbageIcon from '../../../components/SVGs/images/flaticons/garbage.svg';
+import moize from 'moize';
 
 const copy = {
     clear: 'Clear',
@@ -78,6 +79,14 @@ Actions.propTypes = {
     label: PropTypes.string
 };
 
+const orderItems = moize.deep(
+    items => {
+        console.log('Ordering');
+        return sortWith([descend(prop('count')), ascend(prop('label'))])(items);
+    },
+    { maxSize: 5 }
+);
+
 class ContentFrame extends Component {
     constructor(props) {
         super(props);
@@ -88,12 +97,13 @@ class ContentFrame extends Component {
     facetRefs = {};
 
     get attributes() {
+        // Potentially memoize this...?
         return map(prop('attribute'), this.props.children);
     }
 
     orderItems(items) {
         // Potentially memoize this...?
-        return sortWith([descend(prop('count')), ascend(prop('label'))])(items);
+        return orderItems(items);
     }
 
     process() {
