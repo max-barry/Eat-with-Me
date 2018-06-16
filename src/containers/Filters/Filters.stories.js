@@ -4,16 +4,16 @@ import { Hits } from 'react-instantsearch/dom';
 import faker from 'faker';
 import { compose, setDisplayName } from 'recompose';
 import { withState } from '@dump247/storybook-state';
+import { css } from 'emotion';
 import centered from '@storybook/addon-centered';
 import { Provider } from '../../stories/decorators';
 import Filters from './Filters.containers';
 import { QuarterList } from './Facets/Quarter/Quarter.components';
 import { CuisineTabs } from './Facets/Cuisine/Cuisine.components';
 import { PriceOptions } from './Facets/Price/Price.components';
-import { FacetBars } from './Facets/Extra/Extra.components';
+// import { FacetBars } from './Facets/Extra/Extra.components';
 import withSearch from '../../hocs/Search/Search';
 import AddedList from './Added';
-import { css } from 'emotion';
 import { mq } from '../../settings/styles';
 
 const onChange = () => console.log('Change');
@@ -106,7 +106,7 @@ storiesOf('Filters', module)
             }))}
         />
     ))
-    .add('Extras.Bars', () => (
-        <FacetBars refinement={[false]} update={onChange} />
-    ))
+    // .add('Extras.Bars', () => (
+    //     <FacetBars refinement={[false]} update={onChange} />
+    // ))
     .add('Card List', () => <AddedList />);
