@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moize from 'moize';
+import MediaQuery from 'react-responsive';
 import {
     map,
     prop,
@@ -10,7 +12,6 @@ import {
     descend,
     ascend
 } from 'ramda';
-import MediaQuery from 'react-responsive';
 import {
     ContentFrameExterior as Exterior,
     ContentFrameInterior as Interior,
@@ -24,7 +25,6 @@ import {
 } from '../../../components/Buttons';
 import { colors, breakpoints } from '../../../settings/styles.js';
 import garbageIcon from '../../../components/SVGs/images/flaticons/garbage.svg';
-import moize from 'moize';
 
 const copy = {
     clear: 'Clear',
