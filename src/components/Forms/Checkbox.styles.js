@@ -39,8 +39,7 @@ export const checkboxBoxWrapClass = css(sFlexedCenter, sInteractive, {
 const unchecked = `.${checkboxBoxWrapClass}:not(.${checkboxCheckedClass})`;
 const checked = `.${checkboxBoxWrapClass}.${checkboxCheckedClass}`;
 
-export const CheckboxBoxInner = styled('span')({
-    display: 'block',
+export const CheckboxBoxInner = styled('span')(sFlexedCenter, {
     borderRadius: dimensions.borderRadius,
     height: dimensions.icon,
     width: dimensions.icon,
