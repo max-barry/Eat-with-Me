@@ -26,22 +26,27 @@ import { colors, breakpoints } from '../../../settings/styles.js';
 import garbageIcon from '../../../components/SVGs/images/flaticons/garbage.svg';
 
 const copy = {
-    clear: 'Reset',
+    clear: 'Clear',
     close: 'Close',
     apply: 'Apply'
 };
 
-const Actions = ({ apply, close, clear }) => {
+const Actions = ({ apply, close, clear, clearEnabled, label }) => {
     const isJustApply = !close && !clear;
     return (
         <Ul fixed={isJustApply}>
             {clear && (
                 <Li>
-                    <ButtonSimpleIcon onClick={clear} icon={garbageIcon}>
+                    <ButtonSimpleIcon
+                        onClick={clear}
+                        icon={garbageIcon}
+                        disabled={!clearEnabled}
+                    >
                         {copy.clear}
                     </ButtonSimpleIcon>
                 </Li>
             )}
+            {label && <Li>{label}</Li>}
             {close && (
                 <Li>
                     <ButtonLink onClick={close}>{copy.close}</ButtonLink>
@@ -68,7 +73,9 @@ const Actions = ({ apply, close, clear }) => {
 Actions.propTypes = {
     apply: PropTypes.func,
     close: PropTypes.func,
-    clear: PropTypes.func
+    clear: PropTypes.func,
+    clearEnabled: PropTypes.bool,
+    label: PropTypes.string
 };
 
 class ContentFrame extends Component {
@@ -76,9 +83,9 @@ class ContentFrame extends Component {
         super(props);
         this.process = this.process.bind(this);
         this.onChildMount = this.onChildMount.bind(this);
-        // Create an empty object to store rendered references of each object
-        this.facetRefs = {};
     }
+
+    facetRefs = {};
 
     get attributes() {
         return map(prop('attribute'), this.props.children);
@@ -113,23 +120,30 @@ class ContentFrame extends Component {
             apply,
             close,
             clear,
+            clearEnabled,
             currentRefinement,
+            menuItem,
             ...props
         } = this.props;
         // TODO : Check if ...props actually has a value to it
         return (
             <Exterior>
                 <MediaQuery maxWidth={breakpoints.mobile}>
-                    <Actions close={close} clear={clear} />
+                    <Actions
+                        close={close}
+                        clear={clear}
+                        clearEnabled={clearEnabled}
+                        label={menuItem}
+                    />
                 </MediaQuery>
                 <Interior>
                     {children.map(({ attribute, component: Child }, i) => (
                         <Child
                             key={`facet_${attribute}`}
+                            onMount={r => this.onChildMount(attribute, r)}
                             initial={this.orderItems(
                                 currentRefinement[attribute]
                             )}
-                            onMount={r => this.onChildMount(attribute, r)}
                             {...props}
                         />
                     ))}
@@ -138,7 +152,12 @@ class ContentFrame extends Component {
                     <Actions apply={apply} />
                 </MediaQuery>
                 <MediaQuery minWidth={breakpoints.mobile + 1}>
-                    <Actions apply={apply} close={close} clear={clear} />
+                    <Actions
+                        apply={apply}
+                        close={close}
+                        clear={clear}
+                        clearEnabled={clearEnabled}
+                    />
                 </MediaQuery>
             </Exterior>
         );
@@ -149,7 +168,9 @@ ContentFrame.propTypes = {
     apply: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
     clear: PropTypes.func.isRequired,
-    currentRefinement: PropTypes.object.isRequired
+    currentRefinement: PropTypes.object.isRequired,
+    menuItem: PropTypes.string,
+    clearEnabled: PropTypes.bool
 };
 
 export default ContentFrame;
