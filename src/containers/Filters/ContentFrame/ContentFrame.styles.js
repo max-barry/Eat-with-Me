@@ -25,6 +25,15 @@ export const ContentFrameInterior = styled('div')(
     })
 );
 
+export const ContentFrameFacet = styled('div')(
+    mq({
+        padding: [0, `0 ${bs(0.5)}`],
+        '&:not(:last-child)': {
+            marginBottom: bs()
+        }
+    })
+);
+
 export const ActionsList = styled('ul')(shevy.h6, ({ fixed }) =>
     mq({
         display: 'flex',

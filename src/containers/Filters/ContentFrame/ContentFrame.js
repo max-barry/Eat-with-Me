@@ -15,6 +15,7 @@ import {
 import {
     ContentFrameExterior as Exterior,
     ContentFrameInterior as Interior,
+    ContentFrameFacet as FacetWrap,
     ActionsList as Ul,
     ActionsListItem as Li
 } from './ContentFrame.styles.js';
@@ -80,10 +81,7 @@ Actions.propTypes = {
 };
 
 const orderItems = moize.deep(
-    items => {
-        console.log('Ordering');
-        return sortWith([descend(prop('count')), ascend(prop('label'))])(items);
-    },
+    sortWith([descend(prop('count')), ascend(prop('label'))]),
     { maxSize: 5 }
 );
 
@@ -99,11 +97,6 @@ class ContentFrame extends Component {
     get attributes() {
         // Potentially memoize this...?
         return map(prop('attribute'), this.props.children);
-    }
-
-    orderItems(items) {
-        // Potentially memoize this...?
-        return orderItems(items);
     }
 
     process() {
@@ -148,14 +141,15 @@ class ContentFrame extends Component {
                 </MediaQuery>
                 <Interior>
                     {children.map(({ attribute, component: Child }, i) => (
-                        <Child
-                            key={`facet_${attribute}`}
-                            onMount={r => this.onChildMount(attribute, r)}
-                            initial={this.orderItems(
-                                currentRefinement[attribute]
-                            )}
-                            {...props}
-                        />
+                        <FacetWrap key={`facet_${attribute}`}>
+                            <Child
+                                onMount={r => this.onChildMount(attribute, r)}
+                                initial={orderItems(
+                                    currentRefinement[attribute]
+                                )}
+                                {...props}
+                            />
+                        </FacetWrap>
                     ))}
                 </Interior>
                 <MediaQuery maxWidth={breakpoints.mobile}>
