@@ -3,6 +3,7 @@ import { compose, branch, renderComponent } from 'recompose';
 import { connect } from 'react-redux';
 import { pluck, pick } from 'ramda';
 import PropTypes from 'prop-types';
+import moize from 'moize';
 import { CuisineTabs as Tabs } from './Cuisine.components';
 import { getRefinedItems, updateItem } from '../Facets.shared';
 import { cuisineActions } from '../../../../redux/ducks/cuisine';
@@ -12,6 +13,11 @@ import {
     cuisineNationalSelector,
     cuisineGenreSelector
 } from '../../../../redux/ducks/cuisine/cuisine.selectors';
+
+const fastFilter = moize.deep(
+    (items, whitelist) => items.filter(item => whitelist.includes(item.label)),
+    { maxSize: 9 }
+);
 
 class Cuisine extends Component {
     state = { items: this.props.initial };
@@ -33,15 +39,15 @@ class Cuisine extends Component {
             {
                 name: 'Most popular',
                 hideCount: true,
-                items: items.filter(item => favorites.includes(item.label))
+                items: fastFilter(items, favorites)
             },
             {
                 name: 'By country',
-                items: items.filter(item => byCountry.includes(item.label))
+                items: fastFilter(items, byCountry)
             },
             {
                 name: 'Everything else',
-                items: items.filter(item => byCuisines.includes(item.label))
+                items: fastFilter(items, byCuisines)
             }
         ];
     }

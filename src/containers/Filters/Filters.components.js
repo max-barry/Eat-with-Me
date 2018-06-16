@@ -39,10 +39,6 @@ export const FilterButton = onlyUpdateForKeys(['hasValue'])(
     )
 );
 
-export const VirtualRefinement = compose(
-    connectRefinementList
-    // onlyUpdateForKeys(['currentRefinement', 'items', 'canRefine'])
-    // withPropsChecker
-)(() => null);
+export const VirtualRefinement = compose(connectRefinementList)(() => null);
 
 // TODO : Avoid constant rerendering of virtuals by adding a "lastFiltered" and check in a shouldUpdate if lastFiltered matches this virtuals facet

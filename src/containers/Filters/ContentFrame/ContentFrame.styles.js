@@ -44,12 +44,14 @@ export const ActionsList = styled('ul')(shevy.h6, ({ fixed }) =>
     })
 );
 
-export const ActionsListItem = styled('li')({
-    display: 'inline-block',
-    color: colors.greyDark,
-    fontWeight: fontWeights.medium,
-    position: 'relative',
-    '&:not(:last-child)': {
-        marginRight: bs(2)
-    }
-});
+export const ActionsListItem = styled('li')(
+    mq({
+        display: 'inline-block',
+        color: colors.greyDark,
+        fontWeight: fontWeights.medium,
+        position: 'relative',
+        '&:not(:last-child)': {
+            marginRight: [bs(2), 0]
+        }
+    })
+);
