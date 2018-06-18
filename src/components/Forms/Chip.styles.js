@@ -1,4 +1,6 @@
 import styled, { css } from 'react-emotion';
+import { ellipsis } from 'polished';
+import { onlyUpdateForKeys } from 'recompose';
 import {
     colors,
     shevy,
@@ -10,8 +12,6 @@ import {
     easings,
     dimensions
 } from '../../settings/styles';
-import { ellipsis } from 'polished';
-import { onlyUpdateForKeys } from 'recompose';
 
 export const CHIP_EDGE_PADDING = bs(0.75);
 export const CHIP_VERTICAL_DOT_PADDING = bs(0.25);

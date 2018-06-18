@@ -75,6 +75,7 @@ export const easings = {
 };
 
 export const shadows = {
+    heavy: `0px 0px 4px rgba(0, 0, 0, 0.6), 0px 0px 8px rgba(0, 0, 0, 0.4)`,
     focused: `0px 0px 4px rgba(0, 0, 0, 0.3)`,
     overlay: `0px 0px 4px rgba(0, 0, 0, 0.1)`
 };

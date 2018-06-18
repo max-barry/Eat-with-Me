@@ -28,6 +28,10 @@ const Img = ({ src, alt, className, responsive, height, width, ...props }) => (
     </figure>
 );
 
+Img.defaultProps = {
+    responsive: false
+};
+
 Img.propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string.isRequired,

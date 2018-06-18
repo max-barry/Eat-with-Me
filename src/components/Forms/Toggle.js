@@ -23,8 +23,8 @@ const iconProperties = {
         '> div': { display: 'flex' }
     }),
     svgStyle: {
-        height: 16,
-        width: 16
+        height: 14,
+        width: 14
     }
 };
 

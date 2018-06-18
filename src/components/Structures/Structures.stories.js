@@ -5,6 +5,7 @@ import centered from '@storybook/addon-centered';
 import faker from 'faker';
 import { css } from 'emotion';
 import Card from './Card';
+import MediaElement from './MediaElement';
 import Drawer from './Drawer';
 import archiveSvg from '../SVGs/images/flaticons/archive.svg';
 import {
@@ -45,7 +46,7 @@ storiesOf('Structures', module)
         <Card
             title={faker.company.catchPhrase()}
             deck={faker.company.catchPhrase()}
-            src={`https://source.unsplash.com/featured/300x200/`}
+            src="https://source.unsplash.com/featured/300x200/"
             badge="92.83"
             strap={[
                 faker.lorem.word(),
@@ -65,7 +66,7 @@ storiesOf('Structures', module)
             <Card
                 title="Dishoom (Shoreditch)"
                 deck="Collected by 20 people"
-                src={`https://cdn.londonandpartners.com/asset/dishoom-kings-cross-e68f09d6444bb3c20d8e48ccfeb3c386.jpg`}
+                src="https://cdn.londonandpartners.com/asset/dishoom-kings-cross-e68f09d6444bb3c20d8e48ccfeb3c386.jpg"
                 badge="92.83"
                 strap={['Indian', 'Shoreditch', '3.4mil'].join(' • ')}
                 action={
@@ -76,4 +77,16 @@ storiesOf('Structures', module)
                 }
             />
         ))
-    );
+    )
+    .add('MediaElement', () => (
+        <MediaElement
+            title={faker.company.catchPhrase()}
+            src="https://source.unsplash.com/featured/300x200/"
+            smallFont={false}
+            strap={[
+                faker.lorem.word(),
+                faker.lorem.word(),
+                faker.lorem.word()
+            ].join(' • ')}
+        />
+    ));
