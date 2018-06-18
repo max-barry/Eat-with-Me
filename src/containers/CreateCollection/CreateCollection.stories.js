@@ -14,6 +14,7 @@ import { PriceOptions } from './Filters/Facets/Price/Price.components';
 import withSearch from '../../hocs/Search/Search';
 import AddedList from './Added';
 import { mq } from '../../settings/styles';
+import CreateCollection from './CreateCollection';
 
 const onChange = () => console.log('Change');
 
@@ -48,11 +49,11 @@ const withParent = BaseComponent => props => (
 storiesOf('Filters', module)
     .addDecorator(story => <Provider story={story()} />)
     .add('default', () => {
-        const Enhanced = compose(
-            setDisplayName('Filters'),
-            withSearch,
-            withParent
-        )(() => <Filters />);
+        const Enhanced = compose(withSearch)(() => <CreateCollection />);
+        return <Enhanced />;
+    })
+    .add('Filter Navigation', () => {
+        const Enhanced = compose(withSearch, withParent)(() => <Filters />);
         return <Enhanced />;
     })
     .addDecorator(centered)
