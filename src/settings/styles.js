@@ -103,9 +103,12 @@ export const mq = facepaint(
     Object.entries(breakpoints).map(([n, s]) => `@media(max-width: ${s}px)`)
 );
 
+const baseFontSize = 17;
+const baseLineHeight = 1.4;
+
 const shevyConf = new Shevy({
-    baseFontSize: '17px',
-    baseLineHeight: 1.4,
+    baseLineHeight,
+    baseFontSize: `${baseFontSize}px`,
     // AirBnb do a [0.7, 0.85, 1, 1.2, 1.45, 1.75] scale around 20
     // This takes that same scale but from a base of 17
     baseFontScale: [
@@ -122,8 +125,10 @@ const shevyConf = new Shevy({
 });
 
 shevyConf.content.fontWeight = fontWeights.regular;
+
 shevyConf.h6.fontWeight = fontWeights.medium;
 shevyConf.h6.marginBottom = 0;
+
 shevyConf.overline = {
     ...shevyConf.h6,
     fontSize: 12,
@@ -132,6 +137,8 @@ shevyConf.overline = {
     color: colors.greyDark,
     textTransform: 'uppercase'
 };
+
+shevyConf.pHeight = Math.floor(baseFontSize * baseLineHeight);
 
 // TODO : Add an unselectable to the overline
 

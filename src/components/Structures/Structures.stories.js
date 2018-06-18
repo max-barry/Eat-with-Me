@@ -43,16 +43,25 @@ storiesOf('Structures', module)
             </div>
         ))
     )
-    .add('ContractableList', () => (
-        <ContractableList
-            items={Array(10)
-                .fill()
-                .map(_ => ({
-                    component: Card,
-                    props: { ...randomRestaurant() }
-                }))}
-        />
-    ))
+    .add(
+        'ContractableList',
+        withState({ isExpanded: true })(({ store }) => (
+            <ContractableList
+                columns={store.state.isExpanded ? 1 : 2}
+                onClick={() =>
+                    store.set({ isExpanded: !store.state.isExpanded })
+                }
+                items={Array(10)
+                    .fill()
+                    .map(_ => ({
+                        component: Card,
+                        props: { ...randomRestaurant() }
+                    }))}
+            >
+                Right hand side
+            </ContractableList>
+        ))
+    )
     .addDecorator(centered)
     .add('Card', () => (
         <Card

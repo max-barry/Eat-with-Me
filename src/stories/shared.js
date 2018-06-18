@@ -1,3 +1,4 @@
+import faker from 'faker';
 import { sample } from 'lodash';
 
 export const iconNames = [
@@ -387,3 +388,13 @@ export const randomIcon = () => {
     const i = sample(iconNames);
     return require(`../components/SVGs/images/flaticons/${i}`);
 };
+
+export const randomRestaurant = () => ({
+    title: faker.company.catchPhrase(),
+    deck: faker.company.catchPhrase(),
+    src: `https://source.unsplash.com/featured/300x200/?r=${faker.random.number()}`,
+    badge: faker.finance.amount(10, 100, 2),
+    strap: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()].join(
+        ' • '
+    )
+});
