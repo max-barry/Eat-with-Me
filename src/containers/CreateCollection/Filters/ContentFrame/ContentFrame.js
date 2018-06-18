@@ -23,9 +23,9 @@ import {
     ButtonLink,
     ButtonSimpleIcon,
     ButtonDominant
-} from '../../../components/Buttons';
-import { colors, breakpoints } from '../../../settings/styles.js';
-import garbageIcon from '../../../components/SVGs/images/flaticons/garbage.svg';
+} from '../../../../components/Buttons';
+import { colors, breakpoints } from '../../../../settings/styles.js';
+import garbageIcon from '../../../../components/SVGs/images/flaticons/garbage.svg';
 
 const copy = {
     clear: 'Clear',

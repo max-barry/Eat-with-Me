@@ -5,7 +5,7 @@ import {
     QuarterList as List,
     QuarterListItem as ListItem
 } from './Quarter.styles';
-import { Checkbox } from '../../../../components/Forms';
+import { Checkbox } from '../../../../../components/Forms';
 
 const quarterList = ({ items, update, ...props }) => (
     <List>

@@ -10,7 +10,7 @@ import {
     mq,
     transitionTimes,
     isCursor
-} from '../../../../settings/styles';
+} from '../../../../../settings/styles';
 
 export const cuisineTabsClass = css(
     mq({

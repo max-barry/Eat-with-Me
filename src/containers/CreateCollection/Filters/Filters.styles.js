@@ -7,7 +7,7 @@ import {
     shadows,
     bsint,
     mq
-} from '../../settings/styles';
+} from '../../../settings/styles';
 
 export const FILTER_NAV_SPACING = bsint(0.75);
 

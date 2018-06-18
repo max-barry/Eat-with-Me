@@ -3,6 +3,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { pick } from 'ramda';
 import MediaQuery from 'react-responsive';
+import moize from 'moize';
 import {
     map,
     path,
@@ -13,8 +14,8 @@ import {
     assoc,
     mergeAll
 } from 'ramda';
-import { Modal } from '../../hocs/Modal/Modal';
-import { dimensions, breakpoints } from '../../settings/styles';
+import { Modal } from '../../../hocs/Modal/Modal';
+import { dimensions, breakpoints } from '../../../settings/styles';
 import { facetDictionary } from './Facets';
 import { VirtualRefinement, FilterButton } from './Filters.components';
 import {
@@ -30,14 +31,13 @@ import {
     filtersModalSimple,
     FILTER_NAV_SPACING
 } from './Filters.styles';
-import { cuisineActions } from '../../redux/ducks/cuisine';
-import { Drawer } from '../../components/Structures';
+import { cuisineActions } from '../../../redux/ducks/cuisine';
+import { Drawer } from '../../../components/Structures';
 import ContentFrame from './ContentFrame';
-import { BottomBar } from '../../components/Navigation';
-import mapLocationSvg from '../../components/SVGs/images/flaticons/map-location.svg';
-import moreSvg from '../../components/SVGs/images/flaticons/more.svg';
-import worldwideSvg from '../../components/SVGs/images/flaticons/worldwide.svg';
-import moize from 'moize';
+import { BottomBar } from '../../../components/Navigation';
+import mapLocationSvg from '../../../components/SVGs/images/flaticons/map-location.svg';
+import moreSvg from '../../../components/SVGs/images/flaticons/more.svg';
+import worldwideSvg from '../../../components/SVGs/images/flaticons/worldwide.svg';
 
 const MENU_COPY = {
     region: 'Region',

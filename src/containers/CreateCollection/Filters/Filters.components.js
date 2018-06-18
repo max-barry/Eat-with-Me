@@ -3,8 +3,8 @@ import styled, { css, cx } from 'react-emotion';
 import { darken } from 'polished';
 import { onlyUpdateForKeys, compose } from 'recompose';
 import { connectRefinementList } from 'react-instantsearch/connectors';
-import { bs, colors, isCursor } from '../../settings/styles';
-import { ButtonSimple } from '../../components/Buttons';
+import { bs, colors, isCursor } from '../../../settings/styles';
+import { ButtonSimple } from '../../../components/Buttons';
 
 const FilterButtonLi = styled('li')(
     css({

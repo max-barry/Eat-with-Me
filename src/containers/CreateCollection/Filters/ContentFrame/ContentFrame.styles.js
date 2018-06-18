@@ -6,7 +6,7 @@ import {
     fontWeights,
     bs,
     dimensions
-} from '../../../settings/styles';
+} from '../../../../settings/styles';
 
 export const ContentFrameExterior = styled('div')(
     mq({

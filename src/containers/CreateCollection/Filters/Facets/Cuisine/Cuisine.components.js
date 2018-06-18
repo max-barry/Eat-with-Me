@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Chip } from '../../../../components/Forms';
+import { Chip } from '../../../../../components/Forms';
 import {
     cuisineTabsClass as tabsClass,
     cuisineHeaderListClass as headerListClass,
@@ -8,8 +8,8 @@ import {
     cuisinePanelClass as panelClass,
     cuisineChipClass as chipClass
 } from './Cuisine.styles';
-import { Badge } from '../../../../components/Forms';
-import { dimensions } from '../../../../settings/styles';
+import { Badge } from '../../../../../components/Forms';
+import { dimensions } from '../../../../../settings/styles';
 
 export const CuisineTabs = ({ items, update }) => (
     <Tabs className={tabsClass}>

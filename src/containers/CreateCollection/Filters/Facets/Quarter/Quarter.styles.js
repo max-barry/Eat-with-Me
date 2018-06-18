@@ -1,7 +1,7 @@
 import styled from 'react-emotion';
 import { onlyUpdateForKeys } from 'recompose';
-import { bs, mq, dimensions } from '../../../../settings/styles';
 import { ellipsis } from 'polished';
+import { bs, mq, dimensions } from '../../../../../settings/styles';
 
 export const QUARTER_ITEM_WIDTH = 360;
 

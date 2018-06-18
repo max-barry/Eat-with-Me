@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ToggleWithLabel } from '../../../../components/Forms';
+import { ToggleWithLabel } from '../../../../../components/Forms';
 
 const isTrue = ['true', 'false'];
 const isFalse = ['false'];

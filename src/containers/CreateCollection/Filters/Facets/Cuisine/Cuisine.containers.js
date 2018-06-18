@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 import moize from 'moize';
 import { CuisineTabs as Tabs } from './Cuisine.components';
 import { getRefinedItems, updateItem } from '../Facets.shared';
-import { cuisineActions } from '../../../../redux/ducks/cuisine';
+import { cuisineActions } from '../../../../../redux/ducks/cuisine';
 import {
     cuisineHasLoadedSelector,
     cuisineFavoritesSelector,
     cuisineNationalSelector,
     cuisineGenreSelector
-} from '../../../../redux/ducks/cuisine/cuisine.selectors';
+} from '../../../../../redux/ducks/cuisine/cuisine.selectors';
 
 const fastFilter = moize.deep(
     (items, whitelist) => items.filter(item => whitelist.includes(item.label)),

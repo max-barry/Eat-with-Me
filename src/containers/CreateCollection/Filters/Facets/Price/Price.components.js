@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { orderBy } from 'lodash';
-import { RangeCheckbox } from '../../../../components/Forms';
 import { compose, withProps } from 'recompose';
-import { priceIntToSymbol } from '../Facets.shared';
-import { bs, shevy, colors } from '../../../../settings/styles';
 import styled from 'react-emotion';
+import { RangeCheckbox } from '../../../../../components/Forms';
+import { bs, shevy, colors } from '../../../../../settings/styles';
+import { priceIntToSymbol } from '../Facets.shared';
 
 const enhance = compose(
     withProps(props => ({
