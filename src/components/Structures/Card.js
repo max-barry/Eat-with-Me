@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Img } from '../Performance';
+import {
+    Img,
+    LoadingImage,
+    LoadingButton,
+    LoadingHeading
+} from '../Performance';
 import {
     cardImgClass as imgClass,
     CardContainer as Container,
@@ -12,6 +17,7 @@ import {
     CARD_IMG_HEIGHT,
     CARD_IMG_WIDTH
 } from './Card.styles';
+import { dimensions } from '../../settings/styles';
 
 // https://github.com/drcmda/react-spring/tree/master/examples
 
@@ -30,7 +36,16 @@ const Card = ({
     const hasStrap = !!(strap || badge);
     const hasDeck = !!deck;
     const hasAction = !!Action;
-    return (
+
+    return isLoading ? (
+        <div style={{ width: dimensions.card }}>
+            <LoadingImage height={180} margin={0.5} />
+            <LoadingHeading margin={0.5} />
+            <LoadingHeading width="80%" dominant={true} margin={0.25} />
+            <LoadingHeading width="65%" margin={0.75} />
+            <LoadingButton dominant={true} />
+        </div>
+    ) : (
         <Container
             isLoading={isLoading}
             hasStrap={hasStrap}
