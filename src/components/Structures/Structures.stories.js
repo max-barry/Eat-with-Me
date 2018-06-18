@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
@@ -7,6 +7,7 @@ import { css } from 'emotion';
 import Card from './Card';
 import MediaElement from './MediaElement';
 import Drawer from './Drawer';
+import ContractableList from './ContractableList';
 import archiveSvg from '../SVGs/images/flaticons/archive.svg';
 import {
     ButtonSimple,
@@ -14,6 +15,7 @@ import {
     ButtonSimpleIcon
 } from '../Buttons';
 import { bs, colors } from '../../settings/styles';
+import { randomRestaurant } from '../../stories/shared';
 
 const action = _ => console.log('Clicked');
 
@@ -41,18 +43,20 @@ storiesOf('Structures', module)
             </div>
         ))
     )
+    .add('ContractableList', () => (
+        <ContractableList
+            items={Array(10)
+                .fill()
+                .map(_ => ({
+                    component: Card,
+                    props: { ...randomRestaurant() }
+                }))}
+        />
+    ))
     .addDecorator(centered)
     .add('Card', () => (
         <Card
-            title={faker.company.catchPhrase()}
-            deck={faker.company.catchPhrase()}
-            src="https://source.unsplash.com/featured/300x200/"
-            badge="92.83"
-            strap={[
-                faker.lorem.word(),
-                faker.lorem.word(),
-                faker.lorem.word()
-            ].join(' • ')}
+            {...randomRestaurant()}
             action={
                 <ButtonSimpleIcon icon={archiveSvg} onClick={action}>
                     Action
@@ -60,6 +64,21 @@ storiesOf('Structures', module)
             }
         />
     ))
+    .add(
+        'Card (Loading)',
+        withState({ isLoading: true })(({ store }) => (
+            <Card
+                {...randomRestaurant()}
+                onClick={() => store.set({ isLoading: !store.state.isLoading })}
+                isLoading={store.state.isLoading}
+                action={
+                    <ButtonSimpleIcon icon={archiveSvg} onClick={action}>
+                        Action
+                    </ButtonSimpleIcon>
+                }
+            />
+        ))
+    )
     .add(
         'Card (Restaurant)',
         withState({ added: false })(({ store }) => (
