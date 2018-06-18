@@ -1,8 +1,8 @@
 import React from 'react';
 import lazySizes from 'lazysizes';
 import { cx, css } from 'emotion';
-import { responsiveFigureClass, figureClass } from './Img.styles';
 import PropTypes from 'prop-types';
+import { responsiveFigureClass, figureClass, imgClass } from './Img.styles';
 
 const opts = {};
 lazySizes.cfg = { ...lazySizes.cfg, ...opts };
@@ -18,7 +18,7 @@ const Img = ({ src, alt, className, responsive, height, width, ...props }) => (
         })}
     >
         <img
-            className={cx(className, 'lazyload')}
+            className={cx(className, imgClass, 'lazyload')}
             data-src={src}
             alt={alt}
             height={responsive ? null : height}
