@@ -4,10 +4,10 @@ import { withState } from '@dump247/storybook-state';
 import centered from '@storybook/addon-centered';
 import faker from 'faker';
 import { css } from 'emotion';
+import { assocPath, map } from 'ramda';
 import Card from './Card';
 import MediaElement from './MediaElement';
 import Drawer from './Drawer';
-import ContractableList from './ContractableList';
 import archiveSvg from '../SVGs/images/flaticons/archive.svg';
 import {
     ButtonSimple,
@@ -16,13 +16,22 @@ import {
 } from '../Buttons';
 import { bs, colors } from '../../settings/styles';
 import { randomRestaurant } from '../../stories/shared';
+import ExpandingThirds from './ExpandingThirds';
+import { InfiniteList } from '../Performance';
+
+let rowsLoaded = 0;
+const ITEMS_PER_ROW = 30;
 
 const makeItems = () =>
-    Array(10)
+    Array(ITEMS_PER_ROW)
         .fill()
-        .map(_ => ({
+        .map((_, i) => ({
             component: Card,
-            props: { ...randomRestaurant() }
+            props: {
+                ...randomRestaurant(),
+                // isLoading: true,
+                title: (rowsLoaded * ITEMS_PER_ROW + i).toString()
+            }
         }));
 
 const action = _ => console.log('Clicked');
@@ -52,31 +61,41 @@ storiesOf('Structures', module)
         ))
     )
     .add(
-        'ContractableList',
+        'ExpandingThirds',
         withState({ isExpanded: false, items: makeItems() })(({ store }) => (
             <Fragment>
-                <ContractableList
+                <ExpandingThirds
                     sticky={true}
+                    secondary={<div>Secondary</div>}
                     columns={store.state.isExpanded ? 1 : 2}
                     onClick={() =>
                         store.set({ isExpanded: !store.state.isExpanded })
                     }
-                    items={store.state.items}
-                >
-                    Right hand side
-                </ContractableList>
-                <button
-                    onClick={() =>
-                        store.set({
-                            items: [...store.state.items, ...makeItems()]
-                        })
+                    primary={
+                        <InfiniteList
+                            items={store.state.items}
+                            hasMore={store.state.items.length < 200}
+                            loadMore={({ startIndex, stopIndex }) => {
+                                rowsLoaded++;
+                                store.set({
+                                    items: [
+                                        ...store.state.items,
+                                        ...makeItems()
+                                    ]
+                                });
+                            }}
+                            onClick={() =>
+                                store.set({
+                                    isExpanded: !store.state.isExpanded
+                                })
+                            }
+                        />
                     }
-                >
-                    Load more
-                </button>
+                />
             </Fragment>
         ))
     )
+
     .addDecorator(centered)
     .add('Card', () => (
         <Card

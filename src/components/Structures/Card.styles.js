@@ -15,11 +15,11 @@ export const CARD_IMG_HEIGHT = 180;
 export const CARD_IMG_WIDTH = 270;
 
 export const CardContainer = styled('div')(({ isLoading }) => ({
-    width: dimensions.card,
-    '> *': {
-        transition: `opacity ${transitionTimes.minimal}ms`,
-        opacity: isLoading ? 0 : 1
-    }
+    width: dimensions.card
+    // '> *': {
+    //     transition: `opacity ${transitionTimes.minimal}ms`,
+    //     opacity: isLoading ? 0 : 1
+    // }
 }));
 
 export const cardImgClass = css({

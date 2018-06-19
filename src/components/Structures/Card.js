@@ -46,13 +46,7 @@ const Card = ({
             <LoadingButton dominant={true} />
         </div>
     ) : (
-        <Container
-            isLoading={isLoading}
-            hasStrap={hasStrap}
-            hasDeck={hasDeck}
-            hasAction={hasAction}
-            {...props}
-        >
+        <Container {...props}>
             <Img
                 responsive={true}
                 height={CARD_IMG_HEIGHT}
