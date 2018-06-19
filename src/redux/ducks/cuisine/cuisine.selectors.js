@@ -8,7 +8,7 @@ const cuisineArray = state => path(['cuisine', 'result'], state) || [];
 
 export const cuisineHasLoadedSelector = createSelector(
     [cuisinePreload, cuisineLoading, cuisineFound],
-    (preload, loading, found) => !preload && !loading && cuisineFound
+    (preload, loading, found) => !preload && !loading && found
 );
 
 export const cuisineFavoritesSelector = createSelector(

@@ -17,6 +17,14 @@ import {
 import { bs, colors } from '../../settings/styles';
 import { randomRestaurant } from '../../stories/shared';
 
+const makeItems = () =>
+    Array(10)
+        .fill()
+        .map(_ => ({
+            component: Card,
+            props: { ...randomRestaurant() }
+        }));
+
 const action = _ => console.log('Clicked');
 
 storiesOf('Structures', module)
@@ -45,21 +53,28 @@ storiesOf('Structures', module)
     )
     .add(
         'ContractableList',
-        withState({ isExpanded: true })(({ store }) => (
-            <ContractableList
-                columns={store.state.isExpanded ? 1 : 2}
-                onClick={() =>
-                    store.set({ isExpanded: !store.state.isExpanded })
-                }
-                items={Array(10)
-                    .fill()
-                    .map(_ => ({
-                        component: Card,
-                        props: { ...randomRestaurant() }
-                    }))}
-            >
-                Right hand side
-            </ContractableList>
+        withState({ isExpanded: false, items: makeItems() })(({ store }) => (
+            <Fragment>
+                <ContractableList
+                    sticky={true}
+                    columns={store.state.isExpanded ? 1 : 2}
+                    onClick={() =>
+                        store.set({ isExpanded: !store.state.isExpanded })
+                    }
+                    items={store.state.items}
+                >
+                    Right hand side
+                </ContractableList>
+                <button
+                    onClick={() =>
+                        store.set({
+                            items: [...store.state.items, ...makeItems()]
+                        })
+                    }
+                >
+                    Load more
+                </button>
+            </Fragment>
         ))
     )
     .addDecorator(centered)

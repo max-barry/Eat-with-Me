@@ -1,49 +1,60 @@
 import React, { Component } from 'react';
-import { connectHits } from 'react-instantsearch/connectors';
+import { connectInfiniteHits } from 'react-instantsearch/connectors';
 import { compose } from 'recompose';
 import moize from 'moize';
-import { applySpec, prop, path, curry } from 'ramda';
+import { applySpec, prop, invoker, map, head, join, assoc } from 'ramda';
 import Filters from './Filters';
 import Added from './Added';
 import { CreateContainer as Container } from './CreateCollection.styles';
 import { ContractableList, Card } from '../../components/Structures';
+import { paths } from '../../shared';
 
-const loadingItems = Array(1)
+const loadingItems = Array(6)
     .fill()
     .map(_ => ({
         component: Card,
-        props: {
-            isLoading: true,
-            src: 'src',
-            strap: 'strap',
-            title: 'title',
-            deck: 'deck'
-        }
+        props: { isLoading: true }
     }));
+
+const reshape = moize.deep(
+    map(
+        compose(
+            assoc('component', Card),
+            applySpec({
+                props: {
+                    key: prop('id'),
+                    title: prop('name'),
+                    src: compose(head, prop('yelp_photos')),
+                    strap: compose(
+                        join(' • '),
+                        paths([
+                            ['all_category_groups', 0, 'category'],
+                            ['micro_neighborhood', 'name']
+                        ])
+                    ),
+                    badge: compose(invoker(1, 'toFixed')(2), prop('ewm_score'))
+                }
+            })
+        )
+    ),
+    { maxSize: 20 }
+);
 
 class CreateCollection extends Component {
     state = { showMap: false };
 
     constructor(props) {
         super(props);
-
         this.toggleMap = this.toggleMap.bind(this);
     }
 
     get items() {
-        return this.props.hits.map(item => ({
-            component: Card,
-            props: {
-                src: item.yelp_photos.length ? item.yelp_photos[0] : null,
-                strap: [
-                    path(['micro_neighborhood', 'name'], item),
-                    prop('all_category_groups', item)[0].category
-                ].join(' • '),
-                title: item.name,
-                deck: 'Deck goes here and will say something',
-                badge: item.ewm_score.toFixed(2)
-            }
-        }));
+        const hits = this.props.hits;
+        return hits.length ? reshape(hits) : loadingItems;
+    }
+
+    get columns() {
+        return this.state.showMap ? 1 : 2;
     }
 
     toggleMap() {
@@ -54,13 +65,19 @@ class CreateCollection extends Component {
         return (
             <Container>
                 <Filters />
-                <ContractableList columns={2} items={loadingItems}>
+                <ContractableList
+                    sticky={true}
+                    columns={this.columns}
+                    items={this.items}
+                >
                     <Added />
                 </ContractableList>
+                <button onClick={() => this.props.refine()}>clicky</button>
             </Container>
         );
     }
 }
-const enhance = compose(connectHits);
+
+const enhance = compose(connectInfiniteHits);
 
 export default enhance(CreateCollection);

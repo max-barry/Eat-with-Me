@@ -38,8 +38,8 @@ const Card = ({
     const hasAction = !!Action;
 
     return isLoading ? (
-        <div style={{ width: dimensions.card }}>
-            <LoadingImage height={180} margin={0.5} />
+        <div style={{ width: dimensions.card }} {...props}>
+            <LoadingImage height={180} margin={0.5} onClick={onClick} />
             <LoadingHeading margin={0.5} />
             <LoadingHeading width="80%" dominant={true} margin={0.25} />
             <LoadingHeading width="65%" margin={0.75} />
@@ -80,8 +80,8 @@ Card.defaultProps = {
 };
 
 Card.propTypes = {
-    src: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    src: PropTypes.string,
+    title: PropTypes.string,
     deck: PropTypes.string,
     alt: PropTypes.string,
     onClick: PropTypes.func,
