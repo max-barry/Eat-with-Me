@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { pick } from 'ramda';
 import MediaQuery from 'react-responsive';
 import moize from 'moize';
+// import { Configure } from 'react-instantsearch/dom';
 import {
     map,
     path,
@@ -292,6 +293,8 @@ class Filters extends Component {
                     )}
                     {isMobile && <Drawer isOpen={isOpen}>{Content}</Drawer>}
                 </div>
+
+                {/* <Configure facetFilters={['quarter.name:East London']} /> */}
 
                 <VirtualRefinement
                     ref={this.virtualRefs[FACET_QUARTER]}

@@ -9,7 +9,7 @@ import {
     mq
 } from '../../../settings/styles';
 
-export const FILTER_NAV_SPACING = bsint(0.75);
+export const FILTER_NAV_SPACING = bsint(0.5);
 
 export const FiltersContainer = styled('nav')(
     mq({

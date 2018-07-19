@@ -13,6 +13,7 @@ const MARKERS = Array(5)
     .map(_ => ({
         id: faker.random.uuid(),
         labelStyle: faker.random.arrayElement(Object.values(MARKER_STYLES)),
+        text: faker.lorem.word(),
         coordinates: (() => {
             const {
                 latitude: lat,
@@ -36,5 +37,11 @@ const MARKERS = Array(5)
 storiesOf('GoogleMap', module)
     .addDecorator(centered)
     .add('default', () => (
-        <GoogleMap expandedElement={MediaElement} markers={MARKERS} />
+        <GoogleMap
+            expandedElement={MediaElement}
+            markers={MARKERS}
+            onIdle={map =>
+                console.log(`New bounds: ${JSON.stringify(map.getBounds())}`)
+            }
+        />
     ));

@@ -9,6 +9,14 @@ import {
     fontWeights,
     shadows
 } from '../../settings/styles';
+import tickSvg from '../SVGs/images/flaticons/success-1.svg';
+
+const MARKER_PAD = bsint(0.25);
+const MARKER_POINT_DIMENSION = 9;
+const MARKER_BORDER_COLOR = darken(0.1, colors.grey2);
+const DOT_DIMENSION = 16;
+const DOT_COLOR = colors.white;
+const DOT_OUTLINE_COLOR = colors.secondary;
 
 export const googleMapContainerClass = moize((width, height) =>
     css({
@@ -20,10 +28,6 @@ export const googleMapContainerClass = moize((width, height) =>
 export const googleMapWrapClass = css({
     height: '100%'
 });
-
-const MARKER_PAD = bsint(0.25);
-const MARKER_POINT_DIMENSION = 9;
-const MARKER_BORDER_COLOR = darken(0.1, colors.grey2);
 
 export const MARKER_WIDTH = bsint(4);
 export const MARKER_HEIGHT =
@@ -74,20 +78,33 @@ export const GoogleMapMarkerArrow = styled('span')({
     border: `1px solid ${MARKER_BORDER_COLOR}`
 });
 
-const DOT_DIMENSION = 12;
 export const DOT_WIDTH = DOT_DIMENSION;
 export const DOT_HEIGHT = DOT_DIMENSION;
 
 export const googleMapDotClass = css({
     height: DOT_DIMENSION,
     width: DOT_DIMENSION,
-    boxShadow: shadows.heavy,
-    border: `1px solid ${colors.white}`,
+    boxShadow: '0px 0px 1px black',
+    border: `2px solid ${DOT_COLOR}`,
     borderRadius: '50%',
-    backgroundColor: colors.grey1
+    backgroundColor: DOT_OUTLINE_COLOR,
+    position: 'relative',
+    '&::before': {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '65%',
+        backgroundPosition: 'center',
+        filter: 'brightness(0) invert(1)'
+    }
 });
 
 export const googleMapDotActiveClass = css({
-    backgroundColor: colors.secondary,
-    borderColor: colors.white
+    '&::before': {
+        content: "''",
+        backgroundImage: `url(${tickSvg})`
+    }
 });

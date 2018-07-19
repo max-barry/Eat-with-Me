@@ -15,6 +15,7 @@ import withSearch from '../../hocs/Search/Search';
 import AddedList from './Added';
 import { mq } from '../../settings/styles';
 import CreateCollection from './CreateCollection';
+import SearchableMap from './SearchableMap';
 
 const onChange = () => console.log('Change');
 
@@ -50,6 +51,12 @@ storiesOf('Filters', module)
     .addDecorator(story => <Provider story={story()} />)
     .add('default', () => {
         const Enhanced = compose(withSearch)(() => <CreateCollection />);
+        return <Enhanced />;
+    })
+    .add('Searchable Map', () => {
+        const Enhanced = compose(withSearch, withParent)(() => (
+            <SearchableMap />
+        ));
         return <Enhanced />;
     })
     .add('Filter Navigation', () => {

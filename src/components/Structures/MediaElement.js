@@ -18,17 +18,8 @@ const MediaElement = ({
     ...props
 }) => (
     <Container width={width} smallFont={smallFont} {...props}>
-        {src && (
-            <Img
-                src={src}
-                alt={alt || title}
-                width={width * (1 / 3)}
-                style={{
-                    marginRight: bs(0.5)
-                }}
-            />
-        )}
-        <div style={{ flex: 1 }}>
+        {src && <Img src={src} alt={alt || title} width={width * (1 / 3)} />}
+        <div style={{ flex: 1, marginLeft: bs(0.5) }}>
             <MediaElementTitle>{title}</MediaElementTitle>
             {strap && <Strap>{strap}</Strap>}
         </div>

@@ -9,11 +9,7 @@ import {
     CellMeasurer
 } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import {
-    // InfiniteListContainer as Container,
-    InfiniteListRow as Row
-    // InfiniteListArea as Area
-} from './InfiniteList.styles';
+import { InfiniteListRow as Row } from './InfiniteList.styles';
 import { dimensions } from '../../settings/styles';
 
 // @link http://next.plnkr.co/edit/zjCwNeRZ7XtmFp1PDBsc?p=preview
@@ -38,7 +34,7 @@ class InfiniteList extends Component {
         return this.props.items.length;
     }
 
-    RowRenderer({ index, key, style, parent }) {
+    RowRenderer({ index, key, style, parent, isScrolling }) {
         const rowItems = [];
         const fromIndex = index * this.itemsPerRow;
         const toIndex = Math.min(fromIndex + this.itemsPerRow, this.listSize);
@@ -62,15 +58,12 @@ class InfiniteList extends Component {
     }
 
     render() {
-        const { loadMore, hasMore, isLoadingMore } = this.props;
-
-        // TODO : block loadMore call if already fetching
+        const { loadMore, hasMore, isLoadingMore, threshold } = this.props;
 
         // Only load 1 page of items at a time.
         // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
-        // TODO : This is not working
+        // TODO : Block loadMore call if already fetching. The below is not working
         const loadMoreRows = isLoadingMore || !hasMore ? () => {} : loadMore;
-        // const loadMoreRows = loadMore;
 
         return (
             <InfiniteLoader
@@ -78,7 +71,7 @@ class InfiniteList extends Component {
                 loadMoreRows={loadMoreRows}
                 rowCount={9000}
                 // minimumBatchSize={20}
-                // threshold={20}
+                threshold={threshold}
             >
                 {({ onRowsRendered, registerChild }) => (
                     <WindowScroller>
@@ -104,15 +97,15 @@ class InfiniteList extends Component {
                                             height={height}
                                             width={width}
                                             isScrolling={isScrolling}
-                                            onScroll={onChildScroll}
                                             rowCount={this.rowCount}
                                             rowRenderer={this.RowRenderer}
-                                            onRowsRendered={onRowsRendered}
                                             deferredMeasurementCache={cache}
                                             rowHeight={cache.rowHeight}
                                             scrollTop={scrollTop}
                                             style={{ outline: 0 }}
                                             ref={registerChild}
+                                            onScroll={onChildScroll}
+                                            onRowsRendered={onRowsRendered}
                                         />
                                     );
                                 }}
@@ -126,14 +119,14 @@ class InfiniteList extends Component {
 }
 
 InfiniteList.defaultProps = {
-    // pageSize: 20
+    threshold: 20
 };
 
 InfiniteList.propTypes = {
     hasMore: PropTypes.bool,
     isLoadingMore: PropTypes.bool,
     loadMore: PropTypes.func,
-    // pageSize: PropTypes.number,
+    threshold: PropTypes.number,
     items: PropTypes.arrayOf(
         PropTypes.shape({
             component: PropTypes.oneOfType([PropTypes.func, PropTypes.element])

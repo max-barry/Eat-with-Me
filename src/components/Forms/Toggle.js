@@ -13,7 +13,7 @@ import {
 import { requiredPropTypes } from './Forms.shared';
 import { colors, sFlexedCenter } from '../../settings/styles';
 import { SvgFromFile } from '../SVGs';
-import multipleSvg from '../SVGs/images/flaticons/multiply.svg';
+import multiplySvg from '../SVGs/images/flaticons/multiply.svg';
 import successSvg from '../SVGs/images/flaticons/success-1.svg';
 
 const iconProperties = {
@@ -29,7 +29,7 @@ const iconProperties = {
 };
 
 const UncheckedIcon = () => (
-    <SvgFromFile {...iconProperties} path={multipleSvg} />
+    <SvgFromFile {...iconProperties} path={multiplySvg} />
 );
 
 const CheckedIcon = () => <SvgFromFile {...iconProperties} path={successSvg} />;
@@ -57,10 +57,13 @@ export default onlyUpdateForKeys(['checked'])(Toggle);
 const toggleWithLabel = ({
     title: TitleComponent,
     tag: TagComponent,
+    style,
+    className,
+    compact,
     ...props
 }) => (
-    <ToggleLabel for={props.id}>
-        <ToggleLabelText>
+    <ToggleLabel for={props.id} className={className} style={style}>
+        <ToggleLabelText compact={compact}>
             <ToggleTitle>
                 {typeof TitleComponent === 'string' ? (
                     TitleComponent
@@ -82,6 +85,10 @@ const toggleWithLabel = ({
     </ToggleLabel>
 );
 
+toggleWithLabel.defaultProps = {
+    compact: false
+};
+
 toggleWithLabel.propTypes = {
     title: PropTypes.oneOfType([
         PropTypes.element,
@@ -93,6 +100,7 @@ toggleWithLabel.propTypes = {
         PropTypes.func,
         PropTypes.string
     ]),
+    compact: PropTypes.bool,
     ...requiredPropTypes
 };
 

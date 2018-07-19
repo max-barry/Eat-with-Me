@@ -33,7 +33,7 @@ storiesOf('Performance', module)
                 items={store.state.items}
                 hasMore={store.state.items.length < 200}
                 loadMore={({ startIndex, stopIndex }) => {
-                    console.log(startIndex, stopIndex);
+                    // console.log(startIndex, stopIndex);
                     rowsLoaded++;
                     store.set({
                         items: [...store.state.items, ...makeItems()]

@@ -1,8 +1,15 @@
 import React, { Fragment } from 'react';
-import { compose, withProps, withStateHandlers, defaultProps } from 'recompose';
 import PropTypes from 'prop-types';
 import { assoc, dissoc } from 'ramda';
 import { cx } from 'react-emotion';
+import {
+    compose,
+    withProps,
+    withStateHandlers,
+    defaultProps,
+    withHandlers,
+    onlyUpdateForKeys
+} from 'recompose';
 import {
     GoogleMap,
     InfoWindow,
@@ -31,10 +38,11 @@ export const MARKER_STYLES = {
     label: 'label'
 };
 
-const mapOptions = {
+const defaultOptions = {
     fullscreenControl: false,
     streetViewControl: false,
     mapTypeControl: false,
+    clickableIcons: false,
     zoom: 11,
     center: {
         lat: 51.508039,
@@ -72,7 +80,7 @@ const Label = ({ marker, toggleOpen }) => (
     >
         <Fragment>
             <MarkerArrow role="presentation" />
-            <MarkerText>Hello There!</MarkerText>
+            <MarkerText>{marker.text}</MarkerText>
         </Fragment>
     </MarkerWithLabel>
 );
@@ -91,44 +99,56 @@ const GoogleMapComponent = ({
     toggleOpen,
     width,
     height,
+    onIdle,
+    onMapMounted,
+    options,
     expandedElement: ExpandedElement
-}) => (
-    <GoogleMap options={mapOptions}>
-        {markers.map((marker, i) => {
-            const openFn = () => toggleOpen(marker.id);
-            const markerProps = { marker: marker, toggleOpen: openFn };
-            const isOpen = !!open[marker.id];
-            const style = marker.labelStyle;
-            return (
-                <Fragment key={marker.id}>
-                    {style === MARKER_STYLES.dot &&
-                        !isOpen && <Dot {...markerProps} />}
+}) => {
+    return (
+        <GoogleMap
+            options={{ ...defaultOptions, ...options }}
+            ref={onMapMounted}
+            onIdle={onIdle}
+        >
+            {markers.map((marker, i) => {
+                const openFn = () => toggleOpen(marker.id);
+                const markerProps = { marker: marker, toggleOpen: openFn };
+                const isOpen = !!open[marker.id];
+                const style = marker.labelStyle;
 
-                    {style === MARKER_STYLES.dotActive &&
-                        !isOpen && <Dot {...markerProps} active={true} />}
+                return (
+                    <Fragment key={`map_frag_${marker.id}`}>
+                        {style === MARKER_STYLES.dot &&
+                            !isOpen && <Dot {...markerProps} />}
 
-                    {style === MARKER_STYLES.label &&
-                        !isOpen && <Label {...markerProps} />}
+                        {style === MARKER_STYLES.dotActive &&
+                            !isOpen && <Dot {...markerProps} active={true} />}
 
-                    {isOpen && (
-                        <LabelExpanded
-                            marker={marker}
-                            ExpandedElement={ExpandedElement}
-                            toggleOpen={openFn}
-                        />
-                    )}
-                </Fragment>
-            );
-        })}
-    </GoogleMap>
-);
+                        {style === MARKER_STYLES.label &&
+                            !isOpen && <Label {...markerProps} />}
+
+                        {isOpen && (
+                            <LabelExpanded
+                                marker={marker}
+                                ExpandedElement={ExpandedElement}
+                                toggleOpen={openFn}
+                            />
+                        )}
+                    </Fragment>
+                );
+            })}
+        </GoogleMap>
+    );
+};
 
 GoogleMapComponent.propTypes = {
+    onIdle: PropTypes.func,
     expandedElement: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     markers: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             expandedProps: PropTypes.object,
+            text: PropTypes.string,
             labelStyle: PropTypes.oneOf(Object.values(MARKER_STYLES)),
             coordinates: PropTypes.shape({
                 lat: PropTypes.number,
@@ -141,7 +161,8 @@ GoogleMapComponent.propTypes = {
 const enhance = compose(
     defaultProps({
         width: '80vh',
-        height: '80vh'
+        height: '80vh',
+        markers: []
     }),
     withProps(({ width, height }) => ({
         googleMapURL: GOOGLE_MAPS_SCRIPT_URL,
@@ -157,6 +178,22 @@ const enhance = compose(
             })
         }
     ),
+    withHandlers(() => {
+        const refs = {
+            map: undefined
+        };
+
+        return {
+            onMapMounted: ({ onMount }) => ref => {
+                refs.map = ref;
+                if (onMount && refs.map) onMount(refs.map);
+            },
+            onIdle: ({ onIdle }) => () => {
+                if (onIdle && refs.map) onIdle(refs.map);
+            }
+        };
+    }),
+    onlyUpdateForKeys(['markers']),
     withScriptjs,
     withGoogleMap
 );

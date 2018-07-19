@@ -1,5 +1,5 @@
 import { onlyUpdateForKeys } from 'recompose';
-import { curry, ap, __, path } from 'ramda';
+import { curry, ap, __, pathOr } from 'ramda';
 
 export const safeId = s => s.replace(/^[^a-z]+|[^\w:.-]+/gi, '');
 
@@ -33,4 +33,4 @@ export const calcWindowWidth = () =>
         document.documentElement.clientWidth
     );
 
-export const paths = curry((ps, obj) => ap([path(__, obj)], ps));
+export const paths = curry((ps, obj) => ap([pathOr(null, __, obj)], ps));

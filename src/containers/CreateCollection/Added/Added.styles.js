@@ -18,8 +18,8 @@ export const addedItemContainerClass = css({
     position: 'absolute',
     top: 0,
     height: dimensions.cardCompact + bsint(1),
-    width: '100%',
-    padding: bs(0.5)
+    width: '100%'
+    // padding: bs(0.5)
 });
 
 export const addedItemTitleClass = props =>

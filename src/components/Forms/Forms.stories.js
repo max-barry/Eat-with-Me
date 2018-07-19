@@ -53,6 +53,18 @@ storiesOf('Forms', module)
         ))
     )
     .add(
+        'Toggle (compact)',
+        withState({ checked: false })(({ store }) => (
+            <ToggleWithLabel
+                title="Title for component"
+                name="somename"
+                checked={store.state.checked}
+                compact={true}
+                onChange={() => store.set({ checked: !store.state.checked })}
+            />
+        ))
+    )
+    .add(
         'Chip',
         withState({ checked1: false, checked2: false })(({ store }) => (
             <div
