@@ -101,8 +101,7 @@ const LoadingResults = onlyUpdateForKeys([])(_ => (
 ));
 
 const CreateCollectionResults = compose(connectStateResults)(
-    ({ columns, items, hasMore, loadMore, ...props }) => {
-        // console.log(items);
+    ({ columns, items, hasMore, loadMore, isMapShown, ...props }) => {
         return (
             <ExpandingThirds
                 sticky={true}
@@ -111,17 +110,21 @@ const CreateCollectionResults = compose(connectStateResults)(
                     <ActionArea
                         items={items}
                         toggleMap={props.toggleMap}
-                        isMapShown={props.isMapShown}
+                        isMapShown={isMapShown}
                     />
                 }
                 primary={
                     !!items.length ? (
-                        <InfiniteList
-                            items={items}
-                            hasMore={hasMore}
-                            loadMore={loadMore}
-                            isLoadingMore={props.searching}
-                        />
+                        isMapShown ? (
+                            <Hits />
+                        ) : (
+                            <InfiniteList
+                                items={items}
+                                hasMore={hasMore}
+                                loadMore={loadMore}
+                                isLoadingMore={props.searching}
+                            />
+                        )
                     ) : (
                         <LoadingResults />
                     )

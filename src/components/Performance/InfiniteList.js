@@ -119,7 +119,7 @@ class InfiniteList extends Component {
 }
 
 InfiniteList.defaultProps = {
-    threshold: 20
+    threshold: 10
 };
 
 InfiniteList.propTypes = {

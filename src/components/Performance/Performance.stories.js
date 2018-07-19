@@ -6,7 +6,7 @@ import centered from '@storybook/addon-centered';
 // import faker from 'faker';
 // import { css } from 'emotion';
 import { LoadingHeading, LoadingButton, LoadingImage } from './Loading';
-import { bs, dimensions } from '../../settings/styles';
+// import { bs, dimensions } from '../../settings/styles';
 import InfiniteList from './InfiniteList';
 import { Card } from '../Structures';
 import { randomRestaurant } from '../../stories/shared';
@@ -33,7 +33,7 @@ storiesOf('Performance', module)
                 items={store.state.items}
                 hasMore={store.state.items.length < 200}
                 loadMore={({ startIndex, stopIndex }) => {
-                    // console.log(startIndex, stopIndex);
+                    console.log(startIndex, stopIndex);
                     rowsLoaded++;
                     store.set({
                         items: [...store.state.items, ...makeItems()]
