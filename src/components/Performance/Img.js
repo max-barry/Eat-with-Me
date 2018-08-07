@@ -3,6 +3,7 @@ import styled from 'react-emotion';
 import lazySizes from 'lazysizes';
 import PropTypes from 'prop-types';
 import { colors, transitionTimes } from '../../settings';
+import { onlyUpdateForKeys } from 'recompose';
 
 lazySizes.cfg = { ...lazySizes.cfg, ...{} }; // Merge custom opts
 lazySizes.init(); // TODO : Only init lazy sizes if it isn't already
@@ -36,18 +37,25 @@ const Image = styled('img')({
     }
 });
 
-const Img = ({ src, alt, responsive, height, width, ...props }) => (
-    <Figure role="presentation" responsive={responsive} h={height} w={width}>
-        <Image
-            alt={alt}
-            data-src={src}
-            className="lazyload"
-            height={responsive ? null : height}
-            width={responsive ? null : width}
-            {...props}
-        />
-    </Figure>
-);
+const Img = ({ src, alt, responsive, height, width, ...props }) => {
+    return (
+        <Figure
+            role="presentation"
+            responsive={responsive}
+            h={height}
+            w={width}
+        >
+            <Image
+                alt={alt}
+                data-src={src}
+                className="lazyload"
+                height={responsive ? null : height}
+                width={responsive ? null : width}
+                {...props}
+            />
+        </Figure>
+    );
+};
 
 Img.defaultProps = {
     responsive: false
@@ -61,4 +69,4 @@ Img.propTypes = {
     responsive: PropTypes.bool
 };
 
-export default Img;
+export default onlyUpdateForKeys([])(Img);

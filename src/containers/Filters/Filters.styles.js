@@ -10,6 +10,7 @@ import {
     shevy,
     fontWeights
 } from '../../settings';
+import { ButtonSimple } from '../../components/Buttons';
 
 const mobileBottomBarSize = dimensions.tap + bsint();
 
@@ -101,37 +102,44 @@ export const modalContent = left =>
 
 export const Main = styled('div')(
     mq({
+        padding: bs(0.5),
         display: 'grid',
         gridTemplateColumns: ['2fr 1fr', '100%'],
         gridGap: styles.fn.pad2(2, 1)
     })
 );
 
-export const ResultsArea = styled('div')(
+export const ResultsArea = styled('div')();
+
+export const ResultsList = styled('div')(
     mq({
-        '.ais-InfiniteHits-list': {
-            display: 'grid',
-            gridTemplateColumns: ['1fr 1fr', '100%'],
-            gridGap: styles.fn.pad2(2, 1),
-            justifyItems: 'center'
-        },
-        '.ais-InfiniteHits-loadMore': {
-            height: dimensions.button,
-            lineHeight: `${dimensions.button}px`,
-            width: '100%',
-            maxWidth: [dimensions.input, 'none'],
-            backgroundColor: colors.secondary,
-            fontWeight: fontWeights.medium,
-            color: colors.white,
-            borderRadius: dimensions.bevel,
-            display: 'block',
-            margin: styles.fn.pad(1, 'auto', 1, 'auto'),
-            '&:focus, &:hover': {
-                outline: 0,
-                backgroundColor: styles.fn.focus(colors.secondary)
-            }
-        }
+        display: 'grid',
+        gridTemplateColumns: ['1fr 1fr', '100%'],
+        gridGap: styles.fn.pad2(2, 1),
+        justifyItems: 'center'
     })
 );
 
-export const AddedArea = styled('div')(mq({}));
+export const AddedArea = styled('div')(mq({ position: 'relative' }));
+
+export const AddedHeadline = styled('h3')(shevy.h3, {});
+
+export const AddedInterior = styled('div')({
+    position: 'sticky',
+    top: bs(),
+    backgroundColor: colors.grey1,
+    padding: bs(0.5)
+});
+
+export const LoadMore = styled(ButtonSimple)({
+    width: '100%',
+    maxWidth: dimensions.input,
+    margin: styles.fn.pad(2, 'auto', 1, 'auto')
+});
+
+// export const addedList = css({
+//     position: 'sticky',
+//     top: bs(),
+//     backgroundColor: colors.grey1,
+//     padding: bs(0.5)
+// });

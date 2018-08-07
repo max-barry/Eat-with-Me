@@ -2,18 +2,14 @@ import React, { Component, Fragment } from 'react';
 import Modal from 'react-modal';
 import MediaQuery from 'react-responsive';
 import { invoker, prop, mapObjIndexed, ifElse, map, path } from 'ramda';
-import { InfiniteHits } from 'react-instantsearch-dom';
 import { bpProps } from '../../settings';
-import { Card, Drawer, AnimatedList } from '../../components/Display';
+import { Drawer } from '../../components/Display';
 import {
     modalOverlay,
     modalContent,
     MODAL_WIDTH,
     Inner,
     Outer,
-    Main,
-    ResultsArea,
-    AddedArea,
     RenderedWrap
 } from './Filters.styles';
 import {
@@ -31,30 +27,12 @@ import {
     mobileDrawerItems,
     componentMapArray
 } from './Filters.shared';
-import { restaurantSelectors } from '../../redux/ducks/restaurants/restaurants.selectors';
+import Results from './Filters.Results';
 
 // https://www.algolia.com/doc/api-reference/api-parameters/filters/
 // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
 
 Modal.setAppElement('#root');
-
-class Results extends Component {
-    render = () => (
-        <Main>
-            <ResultsArea>
-                <InfiniteHits
-                    hitComponent={({ hit }) => (
-                        <Card {...restaurantSelectors.makeCard(hit)} />
-                    )}
-                />
-            </ResultsArea>
-            <AddedArea>
-                Yo
-                <AnimatedList items={[]} />
-            </AddedArea>
-        </Main>
-    );
-}
 
 class ModalContent extends Component {
     facetRefs = {};

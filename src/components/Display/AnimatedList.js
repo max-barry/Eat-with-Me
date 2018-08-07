@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import posed, { PoseGroup } from 'react-pose';
-import { spring, decay } from 'popmotion';
+import { spring, decay, tween } from 'popmotion';
+import { transitionTimes } from '../../settings';
 
 // @link https://codepen.io/popmotion/pen/rdzeKQ
 
@@ -20,36 +21,39 @@ const DraggableItem = posed.li({
 });
 
 const ItemContainer = posed.div({
-    exit: { opacity: 0 },
-    enter: { opacity: 1 }
+    exit: { opacity: 0, transition: { duration: transitionTimes.minimal } },
+    enter: { opacity: 1, transition: { duration: transitionTimes.minimal } }
 });
 
 class AnimatedList extends Component {
     exited = {};
 
-    render = () => (
-        <ul>
-            <PoseGroup>
-                {this.props.items.map(({ key, component }) => (
-                    <ItemContainer key={key}>
-                        <DraggableItem
-                            onValueChange={{
-                                x: x => {
-                                    if (this.exited[key] || !isDismissed(x))
-                                        return;
+    render = () => {
+        const { items, onExit, ...props } = this.props;
+        return (
+            <ul {...props}>
+                <PoseGroup>
+                    {items.map(({ key, component }) => (
+                        <ItemContainer key={key}>
+                            <DraggableItem
+                                onValueChange={{
+                                    x: x => {
+                                        if (this.exited[key] || !isDismissed(x))
+                                            return;
 
-                                    this.props.onExit(key);
-                                    this.exited[key] = true;
-                                }
-                            }}
-                        >
-                            {component}
-                        </DraggableItem>
-                    </ItemContainer>
-                ))}
-            </PoseGroup>
-        </ul>
-    );
+                                        onExit(key);
+                                        this.exited[key] = true;
+                                    }
+                                }}
+                            >
+                                {component}
+                            </DraggableItem>
+                        </ItemContainer>
+                    ))}
+                </PoseGroup>
+            </ul>
+        );
+    };
 }
 
 AnimatedList.defaultProps = {};

@@ -39,7 +39,11 @@ const Simple = styled('button')(
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             transform: 'scale(1.1)',
-            transformOrigin: 'center'
+            transformOrigin: 'center',
+            filter:
+                !recessive && readableColor(color) === '#fff'
+                    ? 'invert(100%)'
+                    : undefined
         }
     })
 );
