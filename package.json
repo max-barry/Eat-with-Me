@@ -80,7 +80,7 @@
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
         "precommit": "pretty-quick --staged",
-        "storybook": "start-storybook -p 9009 -s public",
+        "storybook": "start-storybook -p 9008 -s public",
         "build-storybook": "build-storybook -s public",
         "analyze": "source-map-explorer build/static/js/main.*"
     },

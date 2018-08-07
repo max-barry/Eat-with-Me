@@ -34,6 +34,7 @@ class IsBar extends Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <ToggleWithLabel
                 name="include-bars"

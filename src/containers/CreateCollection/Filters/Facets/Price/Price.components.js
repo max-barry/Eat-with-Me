@@ -29,14 +29,17 @@ const enhance = compose(
 const PriceTitle = styled('h5')(shevy.h6, {});
 const PriceDeck = styled('h6')(shevy.h6, { color: colors.greyDark });
 
-export const PriceOptions = enhance(({ items, update }) => (
-    <Fragment>
-        <PriceTitle>Choose a price range</PriceTitle>
-        <PriceDeck>Filter by price</PriceDeck>
-        <RangeCheckbox
-            items={items}
-            onChange={update}
-            style={{ marginBottom: bs(2), marginTop: bs() }}
-        />
-    </Fragment>
-));
+export const PriceOptions = enhance(({ items, update }) => {
+    console.log(items);
+    return (
+        <Fragment>
+            <PriceTitle>Choose a price range</PriceTitle>
+            <PriceDeck>Filter by price</PriceDeck>
+            <RangeCheckbox
+                items={items}
+                onChange={update}
+                style={{ marginBottom: bs(2), marginTop: bs() }}
+            />
+        </Fragment>
+    );
+});
