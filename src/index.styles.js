@@ -1,10 +1,10 @@
-import { injectGlobal } from 'emotion';
-import { shevy, fontFamily, fontWeights } from './settings/styles';
-import { fontFace } from 'polished';
+import { injectGlobal } from 'react-emotion';
+import { shevy, fontFamily, fontWeights } from './settings';
 
 const { content, ...headings } = shevy;
 
 // TODO : Implement : fontFace
+// TODO : Ramda can probably clean this
 
 const hs = [1, 2, 3, 4, 5, 6]
     .map(

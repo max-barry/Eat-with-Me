@@ -1,9 +1,6 @@
 const REGULAR = ['background: blue', 'color: white'].join(';');
-
 const SUCCESS = ['background: green', 'color: white'].join(';');
-
 const STARTED = ['background: darkorange', 'color: white'].join(';');
-
 const FAILURE = ['background: red', 'color: white'].join(';');
 
 const logGroupCollapsed = (...args) => {
@@ -28,11 +25,8 @@ const logInfo = (...args) => {
 
 const determineStyle = ({ type, meta, ...action }) => {
     if (!meta || !meta.async) return REGULAR;
-
     if (type.indexOf('_COMPLETED') > -1) return SUCCESS;
-
     if (type.indexOf('_FAILED') > -1) return FAILURE;
-
     return STARTED;
 };
 

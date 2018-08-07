@@ -1,11 +1,7 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
-import { checkA11y } from '@storybook/addon-a11y';
-
-// if (process.env.NODE_ENV !== 'production') {
-//     const { whyDidYouUpdate } = require('why-did-you-update');
-//     whyDidYouUpdate(React, { exclude: [/^StoryState/] });
-// }
+import { withKnobs } from '@storybook/addon-knobs';
+// import { checkA11y } from '@storybook/addon-a11y';
 
 const reqComponents = require.context('../components', true, /\.stories\.js$/);
 const reqContainers = require.context('../containers', true, /\.stories\.js$/);
@@ -15,6 +11,7 @@ const loadStories = () => {
     reqContainers.keys().forEach(filename => reqContainers(filename));
 };
 
-addDecorator(checkA11y);
+// addDecorator(checkA11y);
+addDecorator(withKnobs);
 
 configure(loadStories, module);

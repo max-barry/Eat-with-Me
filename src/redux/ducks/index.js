@@ -1,2 +1,1 @@
-export { default as cuisine } from './cuisine';
-export { default as hardware } from './hardware';
+export { default as restaurants } from './restaurants';
