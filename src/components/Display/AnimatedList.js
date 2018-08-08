@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import posed, { PoseGroup } from 'react-pose';
-import { spring, decay, tween } from 'popmotion';
+import styled from 'react-emotion';
+import { spring, decay } from 'popmotion';
 import { transitionTimes } from '../../settings';
 
 // @link https://codepen.io/popmotion/pen/rdzeKQ
@@ -21,20 +22,37 @@ const DraggableItem = posed.li({
 });
 
 const ItemContainer = posed.div({
-    exit: { opacity: 0, transition: { duration: transitionTimes.minimal } },
-    enter: { opacity: 1, transition: { duration: transitionTimes.minimal } }
+    exit: {
+        opacity: 0,
+        // translateY: 0,
+        transition: { duration: transitionTimes.minimal }
+    },
+    enter: {
+        opacity: 1,
+        // translateY: 0,
+        transition: { duration: transitionTimes.short }
+    },
+    preenter: { opacity: 0 }
 });
+
+const StyledItem = styled(ItemContainer)(({ gap }) => ({
+    '&:not(:last-child)': {
+        marginBottom: gap
+    }
+}));
 
 class AnimatedList extends Component {
     exited = {};
 
+    // TODO : Make the container elastic
+
     render = () => {
-        const { items, onExit, ...props } = this.props;
+        const { items, onExit, gap, ...props } = this.props;
         return (
             <ul {...props}>
-                <PoseGroup>
+                <PoseGroup preEnterPose="preenter">
                     {items.map(({ key, component }) => (
-                        <ItemContainer key={key}>
+                        <StyledItem key={key} gap={gap}>
                             <DraggableItem
                                 onValueChange={{
                                     x: x => {
@@ -48,7 +66,7 @@ class AnimatedList extends Component {
                             >
                                 {component}
                             </DraggableItem>
-                        </ItemContainer>
+                        </StyledItem>
                     ))}
                 </PoseGroup>
             </ul>
@@ -56,7 +74,9 @@ class AnimatedList extends Component {
     };
 }
 
-AnimatedList.defaultProps = {};
+AnimatedList.defaultProps = {
+    gap: 0
+};
 
 AnimatedList.propTypes = {
     items: PropTypes.arrayOf(
@@ -66,6 +86,7 @@ AnimatedList.propTypes = {
             key: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
         })
     ).isRequired,
+    gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onExit: PropTypes.func
 };
 

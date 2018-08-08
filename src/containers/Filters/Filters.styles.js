@@ -1,4 +1,5 @@
 import styled, { css } from 'react-emotion';
+import posed from 'react-pose';
 import {
     bs,
     dimensions,
@@ -7,8 +8,7 @@ import {
     bsint,
     mq,
     styles,
-    shevy,
-    fontWeights
+    shevy
 } from '../../settings';
 import { ButtonSimple } from '../../components/Buttons';
 
@@ -104,19 +104,18 @@ export const Main = styled('div')(
     mq({
         padding: bs(0.5),
         display: 'grid',
-        gridTemplateColumns: ['2fr 1fr', '100%'],
-        gridGap: styles.fn.pad2(2, 1)
+        gridTemplateColumns: ['2fr 1fr', '100%']
     })
 );
-
-export const ResultsArea = styled('div')();
 
 export const ResultsList = styled('div')(
     mq({
         display: 'grid',
         gridTemplateColumns: ['1fr 1fr', '100%'],
-        gridGap: styles.fn.pad2(2, 1),
+        gridGap: styles.fn.pad(2, 1),
         justifyItems: 'center'
+        // maxWidth: '90vh',
+        // overflow: 'scroll'
     })
 );
 
@@ -131,8 +130,12 @@ export const AddedInterior = styled('div')({
     padding: bs(0.5)
 });
 
+export const animatedListStyles = css({
+    maxHeight: '90vh',
+    overflow: 'scroll'
+});
+
 export const LoadMore = styled(ButtonSimple)({
-    width: '100%',
     maxWidth: dimensions.input,
     margin: styles.fn.pad(2, 'auto', 1, 'auto')
 });

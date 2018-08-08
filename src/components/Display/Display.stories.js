@@ -120,5 +120,15 @@ storiesOf('Display', module)
     .addDecorator(centered)
     .add('Display.Card', makeCard)
     .add('Display.MiniCard', () => (
-        <MiniCard {...omit(['img'], cardProps())} />
+        <MiniCard
+            {...omit(['img'], cardProps())}
+            actions={[
+                <Simple key={1} mini color={colors.valid} onClick={onClick}>
+                    Click me
+                </Simple>,
+                <Simple key={2} mini onClick={onClick}>
+                    Also me
+                </Simple>
+            ]}
+        />
     ));

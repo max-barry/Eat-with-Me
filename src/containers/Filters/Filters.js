@@ -149,6 +149,9 @@ class Filters extends Component {
         );
     }
 
+    // toggleResults = _ =>
+    //     this.setState({ showCollection: !this.state.showCollection });
+
     /**
      * Toggle the modal open / close. Visible attributes will be an array
      * of attributes that this modal instance should show OR undefined on a close
@@ -268,7 +271,7 @@ class Filters extends Component {
                 <MediaQuery {...bpProps.mobile}>
                     <Drawer
                         isOpen={modalIsOpen}
-                        items={mobileDrawerItems(this.openModal)}
+                        items={[...mobileDrawerItems(this.openModal)]}
                     >
                         {Content}
                     </Drawer>

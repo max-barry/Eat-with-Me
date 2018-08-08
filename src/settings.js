@@ -26,23 +26,22 @@ export const colors = {
 // ------------------
 // STYLES - shared
 // ------------------
-const isUnd = n => n === undefined;
 const format = n => (isNaN(n) ? n : bs(n));
 
 export const styles = {
     fn: {
-        focus: color => shade(0.7, color),
+        focus: color => shade(0.85, color),
+        active: color => shade(0.75, color),
         pad: (t, r, b, l) => {
-            const top = format(t);
-            const right = format(isUnd(r) ? t : r);
-            const bottom = format(isUnd(b) ? t : b);
-            const left = format(isUnd(l) ? (isUnd(r) ? t : r) : l);
-            return `${top} ${right} ${bottom} ${left}`;
-        },
-        pad2: (v, h) => {
-            const vertical = format(v);
-            const horizontal = format(isUnd(h) ? v : h);
-            return `${vertical} ${horizontal}`;
+            const top = t;
+            const right = r || t;
+            const bottom = b || t;
+            const left = l || r || t;
+            const valuesArr =
+                top === bottom && right === left
+                    ? [top, right]
+                    : [top, right, bottom, left];
+            return valuesArr.map(format).join(' ');
         }
     },
     fill: {

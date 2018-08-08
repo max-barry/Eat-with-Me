@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { compose } from 'recompose';
 import { map, omit, values, isEmpty } from 'ramda';
 import { connectInfiniteHits } from 'react-instantsearch-dom';
-import { colors } from '../../settings';
+import PropTypes from 'prop-types';
+import { colors, bs } from '../../settings';
 import { Card, AnimatedList } from '../../components/Display';
 import {
     Main,
@@ -10,12 +10,22 @@ import {
     AddedArea,
     AddedHeadline,
     AddedInterior,
-    LoadMore
+    LoadMore,
+    animatedListStyles
 } from './Filters.styles';
 import { restaurantSelectors } from '../../redux/ducks/restaurants/restaurants.selectors';
 import { ButtonSimple as Button } from '../../components/Buttons';
 import addSvg from '../../../public/images/icons/add.svg';
 import MiniCard from '../../components/Display/MiniCard';
+
+const AddedMiniCard = ({ hit, remove }) => {
+    const Remove = (
+        <Button color={colors.error} mini onClick={() => remove(hit)}>
+            Remove
+        </Button>
+    );
+    return <MiniCard {...restaurantSelectors.makeCard(hit)} actions={Remove} />;
+};
 
 const Result = ({ hit, added, add, remove }) => {
     const cardProps = restaurantSelectors.makeCard(hit);
@@ -44,10 +54,13 @@ class Results extends Component {
     get collectionAsListItems() {
         return values(
             map(
-                ({ id: key, ...hit }) => ({
-                    key,
+                hit => ({
+                    key: hit.id,
                     component: (
-                        <MiniCard {...restaurantSelectors.makeCard(hit)} />
+                        <AddedMiniCard
+                            hit={hit}
+                            remove={this.removeFromCollection}
+                        />
                     )
                 }),
                 this.state.collection
@@ -89,7 +102,11 @@ class Results extends Component {
                             />
                         ))}
                     </ResultsList>
-                    <LoadMore color={colors.secondary} onClick={refine}>
+                    <LoadMore
+                        color={colors.secondary}
+                        onClick={refine}
+                        fullWidth
+                    >
                         Load more
                     </LoadMore>
                 </div>
@@ -97,7 +114,11 @@ class Results extends Component {
                     <AddedInterior>
                         <AddedHeadline>This is the headline</AddedHeadline>
                         {isEmpty && <div>It's empty</div>}
-                        <AnimatedList items={this.collectionAsListItems} />
+                        <AnimatedList
+                            gap={bs(0.5)}
+                            items={this.collectionAsListItems}
+                            className={animatedListStyles}
+                        />
                     </AddedInterior>
                 </AddedArea>
             </Main>
@@ -105,5 +126,7 @@ class Results extends Component {
     };
 }
 
-const enhance = compose(connectInfiniteHits);
-export default enhance(Results);
+Results.defaultProps = {};
+Results.propTypes = {};
+
+export default connectInfiniteHits(Results);

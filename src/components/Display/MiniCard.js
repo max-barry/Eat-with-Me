@@ -3,25 +3,33 @@ import styled from 'react-emotion';
 import { omit } from 'ramda';
 import { ellipsis } from 'polished';
 import Card from './Card';
-import { dimensions, shevy, colors } from '../../settings';
+import { dimensions, shevy, colors, bs } from '../../settings';
 
 const Outer = styled('div')({
     display: 'block',
     width: dimensions.card
-    // width: '100%'
 });
 
 const Headline = styled('h5')(shevy.h6);
 
 const Strap = styled('h6')(shevy.h6, ellipsis, {
     color: colors.greyDark,
+    display: 'block',
     maxWidth: '100%'
 });
 
-const MiniCard = ({ title, strap, deck, onClick, ...props }) => (
+const ActionsRow = styled('div')({
+    display: 'flex',
+    '> *:not(:last-child)': {
+        marginRight: bs(0.25)
+    }
+});
+
+const MiniCard = ({ title, strap, deck, onClick, actions, ...props }) => (
     <Outer {...props}>
         <Headline>{title}</Headline>
         {strap && <Strap>{strap}</Strap>}
+        {actions && <ActionsRow>{actions}</ActionsRow>}
     </Outer>
 );
 
