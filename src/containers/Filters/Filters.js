@@ -1,111 +1,30 @@
 import React, { Component, Fragment } from 'react';
-import Modal from 'react-modal';
 import MediaQuery from 'react-responsive';
-import { invoker, prop, mapObjIndexed, ifElse, map, path } from 'ramda';
+import Modal from 'react-modal';
+import { prop, mapObjIndexed, path, omit } from 'ramda';
 import { bpProps } from '../../settings';
 import { Drawer } from '../../components/Display';
 import {
     modalOverlay,
     modalContent,
     MODAL_WIDTH,
-    Inner,
-    Outer,
-    RenderedWrap
+    Main,
+    AddedArea,
+    AddedInterior
 } from './Filters.styles';
+import { DesktopActions } from './Filters.Navigation';
 import {
-    DesktopModalActions,
-    MobileTopActions,
-    MobileBottomActions,
-    DesktopActions
-} from './Filters.Navigation';
-import {
-    renderedIsList,
-    getRefinedFromRendered,
     formatPropsFromVirtuals,
     checkIfNewRefinements,
-    componentMap,
     mobileDrawerItems,
     componentMapArray
 } from './Filters.shared';
-import Results from './Filters.Results';
+import { Results, Added, ModalContent } from './Filters.Content';
 
 // https://www.algolia.com/doc/api-reference/api-parameters/filters/
 // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
 
 Modal.setAppElement('#root');
-
-class ModalContent extends Component {
-    facetRefs = {};
-
-    get refinedAttrs() {
-        return map(
-            ifElse(
-                renderedIsList,
-                getRefinedFromRendered,
-                path(['state', 'refined'])
-            ),
-            this.facetRefs
-        );
-    }
-
-    /**
-     * Map over each attribute that is rendered and
-     * find it's rendered element and fish the refining function
-     *
-     * Zip the result of this call with an array containing attribute names
-     *
-     * @memberof ModalContent
-     */
-    apply = () => this.props.refine(this.refinedAttrs);
-
-    /**
-     * Clear all current refinements by calling the "clear" method on each
-     *
-     * @memberof ModalContent
-     */
-    clear = () => map(invoker(0, 'clear'), this.facetRefs);
-
-    render = () => {
-        const { closeModal, attributes } = this.props;
-
-        const actionProps = {
-            closeModal,
-            apply: this.apply,
-            clear: this.clear
-        };
-
-        return (
-            <Outer>
-                <MediaQuery {...bpProps.mobile}>
-                    <MobileTopActions {...actionProps} />
-                </MediaQuery>
-                <Inner>
-                    {Object.keys(attributes).map((attribute, key) => {
-                        const RenderedComponent =
-                            componentMap[attribute].toRender;
-                        const items = attributes[attribute];
-                        const onMount = el => (this.facetRefs[attribute] = el);
-
-                        return (
-                            <RenderedWrap key={`facet_component_${key}`}>
-                                <RenderedComponent
-                                    items={items}
-                                    onMount={onMount}
-                                />
-                            </RenderedWrap>
-                        );
-                    })}
-                </Inner>
-                <MediaQuery {...bpProps.notMobile}>
-                    <DesktopModalActions {...actionProps} />
-                </MediaQuery>
-                <MediaQuery {...bpProps.mobile}>
-                    <MobileBottomActions {...actionProps} />
-                </MediaQuery>
-            </Outer>
-        );
-    };
-}
 
 class Filters extends Component {
     _applied = {};
@@ -116,7 +35,8 @@ class Filters extends Component {
     state = {
         modalPosition: {},
         visibleAttributes: [],
-        isOpen: false
+        isOpen: false,
+        collection: {}
     };
 
     /**
@@ -148,9 +68,6 @@ class Filters extends Component {
             this.virtualRefs
         );
     }
-
-    // toggleResults = _ =>
-    //     this.setState({ showCollection: !this.state.showCollection });
 
     /**
      * Toggle the modal open / close. Visible attributes will be an array
@@ -235,6 +152,19 @@ class Filters extends Component {
         this.closeModal();
     };
 
+    addToCollection = hit =>
+        this.setState({
+            collection: {
+                ...this.state.collection,
+                [hit.id]: hit
+            }
+        });
+
+    removeFromCollection = hit =>
+        this.setState({
+            collection: omit([hit.id], this.state.collection)
+        });
+
     render() {
         const {
             modalPosition: { left, top },
@@ -277,7 +207,18 @@ class Filters extends Component {
                     </Drawer>
                 </MediaQuery>
 
-                <Results />
+                <Main>
+                    <div>
+                        <Results />
+                    </div>
+                    <MediaQuery {...bpProps.notMobile}>
+                        <AddedArea>
+                            <AddedInterior>
+                                <Added />
+                            </AddedInterior>
+                        </AddedArea>
+                    </MediaQuery>
+                </Main>
 
                 {componentMapArray.map(
                     (

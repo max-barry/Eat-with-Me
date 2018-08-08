@@ -22,6 +22,7 @@ import Quarter, { FACET_QUARTER } from './Filters.Quarter';
 import Cuisine, { FACET_CUISINE } from './Filters.Cuisine';
 import Bar, { FACET_IS_BAR } from './Filters.Bar';
 import Price, { FACET_PRICE } from './Filters.Price';
+// import { RESULTS_VIEW } from './Filters.Results';
 import mapLocationSvg from '../../../public/images/icons/map-location.svg';
 import worldwideSvg from '../../../public/images/icons/worldwide.svg';
 import moreSvg from '../../../public/images/icons/more.svg';
@@ -42,6 +43,7 @@ export const componentMap = {
             defaultRefinement: true
         }
     }
+    // [RESULTS_VIEW]: {}
 };
 
 export const componentMapArray = Object.entries(componentMap);
