@@ -168,8 +168,12 @@ class Filters extends Component {
     render() {
         const {
             modalPosition: { left, top },
-            isOpen: modalIsOpen
+            isOpen: modalIsOpen,
+            collection
         } = this.state;
+
+        const removeFromCollection = this.removeFromCollection;
+        const addToCollection = this.addToCollection;
 
         const Content = (
             <ModalContent
@@ -209,12 +213,19 @@ class Filters extends Component {
 
                 <Main>
                     <div>
-                        <Results />
+                        <Results
+                            collection={collection}
+                            add={addToCollection}
+                            remove={removeFromCollection}
+                        />
                     </div>
                     <MediaQuery {...bpProps.notMobile}>
                         <AddedArea>
                             <AddedInterior>
-                                <Added />
+                                <Added
+                                    collection={collection}
+                                    remove={removeFromCollection}
+                                />
                             </AddedInterior>
                         </AddedArea>
                     </MediaQuery>

@@ -100,7 +100,13 @@ const chip = css({
     margin: bs(0.25)
 });
 
-const { isFavorite, isNational, isGenre, hasLoaded } = cuisineSelectors;
+const {
+    isFavorite,
+    isNational,
+    isGenre,
+    hasLoaded,
+    getArray
+} = cuisineSelectors;
 
 const getGroup = (selector, cuisines) => pluck('group')(selector(cuisines));
 
@@ -109,11 +115,11 @@ class Cuisine extends Component {
 
     get sortedCuisines() {
         const items = this.state;
-        const cuisines = this.props.filters;
+        const cuisineState = this.props.restaurants;
 
-        const favorites = pick(getGroup(isFavorite, cuisines), items);
-        const country = pick(getGroup(isNational, cuisines), items);
-        const rest = pick(getGroup(isGenre, cuisines), items);
+        const favorites = pick(getGroup(isFavorite, cuisineState), items);
+        const country = pick(getGroup(isNational, cuisineState), items);
+        const rest = pick(getGroup(isGenre, cuisineState), items);
 
         return [
             {
@@ -148,7 +154,7 @@ class Cuisine extends Component {
         });
 
     render() {
-        if (!hasLoaded(this.props.filters)) return <p>Loading</p>;
+        if (!hasLoaded(this.props.restaurants)) return <p>Loading</p>;
 
         const sortedCuisines = this.sortedCuisines;
 

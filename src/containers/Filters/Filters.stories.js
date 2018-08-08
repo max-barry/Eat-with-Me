@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
-import { Hits } from 'react-instantsearch-dom';
 import { pluck } from 'ramda';
-import { boolean } from '@storybook/addon-knobs';
 import Filters from './Filters';
 import Quarter from './Filters.Quarter';
 import Cuisine from './Filters.Cuisine';
@@ -14,14 +12,7 @@ import { algoliaItems, mockApi } from '../../stories/stories.shared';
 import { cuisineTestdata } from './Filters.test';
 import { FIRESTORE_COLLECTION_CATEGORY_GROUPS } from '../../settings';
 
-const hitComponent = ({ hit }) => (
-    <Fragment>
-        {hit.name} ({hit.quarter.name})
-    </Fragment>
-);
-
 storiesOf('Filters', module)
-    .addDecorator(withRedux())
     .add('default', _ => {
         mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
         const Enhanced = withSearch(() => <Filters />);
@@ -36,6 +27,7 @@ storiesOf('Filters', module)
     .add('Filters.Bar', _ => {
         return <Bar items={false} />;
     })
+    .addDecorator(withRedux())
     .add('Filters.Cuisine', _ => {
         mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
         return (

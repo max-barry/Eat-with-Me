@@ -76,7 +76,7 @@ ResultsComponent.propTypes = {
     refine: PropTypes.func.isRequired,
     add: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
-    collection: PropTypes.shape.isRequired
+    collection: PropTypes.object.isRequired
 };
 
 export const Results = connectInfiniteHits(ResultsComponent);
@@ -128,7 +128,7 @@ class Added extends Component {
 Added.defaultProps = {};
 
 Added.propTypes = {
-    collection: PropTypes.shape.isRequired,
+    collection: PropTypes.object.isRequired,
     remove: PropTypes.func.isRequired
 };
 

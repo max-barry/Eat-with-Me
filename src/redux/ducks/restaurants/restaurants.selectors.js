@@ -1,5 +1,6 @@
 import {
     path,
+    pathOr,
     prop,
     filter,
     compose,
@@ -13,10 +14,10 @@ import { createSelector } from 'reselect';
 import { paths } from '../../../shared';
 
 const cuisine = {
-    isPreload: state => path(['cuisinesIsPreload'], state),
-    isLoading: state => path(['cuisinesIsLoading'], state),
-    isFound: state => path(['cuisines', 'length'], state),
-    getArray: state => path(['cuisines'], state) || []
+    isPreload: path(['cuisinesIsPreload']),
+    isLoading: path(['cuisinesIsLoading']),
+    isFound: path(['cuisines', 'length']),
+    getArray: pathOr([], ['cuisines'])
 };
 
 cuisine.hasLoaded = createSelector(
@@ -25,23 +26,20 @@ cuisine.hasLoaded = createSelector(
 );
 
 cuisine.isFavorite = createSelector(
-    [cuisine.getArray],
+    cuisine.getArray,
     filter(prop('favorites'))
 );
+cuisine.isNational = createSelector(cuisine.getArray, filter(prop('national')));
+cuisine.isGenre = createSelector(cuisine.getArray, filter(prop('genre')));
 
-cuisine.isNational = createSelector(
-    [cuisine.getArray],
-    filter(prop('national'))
-);
-
-cuisine.isGenre = createSelector([cuisine.getArray], filter(prop('genre')));
+export { cuisine as cuisineSelectors };
 
 const restaurant = {
     getRestaurant: identity,
-    hasLoaded: id => {
-        console.log(id);
-        return false;
-    },
+    // hasLoaded: id => {
+    //     console.log(id);
+    //     return false;
+    // },
     makeStrap: compose(
         join(' • '),
         paths([
@@ -76,5 +74,3 @@ restaurant.makeCard = createSelector(
 );
 
 export { restaurant as restaurantSelectors };
-
-export { cuisine as cuisineSelectors };
