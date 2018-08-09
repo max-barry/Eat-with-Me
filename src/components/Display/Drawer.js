@@ -98,15 +98,17 @@ const Drawer = ({ items, children, isOpen, ...props }) => (
             )}
         </Spring>
         <Actions>
-            {items.map(({ label, icon, onClick }, i) => (
+            {items.map(({ label, icon, onClick, hasBadge }, i) => (
                 <Button onClick={onClick} key={`Drawer_Item_${i}`}>
-                    <Badge
-                        color={colors.secondary}
-                        small={true}
-                        className={badgeClass}
-                    >
-                        &nbsp;
-                    </Badge>
+                    {hasBadge && (
+                        <Badge
+                            color={colors.secondary}
+                            small={true}
+                            className={badgeClass}
+                        >
+                            &nbsp;
+                        </Badge>
+                    )}
                     <img src={icon} alt={label} />
                     {label}
                 </Button>
@@ -125,7 +127,8 @@ Drawer.propTypes = {
         PropTypes.shape({
             icon: PropTypes.string.isRequired,
             label: PropTypes.string.isRequired,
-            onClick: PropTypes.func
+            onClick: PropTypes.func,
+            hasBadge: PropTypes.bool
         })
     ).isRequired
 };

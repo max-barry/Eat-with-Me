@@ -46,32 +46,6 @@ export const componentMap = {
 
 export const componentMapArray = Object.entries(componentMap);
 
-export const desktopNavigation = [
-    ['Region', [FACET_QUARTER]],
-    ['Cuisine', [FACET_CUISINE]],
-    ['Price', [FACET_PRICE]],
-    ['More filters', [FACET_IS_BAR]]
-];
-
-// TODO : Moize
-export const mobileDrawerItems = fn => [
-    {
-        label: 'Region',
-        icon: mapLocationSvg,
-        onClick: () => fn(null, [FACET_QUARTER], true)
-    },
-    {
-        label: 'Cuisine',
-        icon: worldwideSvg,
-        onClick: () => fn(null, [FACET_CUISINE], true)
-    },
-    {
-        label: 'More filters',
-        icon: moreSvg,
-        onClick: () => fn(null, [FACET_IS_BAR, FACET_PRICE], true)
-    }
-];
-
 /**
  * Run through an array of algolia items and return
  * an object with each label as a key and a true / false
@@ -153,3 +127,32 @@ export const checkIfHasValue = moize.maxSize(5)(
         pick
     )
 );
+
+export const desktopNavigation = [
+    ['Region', [FACET_QUARTER]],
+    ['Cuisine', [FACET_CUISINE]],
+    ['Price', [FACET_PRICE]],
+    ['More filters', [FACET_IS_BAR]]
+];
+
+// TODO : Moize
+export const mobileDrawerItems = (fn, applied) => [
+    {
+        label: 'Region',
+        icon: mapLocationSvg,
+        onClick: () => fn(null, [FACET_QUARTER], true),
+        hasBadge: checkIfHasValue([FACET_QUARTER], applied)
+    },
+    {
+        label: 'Cuisine',
+        icon: worldwideSvg,
+        onClick: () => fn(null, [FACET_CUISINE], true),
+        hasBadge: checkIfHasValue([FACET_CUISINE], applied)
+    },
+    {
+        label: 'More filters',
+        icon: moreSvg,
+        onClick: () => fn(null, [FACET_IS_BAR, FACET_PRICE], true),
+        hasBadge: checkIfHasValue([FACET_IS_BAR, FACET_PRICE], applied)
+    }
+];

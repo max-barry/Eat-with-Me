@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import Modal from 'react-modal';
-import { prop, mapObjIndexed, path, omit, propOr } from 'ramda';
+import { prop, mapObjIndexed, path, omit, propOr, isEmpty } from 'ramda';
 import { bpProps } from '../../settings';
 import { Drawer } from '../../components/Display';
 import {
@@ -68,6 +68,10 @@ class Filters extends Component {
             this.state.visibleAttributes,
             this.virtualRefs
         );
+    }
+
+    get collectionIsEmpty() {
+        return isEmpty(this.state.collection);
     }
 
     toggleResultsOnMobile = () => {
@@ -202,12 +206,17 @@ class Filters extends Component {
 
         const removeFromCollection = this.removeFromCollection;
         const addToCollection = this.addToCollection;
+        const applied = this.applied;
+        const openModal = this.openModal;
+        const closeModal = this.closeModal;
+        const collectionIsEmpty = this.collectionIsEmpty;
+        const toggleResultsOnMobile = this.toggleResultsOnMobile;
 
         const FacetDisplay = (
             <ModalContent
                 ref={this.ModalContent}
                 refine={this.refineAndClose}
-                closeModal={this.closeModal}
+                closeModal={closeModal}
                 attributes={this.attributeObjects}
             />
         );
@@ -216,21 +225,19 @@ class Filters extends Component {
             <Added
                 collection={collection}
                 remove={removeFromCollection}
-                close={this.toggleResultsOnMobile}
+                close={toggleResultsOnMobile}
+                isEmpty={collectionIsEmpty}
             />
         );
 
         return (
             <Fragment>
                 <MediaQuery {...bpProps.notMobile}>
-                    <DesktopActions
-                        applied={this.applied}
-                        openModal={this.openModal}
-                    />
+                    <DesktopActions applied={applied} openModal={openModal} />
                     <Modal
                         contentLabel="Filters modal"
                         isOpen={modalIsOpen}
-                        onRequestClose={this.closeModal}
+                        onRequestClose={closeModal}
                         overlayClassName={modalOverlay(top)}
                         className={modalContent(left)}
                     >
@@ -242,11 +249,12 @@ class Filters extends Component {
                     <Drawer
                         isOpen={modalIsOpen || showResults}
                         items={[
-                            ...mobileDrawerItems(this.openModal),
+                            ...mobileDrawerItems(openModal, applied),
                             {
                                 label: 'Your list',
                                 icon: listSvg,
-                                onClick: this.toggleResultsOnMobile
+                                onClick: toggleResultsOnMobile,
+                                hasBadge: !collectionIsEmpty
                             }
                         ]}
                     >

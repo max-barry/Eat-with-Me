@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { map, values, isEmpty, invoker, ifElse, path } from 'ramda';
+import { map, values, invoker, ifElse, path } from 'ramda';
 import { connectInfiniteHits } from 'react-instantsearch-dom';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { colors, bs, bpProps } from '../../settings';
+import { colors, bpProps } from '../../settings';
 import { Card, AnimatedList } from '../../components/Display';
 import {
     ResultsList,
@@ -12,8 +12,7 @@ import {
     animatedListStyles,
     Inner,
     Outer,
-    RenderedWrap,
-    AddedHeadlineArea
+    RenderedWrap
 } from './Filters.styles';
 import {
     DesktopModalActions,
@@ -92,10 +91,6 @@ const AddedMiniCard = ({ hit, remove }) => {
 };
 
 class Added extends Component {
-    get collectionIsEmpty() {
-        return isEmpty(this.props.collection);
-    }
-
     get collectionAsList() {
         return values(
             map(
@@ -124,7 +119,7 @@ class Added extends Component {
             <MediaQuery {...bpProps.notMobile}>
                 <AddedHeadline>This is the headline</AddedHeadline>
             </MediaQuery>
-            {this.collectionIsEmpty && <div>It's empty</div>}
+            {this.props.isEmpty && <div>It's empty</div>}
             <AnimatedList
                 items={this.collectionAsList}
                 className={animatedListStyles}
