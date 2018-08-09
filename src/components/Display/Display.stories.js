@@ -108,7 +108,7 @@ storiesOf('Display', module)
                 <div style={{ maxWidth: dimensions.card }}>
                     <AnimatedList
                         items={ItemsClass.getItems()}
-                        onExit={key => {
+                        onDismiss={key => {
                             ItemsClass.removeItem(key);
                             store.set({ tick: store.state.tick + 1 });
                         }}

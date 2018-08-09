@@ -2,17 +2,31 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import posed, { PoseGroup } from 'react-pose';
 import styled from 'react-emotion';
-import { spring, decay } from 'popmotion';
-import { transitionTimes } from '../../settings';
+import { spring, decay, transform } from 'popmotion';
+import { transitionTimes, dimensions, colors } from '../../settings';
+import trashSvg from '../../../public/images/icons/trash.svg';
 
 // @link https://codepen.io/popmotion/pen/rdzeKQ
 
-const xDist = 190;
-const dismissPercent = 0.8;
-const isDismissed = x => x >= xDist * dismissPercent;
+const { interpolate, pipe, clamp } = transform;
 
-const DraggableItem = posed.li({
+const xDist = dimensions.card;
+const dismissPoint = xDist * 0.6;
+const isDismissed = x => x >= dismissPoint;
+const dismissIconSize = 50;
+
+const Item = posed.div({
+    preenter: { opacity: 0 },
+    enter: {
+        opacity: 1,
+        transition: { duration: transitionTimes.short }
+    },
+    exit: {
+        opacity: 0,
+        transition: { duration: transitionTimes.minimal }
+    },
     draggable: 'x',
+    dragBounds: { left: 0, right: xDist },
     dragEnd: {
         transition: ({ from, to, velocity }) =>
             isDismissed(from)
@@ -21,25 +35,58 @@ const DraggableItem = posed.li({
     }
 });
 
-const ItemContainer = posed.div({
-    exit: {
-        opacity: 0,
-        // translateY: 0,
-        transition: { duration: transitionTimes.minimal }
-    },
-    enter: {
-        opacity: 1,
-        // translateY: 0,
-        transition: { duration: transitionTimes.short }
-    },
-    preenter: { opacity: 0 }
+const StyledItem = styled(Item)({
+    position: 'relative'
 });
 
-const StyledItem = styled(ItemContainer)(({ gap }) => ({
-    '&:not(:last-child)': {
-        marginBottom: gap
+const DismissIcon = posed.i({
+    passive: {
+        translateX: ['x', x => -Math.abs(x), true],
+        scale: [
+            'x',
+            pipe(
+                // At x = 0 the icon is invisible. At x = 50px (the width of the dismiss icon)
+                // it is still scale(0) but begins growing. It reaches full size at point of dismiss
+                interpolate(
+                    [0, dismissIconSize * 0.5, dismissPoint],
+                    [0, 0, 1]
+                ),
+                clamp(0, 1)
+            ),
+            true
+        ]
     }
-}));
+});
+
+const StyledDismissIcon = styled(DismissIcon)({
+    width: dismissIconSize,
+    height: dismissIconSize,
+    display: 'block',
+    backgroundColor: colors.error,
+    transform: 'scale(0)',
+    borderRadius: '50%',
+    position: 'absolute',
+    top: '50%',
+    marginTop: -0.5 * dismissIconSize,
+    '&::before': {
+        content: '""',
+        position: 'absolute',
+        width: dismissIconSize,
+        height: dismissIconSize,
+        display: 'block',
+        backgroundImage: `url(${trashSvg})`,
+        backgroundSize: '60%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        filter: 'invert(100%)'
+    }
+});
+
+const InternalComponentWrap = posed.div({
+    passive: {
+        opacity: ['x', interpolate([0, dismissPoint], [1, 0]), true]
+    }
+});
 
 class AnimatedList extends Component {
     exited = {};
@@ -47,36 +94,36 @@ class AnimatedList extends Component {
     // TODO : Make the container elastic
 
     render = () => {
-        const { items, onExit, gap, ...props } = this.props;
+        const { items, onDismiss, ...props } = this.props;
         return (
-            <ul {...props}>
+            <div {...props}>
                 <PoseGroup preEnterPose="preenter">
                     {items.map(({ key, component }) => (
-                        <StyledItem key={key} gap={gap}>
-                            <DraggableItem
-                                onValueChange={{
-                                    x: x => {
-                                        if (this.exited[key] || !isDismissed(x))
-                                            return;
+                        <StyledItem
+                            key={key}
+                            onValueChange={{
+                                x: x => {
+                                    if (this.exited[key] || !isDismissed(x))
+                                        return;
 
-                                        onExit(key);
-                                        this.exited[key] = true;
-                                    }
-                                }}
-                            >
+                                    onDismiss(key);
+                                    this.exited[key] = true;
+                                }
+                            }}
+                        >
+                            <StyledDismissIcon />
+                            <InternalComponentWrap>
                                 {component}
-                            </DraggableItem>
+                            </InternalComponentWrap>
                         </StyledItem>
                     ))}
                 </PoseGroup>
-            </ul>
+            </div>
         );
     };
 }
 
-AnimatedList.defaultProps = {
-    gap: 0
-};
+AnimatedList.defaultProps = {};
 
 AnimatedList.propTypes = {
     items: PropTypes.arrayOf(
@@ -86,8 +133,7 @@ AnimatedList.propTypes = {
             key: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
         })
     ).isRequired,
-    gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    onExit: PropTypes.func
+    onDismiss: PropTypes.func
 };
 
 export default AnimatedList;

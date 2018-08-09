@@ -3,12 +3,14 @@ import styled from 'react-emotion';
 import { omit } from 'ramda';
 import { ellipsis } from 'polished';
 import Card from './Card';
-import { dimensions, shevy, colors, bs } from '../../settings';
+import { dimensions, shevy, colors, bs, mq } from '../../settings';
 
-const Outer = styled('div')({
-    display: 'block',
-    width: dimensions.card
-});
+const Outer = styled('div')(
+    mq({
+        display: 'block',
+        width: [dimensions.card, '100%']
+    })
+);
 
 const Headline = styled('h5')(shevy.h6);
 

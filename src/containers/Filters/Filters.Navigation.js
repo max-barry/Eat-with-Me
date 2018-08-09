@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     ActionsList,
     MobileTopArea,
@@ -43,17 +44,31 @@ export const DesktopActions = ({ openModal, applied }) => (
     </Controls>
 );
 
-export const MobileTopActions = ({ closeModal, apply, clear }) => (
+export const MobileTopActions = ({ closeModal, clear, title }) => (
     <MobileTopArea>
-        <Button disabled={false} icon={trashSvg} onClick={clear}>
-            Clear
-        </Button>
-        <MobileTopTitle>Thingy</MobileTopTitle>
-        <Button color={colors.black} recessive={true} onClick={closeModal}>
-            Close
-        </Button>
+        {clear && (
+            <Button disabled={false} icon={trashSvg} onClick={clear}>
+                Clear
+            </Button>
+        )}
+        <MobileTopTitle>{title}</MobileTopTitle>
+        {closeModal && (
+            <Button color={colors.black} recessive={true} onClick={closeModal}>
+                Close
+            </Button>
+        )}
     </MobileTopArea>
 );
+
+MobileTopActions.defaultProps = {
+    title: 'Thingy'
+};
+
+MobileTopActions.propTypes = {
+    title: PropTypes.string.isRequired,
+    closeModal: PropTypes.func,
+    clear: PropTypes.func
+};
 
 export const MobileBottomActions = ({ apply }) => (
     <MobileBottomArea>

@@ -22,11 +22,9 @@ import Quarter, { FACET_QUARTER } from './Filters.Quarter';
 import Cuisine, { FACET_CUISINE } from './Filters.Cuisine';
 import Bar, { FACET_IS_BAR } from './Filters.Bar';
 import Price, { FACET_PRICE } from './Filters.Price';
-// import { RESULTS_VIEW } from './Filters.Results';
 import mapLocationSvg from '../../../public/images/icons/map-location.svg';
 import worldwideSvg from '../../../public/images/icons/worldwide.svg';
 import moreSvg from '../../../public/images/icons/more.svg';
-import listSvg from '../../../public/images/icons/list-1.svg';
 
 const VirtualList = connectRefinementList(() => null);
 const VirtualToggle = connectToggleRefinement(() => null);
@@ -71,11 +69,6 @@ export const mobileDrawerItems = fn => [
         label: 'More filters',
         icon: moreSvg,
         onClick: () => fn(null, [FACET_IS_BAR, FACET_PRICE], true)
-    },
-    {
-        label: 'Your list',
-        icon: listSvg,
-        onClick: this.toggleResults
     }
 ];
 

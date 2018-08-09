@@ -119,10 +119,6 @@ export const ResultsList = styled('div')(
     })
 );
 
-export const AddedArea = styled('div')(mq({ position: 'relative' }));
-
-export const AddedHeadline = styled('h3')(shevy.h3, {});
-
 export const AddedInterior = styled('div')({
     position: 'sticky',
     top: bs(),
@@ -130,19 +126,17 @@ export const AddedInterior = styled('div')({
     padding: bs(0.5)
 });
 
-export const animatedListStyles = css({
-    maxHeight: '90vh',
-    overflow: 'scroll'
-});
+export const AddedHeadline = styled('h3')(shevy.h3, {});
+
+export const animatedListStyles = css(
+    mq({
+        maxHeight: ['90vh', 'none'],
+        overflow: ['scroll', 'auto'],
+        padding: [0, styles.fn.pad(1, 0.5)]
+    })
+);
 
 export const LoadMore = styled(ButtonSimple)({
     maxWidth: dimensions.input,
     margin: styles.fn.pad(2, 'auto', 1, 'auto')
 });
-
-// export const addedList = css({
-//     position: 'sticky',
-//     top: bs(),
-//     backgroundColor: colors.grey1,
-//     padding: bs(0.5)
-// });

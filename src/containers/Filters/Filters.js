@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import Modal from 'react-modal';
-import { prop, mapObjIndexed, path, omit } from 'ramda';
+import { prop, mapObjIndexed, path, omit, propOr } from 'ramda';
 import { bpProps } from '../../settings';
 import { Drawer } from '../../components/Display';
 import {
@@ -9,7 +9,6 @@ import {
     modalContent,
     MODAL_WIDTH,
     Main,
-    AddedArea,
     AddedInterior
 } from './Filters.styles';
 import { DesktopActions } from './Filters.Navigation';
@@ -20,6 +19,7 @@ import {
     componentMapArray
 } from './Filters.shared';
 import { Results, Added, ModalContent } from './Filters.Content';
+import listSvg from '../../../public/images/icons/list-1.svg';
 
 // https://www.algolia.com/doc/api-reference/api-parameters/filters/
 // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
@@ -36,6 +36,7 @@ class Filters extends Component {
         modalPosition: {},
         visibleAttributes: [],
         isOpen: false,
+        showResults: false,
         collection: {}
     };
 
@@ -69,6 +70,40 @@ class Filters extends Component {
         );
     }
 
+    toggleResultsOnMobile = () => {
+        console.log('Show the mobile results');
+        this.setState({
+            showResults: !this.state.showResults
+        });
+    };
+
+    refineCurrentlyOpen = () => {
+        // Then you need to refine the currently opened content
+        const refinedAttrs = this.ModalContent.current.refinedAttrs;
+        // Call the refine function
+        this.refine(refinedAttrs);
+    };
+
+    calculateModalPosition = $target => {
+        const modalPosition = {};
+        // Get the bounding rect of the clicked element to work out left value
+        let { left } = $target.getBoundingClientRect();
+        // Adjust for the window being very small and the filter now being off the screen
+        // Delta is either 0 if no adjustment is needed or an integer to shift the open filter component left by that
+        // The width of the container (basically the window) minus how far left this filter component
+        // needs to be and the width of the component OR 0 if we have space
+        const min = Math.min;
+        left -= Math.abs(min(window.innerWidth - (left + MODAL_WIDTH), 0));
+        // Set this on the position
+        modalPosition.left = left;
+        // Get the parent node and find the bottom edge of this element
+        const { bottom } = $target.parentNode.getBoundingClientRect();
+        // Set these on the empty dimensions object
+        modalPosition.top = bottom;
+
+        return modalPosition;
+    };
+
     /**
      * Toggle the modal open / close. Visible attributes will be an array
      * of attributes that this modal instance should show OR undefined on a close
@@ -84,39 +119,17 @@ class Filters extends Component {
         visibleAttributes = [],
         isMobile = false
     ) {
-        const modalPosition = {};
+        const newState = { isOpen, visibleAttributes };
+
         // If the modal is not currently open then we need to fix a left / top value for it's position
         if (isOpen && !isMobile) {
-            const $target = event.target;
-            // Get the bounding rect of the clicked element to work out left value
-            let { left } = $target.getBoundingClientRect();
-            // Adjust for the window being very small and the filter now being off the screen
-            // Delta is either 0 if no adjustment is needed or an integer to shift the open filter component left by that
-            // The width of the container (basically the window) minus how far left this filter component
-            // needs to be and the width of the component OR 0 if we have space
-            const min = Math.min;
-            left -= Math.abs(min(window.innerWidth - (left + MODAL_WIDTH), 0));
-            // Set this on the position
-            modalPosition.left = left;
-            // Get the parent node and find the bottom edge of this element
-            const { bottom } = $target.parentNode.getBoundingClientRect();
-            // Set these on the empty dimensions object
-            modalPosition.top = bottom;
+            newState.modalPosition = this.calculateModalPosition(event.target);
         }
 
         // Is this an opening call but the modal is already open?
-        if (this.state.isOpen && isOpen) {
-            // Then you need to refine the currently opened content
-            const refinedAttrs = this.ModalContent.current.refinedAttrs;
-            // Call the refine function
-            this.refine(refinedAttrs);
-        }
+        if (this.state.isOpen && isOpen) this.refineCurrentlyOpen();
 
-        this.setState({
-            modalPosition,
-            visibleAttributes,
-            isOpen: isOpen
-        });
+        this.setState(newState);
     }
 
     /**
@@ -152,35 +165,58 @@ class Filters extends Component {
         this.closeModal();
     };
 
-    addToCollection = hit =>
+    /**
+     * Add the provided restaurant to the collection
+     *
+     * @param {object} restaurant The object supplied by Algolia with the restaurant's details
+     */
+    addToCollection = restaurant =>
         this.setState({
             collection: {
                 ...this.state.collection,
-                [hit.id]: hit
+                [restaurant.id]: restaurant
             }
         });
 
-    removeFromCollection = hit =>
+    /**
+     * Remove the restaurant from the current collection
+     *
+     * @param {object|string} restaurant Either the restaurant ID or the object containing the ID
+     * @memberof Filters
+     */
+    removeFromCollection = restaurant =>
         this.setState({
-            collection: omit([hit.id], this.state.collection)
+            collection: omit(
+                [propOr(restaurant, 'id', restaurant)],
+                this.state.collection
+            )
         });
 
     render() {
         const {
             modalPosition: { left, top },
             isOpen: modalIsOpen,
-            collection
+            collection,
+            showResults
         } = this.state;
 
         const removeFromCollection = this.removeFromCollection;
         const addToCollection = this.addToCollection;
 
-        const Content = (
+        const FacetDisplay = (
             <ModalContent
                 ref={this.ModalContent}
                 refine={this.refineAndClose}
                 closeModal={this.closeModal}
                 attributes={this.attributeObjects}
+            />
+        );
+
+        const CurrentCollection = (
+            <Added
+                collection={collection}
+                remove={removeFromCollection}
+                close={this.toggleResultsOnMobile}
             />
         );
 
@@ -198,16 +234,23 @@ class Filters extends Component {
                         overlayClassName={modalOverlay(top)}
                         className={modalContent(left)}
                     >
-                        {Content}
+                        {FacetDisplay}
                     </Modal>
                 </MediaQuery>
 
                 <MediaQuery {...bpProps.mobile}>
                     <Drawer
-                        isOpen={modalIsOpen}
-                        items={[...mobileDrawerItems(this.openModal)]}
+                        isOpen={modalIsOpen || showResults}
+                        items={[
+                            ...mobileDrawerItems(this.openModal),
+                            {
+                                label: 'Your list',
+                                icon: listSvg,
+                                onClick: this.toggleResultsOnMobile
+                            }
+                        ]}
                     >
-                        {Content}
+                        {showResults ? CurrentCollection : FacetDisplay}
                     </Drawer>
                 </MediaQuery>
 
@@ -220,14 +263,9 @@ class Filters extends Component {
                         />
                     </div>
                     <MediaQuery {...bpProps.notMobile}>
-                        <AddedArea>
-                            <AddedInterior>
-                                <Added
-                                    collection={collection}
-                                    remove={removeFromCollection}
-                                />
-                            </AddedInterior>
-                        </AddedArea>
+                        <div style={{ position: 'relative' }}>
+                            <AddedInterior>{CurrentCollection}</AddedInterior>
+                        </div>
                     </MediaQuery>
                 </Main>
 

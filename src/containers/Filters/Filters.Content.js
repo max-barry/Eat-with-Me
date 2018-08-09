@@ -12,7 +12,8 @@ import {
     animatedListStyles,
     Inner,
     Outer,
-    RenderedWrap
+    RenderedWrap,
+    AddedHeadlineArea
 } from './Filters.styles';
 import {
     DesktopModalActions,
@@ -114,12 +115,20 @@ class Added extends Component {
 
     render = () => (
         <Fragment>
-            <AddedHeadline>This is the headline</AddedHeadline>
+            <MediaQuery {...bpProps.mobile}>
+                <MobileTopActions
+                    title={'Your list'}
+                    closeModal={this.props.close}
+                />
+            </MediaQuery>
+            <MediaQuery {...bpProps.notMobile}>
+                <AddedHeadline>This is the headline</AddedHeadline>
+            </MediaQuery>
             {this.collectionIsEmpty && <div>It's empty</div>}
             <AnimatedList
-                gap={bs(0.5)}
                 items={this.collectionAsList}
                 className={animatedListStyles}
+                onDismiss={this.props.remove}
             />
         </Fragment>
     );
