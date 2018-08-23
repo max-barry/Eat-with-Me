@@ -14,11 +14,11 @@ import { FIRESTORE_COLLECTION_CATEGORY_GROUPS } from '../../settings';
 
 storiesOf('Filters', module)
     .addDecorator(withRedux())
-    .add('default', _ => {
-        mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
-        const Enhanced = withSearch(() => <Filters />);
-        return <Enhanced />;
-    })
+    // .add('default', _ => {
+    //     mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
+    //     const Enhanced = withSearch(() => <Filters />);
+    //     return <Enhanced />;
+    // })
     .add('Filters.Quarter', _ => {
         return <Quarter items={algoliaItems()} />;
     })

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "eat-with-me-519c8"
+  },
+  "targets": {
+    "eat-with-me-519c8": {
+      "hosting": {
+        "public": [
+          "eat-with-me-519c8"
+        ],
+        "storybook": [
+          "eatwithme-storybook"
+        ]
+      }
+    }
+  }
+}

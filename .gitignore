@@ -9,6 +9,7 @@
 
 # production
 /build
+/.storybook-build
 /functions/dist
 
 # misc

@@ -40,6 +40,7 @@
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
         "storybook": "start-storybook -p 9009 -s public",
+        "deploy-storybook": "build-storybook -c .storybook -o .storybook-build && firebase deploy --only hosting:storybook",
         "analyze": "source-map-explorer build/static/js/main.*"
     },
     "devDependencies": {
