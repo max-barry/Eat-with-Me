@@ -1,7 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import Modal from 'react-modal';
-import { prop, mapObjIndexed, path, omit, propOr, isEmpty } from 'ramda';
+import { connect } from 'react-redux';
+import {
+    prop,
+    mapObjIndexed,
+    path,
+    omit,
+    propOr,
+    isEmpty,
+    pick,
+    pathOr
+} from 'ramda';
+import { compose } from 'recompose';
 import { bpProps } from '../../settings';
 import { Drawer } from '../../components/Display';
 import {
@@ -20,6 +31,8 @@ import {
 } from './Filters.shared';
 import { Results, Added, ModalContent } from './Filters.Content';
 import listSvg from '../../../public/images/icons/list-1.svg';
+import { collectionsActions } from '../../redux/ducks/collections';
+import { EMPTY_COLLECTION } from '../../redux/ducks/collections/collections.reducers';
 
 // https://www.algolia.com/doc/api-reference/api-parameters/filters/
 // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
@@ -36,8 +49,18 @@ class Filters extends Component {
         modalPosition: {},
         visibleAttributes: [],
         isOpen: false,
-        showResults: false,
-        collection: {}
+        showResults: false
+        // collectionId: EMPTY_COLLECTION.id
+        // collection: pathOr(
+        //     EMPTY_COLLECTION,
+        //     ['props', 'collections', ''],
+        //     this
+        // )
+        // collectionName: pathOr(
+        //     '',
+        //     ['props', 'collections', 'activeCollection', 'name'],
+        //     this
+        // )
     };
 
     /**
@@ -74,12 +97,15 @@ class Filters extends Component {
         return isEmpty(this.state.collection);
     }
 
-    toggleResultsOnMobile = () => {
-        console.log('Show the mobile results');
+    componentDidMount() {
+        const isEdit = false;
+        // if (!isEdit) this.props.createNewCollection(); // TODO : This needs readding
+    }
+
+    toggleResultsOnMobile = () =>
         this.setState({
             showResults: !this.state.showResults
         });
-    };
 
     refineCurrentlyOpen = () => {
         // Then you need to refine the currently opened content
@@ -196,13 +222,18 @@ class Filters extends Component {
             )
         });
 
+    renameCollection = ({ newValue: name }) =>
+        this.props.updateActiveCollectionName(name);
+
     render() {
         const {
             modalPosition: { left, top },
             isOpen: modalIsOpen,
-            collection,
+            // collection,
             showResults
         } = this.state;
+
+        const collection = pathOr(EMPTY_COLLECTION, [], this.props);
 
         const removeFromCollection = this.removeFromCollection;
         const addToCollection = this.addToCollection;
@@ -211,6 +242,7 @@ class Filters extends Component {
         const closeModal = this.closeModal;
         const collectionIsEmpty = this.collectionIsEmpty;
         const toggleResultsOnMobile = this.toggleResultsOnMobile;
+        const renameCollection = this.renameCollection;
 
         const FacetDisplay = (
             <ModalContent
@@ -227,6 +259,7 @@ class Filters extends Component {
                 remove={removeFromCollection}
                 close={toggleResultsOnMobile}
                 isEmpty={collectionIsEmpty}
+                renameCollection={renameCollection}
             />
         );
 
@@ -296,4 +329,11 @@ class Filters extends Component {
     }
 }
 
-export default Filters;
+const enhance = compose(
+    connect(
+        pick(['collections']),
+        collectionsActions
+    )
+);
+
+export default enhance(Filters);

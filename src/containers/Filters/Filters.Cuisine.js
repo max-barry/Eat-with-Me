@@ -100,22 +100,20 @@ const chip = css({
     margin: bs(0.25)
 });
 
-const {
-    isFavorite,
-    isNational,
-    isGenre,
-    hasLoaded,
-    getArray
-} = cuisineSelectors;
+const { isFavorite, isNational, isGenre, hasLoaded } = cuisineSelectors;
 
 const getGroup = (selector, cuisines) => pluck('group')(selector(cuisines));
 
 class Cuisine extends Component {
     state = setInitialChecked(this.props.items);
 
+    get reduxState() {
+        return pick(['restaurants'], this.props);
+    }
+
     get sortedCuisines() {
         const items = this.state;
-        const cuisineState = this.props.restaurants;
+        const cuisineState = this.reduxState;
 
         const favorites = pick(getGroup(isFavorite, cuisineState), items);
         const country = pick(getGroup(isNational, cuisineState), items);
@@ -154,7 +152,7 @@ class Cuisine extends Component {
         });
 
     render() {
-        if (!hasLoaded(this.props.restaurants)) return <p>Loading</p>;
+        if (!hasLoaded(this.reduxState)) return <p>Loading</p>;
 
         const sortedCuisines = this.sortedCuisines;
 

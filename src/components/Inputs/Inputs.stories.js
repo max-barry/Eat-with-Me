@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { boolean, text, color } from '@storybook/addon-knobs';
+import { withState } from '@dump247/storybook-state';
 import faker from 'faker';
 import tinycolor from 'tinycolor2';
 import Checkbox from './Checkbox';
@@ -9,6 +10,7 @@ import Toggle from './Toggle';
 import Range from './Range';
 import { colors } from '../../settings';
 import { arrOf } from '../../shared';
+import EditableHeadline from './EditableHeadline';
 
 const makeRangeItem = (_, i) => ({
     label: i,
@@ -57,4 +59,14 @@ storiesOf('Inputs', module)
             steps={arrOf(makeRangeItem, 4)}
             onChange={changed => console.log(`Clicked ${changed}`)}
         />
-    ));
+    ))
+    .add(
+        'Inputs.EditableHeadline',
+        withState({ text: 'Enter new text' })(({ store }) => (
+            <EditableHeadline
+                value={store.state.text}
+                onChange={({ newValue }) => store.set({ text: newValue })}
+                required={true}
+            />
+        ))
+    );

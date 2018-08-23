@@ -117,25 +117,25 @@ const shevyConf = new Shevy({
     proximityFactor: 0.85
 });
 
-// shevyConf.pHeight = Math.floor(baseFontSize * baseLineHeight);
 export const shevy = {
     ...shevyConf,
-    ...{
-        content: { ...shevyConf.content, fontWeight: fontWeights.regular },
-        h6: {
-            ...shevyConf.h6,
-            fontWeight: fontWeights.medium,
-            marginBottom: 0
-        },
-        overline: {
-            // TODO : Add an unselectable to the overline
-            ...shevyConf.h6,
-            fontSize: 12,
-            fontWeight: fontWeights.heavy,
-            lineHeight: 1,
-            color: colors.greyDark,
-            textTransform: 'uppercase'
-        }
+    content: { ...shevyConf.content, fontWeight: fontWeights.regular },
+    h1: { ...shevyConf.h1, fontWeight: fontWeights.heavy },
+    h2: { ...shevyConf.h2, fontWeight: fontWeights.heavy },
+    h3: { ...shevyConf.h3, fontWeight: fontWeights.heavy },
+    h6: {
+        ...shevyConf.h6,
+        fontWeight: fontWeights.medium,
+        marginBottom: 0
+    },
+    overline: {
+        // TODO : Add an unselectable to the overline
+        ...shevyConf.h6,
+        fontSize: 12,
+        fontWeight: fontWeights.heavy,
+        lineHeight: 1,
+        color: colors.greyDark,
+        textTransform: 'uppercase'
     }
 };
 export const { lineHeightSpacing: lhs, baseSpacing: bs } = shevy;
@@ -152,14 +152,18 @@ export const breakpoints = {
 export const mediaqueries = Object.entries(breakpoints).map(
     ([_, s]) => `@media(max-width: ${s}px)`
 );
-export const pointerqueries = ['coarse', 'fine'].map(
-    pointer => `@media (pointer: ${pointer})`
-);
-export const isTouch = pointerqueries[0];
-export const isCursor = pointerqueries[1];
+const pointerqueries = {
+    isTouch: '@media (pointer: coarse)',
+    isCursor: '@media (pointer: fine)'
+};
+
+export const isTouch = pointerqueries.isTouch;
+export const isCursor = pointerqueries.isCursor;
+
 export const mq = facepaint(
     Object.entries(breakpoints).map(([n, s]) => `@media(max-width: ${s}px)`)
 );
+
 export const bpProps = {
     mobile: { maxWidth: breakpoints.mobile },
     notMobile: { minWidth: breakpoints.mobile + 1 }
@@ -186,3 +190,4 @@ export const SERVER_ENDPOINT = `${SERVER_HOST}/eat-with-me-alpha/us-central1/api
 
 export const FIRESTORE_COLLECTION_CATEGORY_GROUPS = 'category_groups';
 export const FIRESTORE_COLLECTION_RESTUARANTS = 'restaurants';
+export const FIRESTORE_COLLECTION_COLLECTIONS = 'collections';

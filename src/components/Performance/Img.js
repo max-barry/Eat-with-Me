@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import { colors, transitionTimes } from '../../settings';
 import { onlyUpdateForKeys } from 'recompose';
 
-lazySizes.cfg = { ...lazySizes.cfg, ...{} }; // Merge custom opts
-lazySizes.init(); // TODO : Only init lazy sizes if it isn't already
+if (!window.lazySizesConfig && !window.lazySizesConfig.init) {
+    lazySizes.cfg = { ...lazySizes.cfg, ...{} };
+    lazySizes.init();
+}
 
 const responsiveStyles = (width, height) => ({
     position: 'relative',

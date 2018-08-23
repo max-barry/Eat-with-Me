@@ -5,7 +5,7 @@ import middlewares from './middlewares';
 const configureStore = (initialState = {}) =>
     createStore(
         combineReducers(reducers),
-        // initialState,
+        initialState,
         applyMiddleware(...middlewares)
     );
 

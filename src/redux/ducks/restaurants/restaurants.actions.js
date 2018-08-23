@@ -1,28 +1,23 @@
-import { createAction, createActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import * as types from './restaurants.types';
-import { cuisineSelectors, restaurantSelectors } from './restaurants.selectors';
-import { fetchFromApi, fetchFromCache } from '../shared.actions';
-import {
-    FIRESTORE_COLLECTION_CATEGORY_GROUPS,
-    FIRESTORE_COLLECTION_RESTUARANTS,
-    SERVER_ENDPOINT
-} from '../../../settings';
+import { cuisineSelectors } from './restaurants.selectors';
+import { fetchFromApi } from '../shared.actions';
+import { FIRESTORE_COLLECTION_CATEGORY_GROUPS } from '../../../settings';
 
 // @link https://github.com/redux-utilities/redux-actions/issues/61
 // @link https://stackoverflow.com/a/42982806
 
 const { FETCH_CUISINES } = types;
+const { get, hasLoaded } = cuisineSelectors;
 
-// TODO : Use createActions to combine the createAction together
+export const fetchCuisines = args => (dispatch, getState) => {
+    const state = getState();
+    const isCached = hasLoaded(state);
 
-export const fetchCuisinesFromNetwork = createAction(FETCH_CUISINES, args =>
-    fetchFromApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS)
-);
-
-export const fetchCuisines = args => (dispatch, getState) =>
-    fetchFromCache(
-        cuisineSelectors.hasLoaded,
-        fetchCuisinesFromNetwork,
-        dispatch,
-        getState
-    );
+    dispatch({
+        type: FETCH_CUISINES,
+        payload: isCached
+            ? Promise.resolve(get(state))
+            : fetchFromApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS)
+    });
+};

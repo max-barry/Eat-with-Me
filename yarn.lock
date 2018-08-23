@@ -7446,9 +7446,9 @@ react-split-pane@^0.1.77:
     react-lifecycles-compat "^3.0.4"
     react-style-proptype "^3.0.0"
 
-react-spring@^5.5.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-5.5.1.tgz#3c66044bd3d1a960462491c3c2728b3357781c81"
+react-spring@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-5.6.1.tgz#f891d3129f4a3d36a139c7ec795ffb5ac977154f"
   dependencies:
     "@babel/runtime" "7.0.0-beta.51"
 
@@ -7910,6 +7910,13 @@ restore-cursor@^2.0.0:
 ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
+
+riek@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/riek/-/riek-1.1.0.tgz#ea854db4a4ed096230ff04382508d6dfbe295994"
+  dependencies:
+    debug "^2.6.8"
+    prop-types "^15.5.10"
 
 right-align@^0.1.1:
   version "0.1.3"

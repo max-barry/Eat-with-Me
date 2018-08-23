@@ -19,7 +19,7 @@ const Container = styled('div')({
     width: cardWidth
 });
 
-const strapClass = css(shevy.h6, ellipsis, {
+const strapClass = css(shevy.h6, ellipsis(), {
     marginTop: bs(0.5),
     display: 'block',
     color: colors.greyDark

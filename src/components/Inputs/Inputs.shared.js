@@ -25,7 +25,7 @@ export const LabelTitle = styled('span')(shevy.h6, {
     }
 });
 
-export const LabelTag = styled('span')(shevy.h6, ellipsis, {
+export const LabelTag = styled('span')(shevy.h6, ellipsis(), {
     color: colors.greyDark,
     fontWeight: shevy.content.fontWeight,
     marginTop: -2

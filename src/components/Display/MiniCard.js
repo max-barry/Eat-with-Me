@@ -14,7 +14,7 @@ const Outer = styled('div')(
 
 const Headline = styled('h5')(shevy.h6);
 
-const Strap = styled('h6')(shevy.h6, ellipsis, {
+const Strap = styled('h6')(shevy.h6, ellipsis(), {
     color: colors.greyDark,
     display: 'block',
     maxWidth: '100%'

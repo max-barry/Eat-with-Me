@@ -21,7 +21,7 @@
         "react-responsive": "^5.0.0",
         "react-router-dom": "^4.3.1",
         "react-scripts": "1.1.4",
-        "react-spring": "^5.5.1",
+        "react-spring": "^5.6.1",
         "react-switch": "^3.0.4",
         "react-tabs": "^2.2.2",
         "recompose": "^0.27.1",
@@ -31,6 +31,7 @@
         "redux-promise-middleware": "^5.1.1",
         "redux-thunk": "^2.3.0",
         "reselect": "^3.0.1",
+        "riek": "^1.1.0",
         "shevyjs": "^1.1.0"
     },
     "scripts": {

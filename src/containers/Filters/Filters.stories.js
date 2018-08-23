@@ -13,6 +13,7 @@ import { cuisineTestdata } from './Filters.test';
 import { FIRESTORE_COLLECTION_CATEGORY_GROUPS } from '../../settings';
 
 storiesOf('Filters', module)
+    .addDecorator(withRedux())
     .add('default', _ => {
         mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
         const Enhanced = withSearch(() => <Filters />);
@@ -27,7 +28,6 @@ storiesOf('Filters', module)
     .add('Filters.Bar', _ => {
         return <Bar items={false} />;
     })
-    .addDecorator(withRedux())
     .add('Filters.Cuisine', _ => {
         mockApi(FIRESTORE_COLLECTION_CATEGORY_GROUPS, cuisineTestdata);
         return (

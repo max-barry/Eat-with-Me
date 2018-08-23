@@ -1,5 +1,6 @@
 import styled, { css } from 'react-emotion';
 import posed from 'react-pose';
+import { ellipsis } from 'polished';
 import {
     bs,
     dimensions,
@@ -49,8 +50,10 @@ export const MobileTopArea = styled('div')({
     borderBottom: `1px solid ${colors.grey2}`
 });
 
-export const MobileTopTitle = styled('h6')(shevy.h6, {
-    color: colors.greyDark
+export const MobileTopTitle = styled('h6')(shevy.h6, ellipsis(), {
+    color: colors.greyDark,
+    maxWidth: '70%',
+    lineHeight: 1
 });
 
 export const MobileBottomArea = styled('div')({
@@ -114,10 +117,13 @@ export const ResultsList = styled('div')(
         gridTemplateColumns: ['1fr 1fr', '100%'],
         gridGap: styles.fn.pad(2, 1),
         justifyItems: 'center'
-        // maxWidth: '90vh',
-        // overflow: 'scroll'
     })
 );
+
+export const LoadMore = styled(ButtonSimple)({
+    maxWidth: dimensions.input,
+    margin: styles.fn.pad(2, 'auto', 3, 'auto')
+});
 
 export const AddedInterior = styled('div')({
     position: 'sticky',
@@ -126,8 +132,6 @@ export const AddedInterior = styled('div')({
     padding: bs(0.5)
 });
 
-export const AddedHeadline = styled('h3')(shevy.h3, {});
-
 export const animatedListStyles = css(
     mq({
         maxHeight: ['90vh', 'none'],
@@ -135,8 +139,3 @@ export const animatedListStyles = css(
         padding: [0, styles.fn.pad(1, 0.5)]
     })
 );
-
-export const LoadMore = styled(ButtonSimple)({
-    maxWidth: dimensions.input,
-    margin: styles.fn.pad(2, 'auto', 1, 'auto')
-});

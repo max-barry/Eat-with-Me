@@ -65,7 +65,8 @@ MobileTopActions.defaultProps = {
 };
 
 MobileTopActions.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+        .isRequired,
     closeModal: PropTypes.func,
     clear: PropTypes.func
 };

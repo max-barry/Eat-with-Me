@@ -3,11 +3,10 @@ import { map, values, invoker, ifElse, path } from 'ramda';
 import { connectInfiniteHits } from 'react-instantsearch-dom';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { colors, bpProps } from '../../settings';
+import { colors, bpProps, shevy } from '../../settings';
 import { Card, AnimatedList } from '../../components/Display';
 import {
     ResultsList,
-    AddedHeadline,
     LoadMore,
     animatedListStyles,
     Inner,
@@ -28,6 +27,7 @@ import { restaurantSelectors } from '../../redux/ducks/restaurants/restaurants.s
 import { ButtonSimple as Button } from '../../components/Buttons';
 import addSvg from '../../../public/images/icons/add.svg';
 import MiniCard from '../../components/Display/MiniCard';
+import { EditableHeadline } from '../../components/Inputs';
 
 const Result = ({ hit, added, add, remove }) => {
     const cardProps = restaurantSelectors.makeCard(hit);
@@ -52,7 +52,7 @@ class ResultsComponent extends Component {
                     <Result
                         key={hit.id}
                         hit={hit}
-                        added={!!this.props.collection[hit.id]}
+                        added={!!this.props.collection.restaurants[hit.id]}
                         add={this.props.add}
                         remove={this.props.remove}
                     />
@@ -103,7 +103,8 @@ class Added extends Component {
                         />
                     )
                 }),
-                this.props.collection
+                []
+                // this.props.collection.restaurants
             )
         );
     }
@@ -112,12 +113,28 @@ class Added extends Component {
         <Fragment>
             <MediaQuery {...bpProps.mobile}>
                 <MobileTopActions
-                    title={'Your list'}
+                    title={
+                        <EditableHeadline
+                            value={this.props.collection.name}
+                            onChange={this.props.renameCollection}
+                            color={colors.greyDark}
+                            headingStyles={{
+                                ...shevy.h6,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}
+                        />
+                    }
                     closeModal={this.props.close}
                 />
             </MediaQuery>
             <MediaQuery {...bpProps.notMobile}>
-                <AddedHeadline>This is the headline</AddedHeadline>
+                <EditableHeadline
+                    // value={this.props.collection.name}
+                    value={''}
+                    onChange={this.props.renameCollection}
+                    headingStyles={shevy.h3}
+                />
             </MediaQuery>
             {this.props.isEmpty && <div>It's empty</div>}
             <AnimatedList
@@ -133,7 +150,10 @@ Added.defaultProps = {};
 
 Added.propTypes = {
     collection: PropTypes.object.isRequired,
-    remove: PropTypes.func.isRequired
+    remove: PropTypes.func.isRequired,
+    isEmpty: PropTypes.bool.isRequired,
+    renameCollection: PropTypes.func.isRequired,
+    close: PropTypes.func.isRequired
 };
 
 export { Added };
