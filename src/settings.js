@@ -1,4 +1,3 @@
-// import { css } from 'react-emotion';
 import Shevy from 'shevyjs';
 import facepaint from 'facepaint';
 import { position, shade } from 'polished';
@@ -185,8 +184,8 @@ export const ALGOLIA_APP_ID = '0PHJ10PJKH';
 export const ALGOLIA_API_KEY = 'b56b2f424a62acad1d17ddc50b18ba79';
 export const ALGOLIA_RESTAURANTS_INDEX = 'prod_restaurants';
 
-export const SERVER_HOST = 'http://localhost:5000';
-export const SERVER_ENDPOINT = `${SERVER_HOST}/eat-with-me-alpha/us-central1/api/`;
+export const SERVER_HOST = 'http://localhost:5000'; // TODO : Change to production
+export const SERVER_ENDPOINT = `${SERVER_HOST}/eat-with-me-alpha/us-central1/api/`; // TODO : Change to production
 
 export const FIRESTORE_COLLECTION_CATEGORY_GROUPS = 'category_groups';
 export const FIRESTORE_COLLECTION_RESTUARANTS = 'restaurants';
